@@ -1,0 +1,13 @@
+{
+"TEXT_DO_SEQ":"Trial {}\nTry this sequence:\n {}",
+"TEXT_ERROR":"You made a mistake!\nTry again.",
+"TEXT_INTRO":"Reproduce the sequence that will be shown next.\nPress a key when ready.",
+"SEQ_KEYS":["a", "s", "d", "f"],
+"TOTAL_STIMULI":20,
+"SEQ_LENGTH":7,
+"FIXATION_TIME":1.0,
+"ERROR_TIME":1,
+"ERROR_BOX_TIME":0.3,
+"SCREEN_RES":[1920,1080],
+"BUZZER_FILE":"./sounds/buzzer.wav"
+}

@@ -8,60 +8,36 @@ Created on Tue Feb 20 08:41:28 2018
 Training tool for discrete sequence production
 """
 
-# give feedback on what they did
-# github
-# ask for username
-# change cumulative trials 
-# if keys come together, count as chords
-# open session
-
 from __future__ import division
-from psychopy import core, visual, event
-import csv, random, time
-import numpy as np
+from psychopy import core, visual, event, prefs
+import csv, time
 from datetime import datetime
+from lib.utils import showStimulus, scorePerformance, Configurator
+from generator.generator import Generator
+prefs.general['audioLib'] = ['pygame']
+from psychopy import sound
 
-TEXT_DO_SEQ="Trial {}\nTry this sequence:\n {}"
-TEXT_ERROR="You made a mistake!\nTry again."
-TEXT_INTRO="Reproduce the sequence that will be shown next.\nPress a key when ready."
-SEQ_KEYS=["a", "s", "d", "f"]
-ALLOWED_KEYS=SEQ_KEYS + ["escape"]
-TOTAL_STIMULI=20
-SEQ_LENGTH=7
-FIXATION_TIME=1.0
-ERROR_TIME=1
-ERROR_BOX_TIME=0.3
 
-def showStimulus(stimulus):
-    stimulus.draw()
-    win.flip()
-
-def computePerformance(keys, RTs, sequence):
-    # returns accuracy and total movement time
-    # accuracy
-    correct = [keys[k][0] == s for k, s in enumerate(sequence)]
-    accuracy = np.sum(correct) / len(sequence)
-
-    # MT
-    MT = np.sum(RTs[1:])
-    return((accuracy, MT))
+config = Configurator().get()
 
 sess_date = str(datetime.now().date())
 sess_time = str(datetime.now().time())
 sess_num = 1
 
-## Setup Section
-win = visual.Window([800,600], fullscr=False, monitor="testMonitor", units="cm")
+buzzer = sound.Sound(config.BUZZER_FILE)
 
-intro_message = visual.TextStim(win, text=TEXT_INTRO) 
-error_message = visual.TextStim(win, text=TEXT_ERROR) #pos=[0,+3], 
-error_box = visual.Rect(win, height=5, width=5, lineWidth=3, lineColor='red') 
+## Setup Section
+win = visual.Window(config.SCREEN_RES, fullscr=False, monitor="testMonitor", units="cm")
+
+intro_message = visual.TextStim(win, text=config.TEXT_INTRO) 
+error_message = visual.TextStim(win, text=config.TEXT_ERROR) #pos=[0,+3], 
+error_box = visual.Rect(win, height=5, width=5, lineWidth=3, lineColor="red") 
 # turn the text strings into stimuli
 textStimuli = []
-sequence = np.random.choice(SEQ_KEYS, size=SEQ_LENGTH, replace=True)
+sequence = Generator(set=config.SEQ_KEYS, size=config.SEQ_LENGTH).random()
 
-for iTrial in range(TOTAL_STIMULI):
-    text = TEXT_DO_SEQ.format(iTrial, ' - '.join(sequence))
+for iTrial in range(config.TOTAL_STIMULI):
+    text = config.TEXT_DO_SEQ.format(iTrial, " - ".join(sequence))
     textStimuli.append(visual.TextStim(win, text=text)) 
   
 # fixation cross
@@ -87,7 +63,8 @@ keyswriter.writerow([
     "cumulative_trial", 
     "trial", 
     "keystroke",
-    "response", 
+    "key_from",
+    "key_to", 
     "RT"
     ])
 trialswriter.writerow([
@@ -106,7 +83,7 @@ trialswriter.writerow([
 ## Experiment Section
 
 #display instructions and wait
-showStimulus(intro_message)
+showStimulus(win, intro_message)
 
 #check for a keypress
 event.waitKeys()
@@ -116,25 +93,26 @@ cum_trial = 0
 trial = 0
 while (trial < n):
     # present fixation
-    showStimulus(fixation)
-    core.wait(FIXATION_TIME) # note how the real time will be very close to a multiple of the refresh time
+    showStimulus(win, fixation)
+    core.wait(config.FIXATION_TIME) # note how the real time will be very close to a multiple of the refresh time
      
     # present stimulus text and wait a maximum of 2 second for a response
-    showStimulus(textStimuli[trial])    
+    showStimulus(win, textStimuli[trial])    
     mytime0 = time.time()
+    key_from = ["0"]
     keys = []
     RTs = []
-    for keystroke in range(SEQ_LENGTH):
-        key = event.waitKeys(keyList=ALLOWED_KEYS)
+    for keystroke in range(config.SEQ_LENGTH):
+        key_to = event.waitKeys(keyList=config.ALLOWED_KEYS, )
         mytime = time.time()
         RT =  mytime - mytime0
         mytime0 = mytime
-        keys.append(key)
+        keys.append(key_to)
         RTs.append(RT)
-        if key=="escape":
+        if key_to=="escape":
             break
-        print(key)
-        print(RT)
+#        print(key)
+#        print(RT)
         # write result to data file    
         keyswriter.writerow([
             sess_num,
@@ -143,19 +121,21 @@ while (trial < n):
             cum_trial, 
             trial, 
             keystroke, 
-            key, 
+            key_from, 
+            key_to, 
             "{:.3f}".format(RT),
         ])
 
-    accuracy, MT  = computePerformance(keys, RTs, sequence)
+    accuracy, MT  = scorePerformance(keys, RTs, sequence)
     if accuracy < 1:
-        showStimulus(error_box)
-        core.wait(ERROR_TIME)
-        showStimulus(error_message)
-        core.wait(ERROR_TIME)
+        showStimulus(win, error_box)
+        buzzer.play()
+        core.wait(config.ERROR_TIME)
+        showStimulus(win, error_message)
+        core.wait(config.ERROR_TIME)
     else:
         #feedback and next
-        showStimulus(visual.TextStim(win, text="{:.3f}".format(MT)))
+        showStimulus(win, visual.TextStim(win, text="{:.3f}".format(MT)))
         trial = trial + 1
 
     # write result to data file
@@ -173,7 +153,7 @@ while (trial < n):
     ])
 
     cum_trial = cum_trial + 1    
-    core.wait(FIXATION_TIME) 
+    core.wait(config.FIXATION_TIME) 
 #    if key==None:
 #        key=[]
 #        key.append("no key")

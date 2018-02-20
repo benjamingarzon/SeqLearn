@@ -1,0 +1,42 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document: default
+---
+
+
+```{r}
+rm(list=ls())
+library(ggplot2)
+library(reshape2)
+
+keys.table = read.table('../data/keysfile.csv', sep =';', header = T)
+trials.table = read.table('../data/trialsfile.csv', sep =';', header = T)
+#keys.melt = melt(keys.table, id.vars = c("cumulative_trial","trial","keystroke","response") )
+#trials.melt = melt(keys.table, id.vars = c("cumulative_trial","trial","keystroke","response") )
+
+```
+Analyze keys
+
+```{r}
+plot.res = ggplot(keys.table, aes(x = key_to, y = RT)) + geom_point()
+plot.keystroke = ggplot(keys.table, aes(x = key_to, y = RT)) + geom_point()
+print(plot.res)
+print(plot.keystroke)
+```
+
+Analyze trials
+```{r}
+plot.RT = ggplot(trials.table, aes(x = cumulative_trial, y = RT)) + geom_line() + geom_point()
+plot.MT = ggplot(trials.table, aes(x = trial, y = MT)) + geom_line() + geom_point()
+plot.acc = ggplot(trials.table, aes(x = trial, y = accuracy)) + geom_line() + geom_point()
+
+print(plot.RT)
+print(plot.MT)
+print(plot.acc)
+
+```
+
