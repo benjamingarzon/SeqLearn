@@ -13,8 +13,8 @@ rm(list=ls())
 library(ggplot2)
 library(reshape2)
 
-keys.table = read.table('../data/keysfile.csv', sep =';', header = T)
-trials.table = read.table('../data/trialsfile.csv', sep =';', header = T)
+keys.table = read.table('../data/keysfile-.csv', sep =';', header = T)
+trials.table = read.table('../data/trialsfile-.csv', sep =';', header = T)
 #keys.melt = melt(keys.table, id.vars = c("cumulative_trial","trial","keystroke","response") )
 #trials.melt = melt(keys.table, id.vars = c("cumulative_trial","trial","keystroke","response") )
 
