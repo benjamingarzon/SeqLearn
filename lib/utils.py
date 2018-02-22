@@ -34,7 +34,8 @@ def scorePerformance(keys, RTs, sequence):
     Returns accuracy and total movement time.
     """
     # accuracy
-    correct = [keys[k][0] == s for k, s in enumerate(sequence)]
+    print keys, sequence
+    correct = [keys[k] == s for k, s in enumerate(sequence) if k < len(sequence)]
     accuracy = np.sum(correct) / len(sequence)
 
     # MT
@@ -113,10 +114,32 @@ def startSession():
            maxscore, maxgroupscore)
 
 
-def filter_keys(keys):
+def filter_keys(keypresses, max_chord_interval, keytime0):#, keys, keytimes):
     """ 
     Aggregate keypresses when they are close together (chords)
     """
-
-    stimulus.draw()
-    win.flip()
+    keys = []
+    keytimes = []
+    RTs = np.array([])
+    lastkeytime = 0
+    
+    
+    
+    for key, keytime in keypresses:
+        keytime = keytime - keytime0
+        RT = keytime - lastkeytime
+        
+        if RT < max_chord_interval and len(keys) > 0:
+            # belongs to same chord, aggregate
+            #print RT, key, keys
+            
+            keys[-1] = keys[-1] +  list(key)
+            keys[-1].sort()
+        else:
+            # new chord           
+            keys.append(list(key))
+            keytimes.append(keytime)
+            RTs.append(RT)
+            lastkeytime = keytime           
+       
+    return(keys, keytimes, RTs)

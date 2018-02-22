@@ -10,9 +10,9 @@ Training tool for discrete sequence production.
 
 from __future__ import division
 from psychopy import core, visual, event, prefs
-import time
 from datetime import datetime
-from lib.utils import showStimulus, scorePerformance, get_config, startSession
+from lib.utils import showStimulus, scorePerformance, get_config, \
+startSession, filter_keys
 from generator.generator import Generator
 prefs.general['audioLib'] = ['pygame']
 from psychopy import sound
@@ -38,7 +38,9 @@ intro_message = visual.TextStim(win,
                                            config["HEADING_TEXT_HEIGHT"], 
                                            alignHoriz='center') 
 instructions_message = visual.TextStim(win, 
-                                       text=config["TEXT_INSTRUCT"].format(config["MAX_WAIT"]), 
+                                       text=config["TEXT_INSTRUCT"].format(
+                                               config["MAX_WAIT"], 
+                                               config["TOTAL_TRIALS"]), 
                                        height = config["TEXT_HEIGHT"], 
                                        alignHoriz='center') 
 last_label = visual.TextStim(win, 
@@ -65,15 +67,20 @@ error_message = visual.TextStim(win,
                                 alignHoriz="center")  
 error_sign = visual.ImageStim(win, 
                               image=config["WRONG_FILE"]) 
+late_message = visual.TextStim(win, 
+                                text=config["TEXT_LATE"], 
+                                alignHoriz="center")
 
 textStimuli = []
-sequence = Generator(set=config["SEQ_KEYS"], 
-                     size=config["SEQ_LENGTH"]).random()
+sequence, sequence_string = Generator(set=config["SEQ_KEYS"], 
+                     size=config["SEQ_LENGTH"],
+                     maxchordsize=config["MAX_CHORD_SIZE"]).random()
 
 # turn the text strings into stimuli
-for iTrial in range(config["TOTAL_STIMULI"]):
-    text = config["TEXT_DO_SEQ"].format(iTrial+1, " - ".join(sequence))
-    textStimuli.append(visual.TextStim(win, text=text)) 
+for iTrial in range(config["TOTAL_TRIALS"]):
+    text = config["TEXT_DO_SEQ"].format(iTrial+1, sequence_string)
+    textStimuli.append(visual.TextStim(win, text=text, 
+                                       height=config["TEXT_HEIGHT"])) 
 
 # fixation cross
 fixation = visual.ShapeStim(win, 
@@ -87,9 +94,9 @@ fixation = visual.ShapeStim(win,
 ## Experiment Section
 
 #display instructions and wait
-showStimulus(win, intro_message)
-core.wait(config["INTRO_TIME"])
-showStimulus(win, instructions_message)
+#showStimulus(win, intro_message)
+#core.wait(config["INTRO_TIME"])
+#showStimulus(win, instructions_message)
 
 #check for a keypress
 event.waitKeys()
@@ -98,34 +105,69 @@ n = len(textStimuli)
 cum_trial = 1 
 trial = 1
 while (trial <= n):
+
+#    keys = []
+#    keytimes = []
+
     # present fixation
     showStimulus(win, fixation)
-    core.wait(config["FIXATION_TIME"]) 
+    core.wait(config["FIXATION_TIME"])     
     
     # present stimulus text and wait a maximum of 2 second for a response
+    event.clearEvents()
     showStimulus(win, textStimuli[trial-1])    
-    mytime0 = time.time()
-    timer = core.Clock()
-    key_from = ["0"]
-    keys = []
-    RTs = []
+#    
+#    core.wait(5)
+     
+#    keys = event.getKeys(#maxWait=config["MAX_WAIT"], 
+#                                keyList=config["ALLOWED_KEYS"], 
+#                                timeStamped = timer)
     
-    
-    for keystroke in range(config["SEQ_LENGTH"]):
-        key_to = event.waitKeys(maxWait=config["MAX_WAIT"], 
-                                keyList=config["ALLOWED_KEYS"], 
-                                timeStamped = timer)
-        #mytime = time.time()
-        print(key_to)
-        print(mytime)
-        print(mytime0)
-        RT =  mytime - mytime0
-        mytime0 = mytime
-        keys.append(key_to)
-        RTs.append(RT)
-        if key_to=="escape":
-            break
+#    print(keys)
+#    print(keys)
+#    timer = core.Clock()
+#    for keystroke in range(config["SEQ_LENGTH"]):
 
+    keytime0 = core.getTime() 
+#    while True:
+#        core.wait(5.0)
+    core.wait(config["MAX_WAIT"])
+    keypresses = event.getKeys(#maxWait=config["MAX_WAIT"], 
+                           keyList=config["ALLOWED_KEYS"], 
+                           timeStamped = True)
+
+#    print(keypresses)
+    if len(keypresses) == 0:
+        showStimulus(win, error_sign)
+        #buzzer.play()
+        core.wait(config["ERROR_TIME"])
+        showStimulus(win, late_message)
+        core.wait(config["ERROR_TIME"])
+
+        continue
+    else:
+#        print core.getTime()
+        keys, keytimes, RTs = filter_keys(keypresses, config["MAX_CHORD_INTERVAL"], 
+                                keytime0)#, keys, keytimes)
+#        print core.getTime()
+
+    print keys
+    print keytimes
+    print RTs
+    
+#    if len(keys) >= config["SEQ_LENGTH"]:
+#        break
+#        if key=="escape":
+#            break
+
+       
+    # print out the data
+    key_from = ["0"]
+        
+    for keystroke in range(len(keys)):
+        
+        key_to = keys[keystroke]
+        RT = RTs[keystroke]
         # write result to data file    
         keyswriter.writerow([
             sess_num,
@@ -138,13 +180,14 @@ while (trial <= n):
             key_to, 
             "{:.3f}".format(RT),
         ])
-    
         key_from = key_to
+        keytime0 = keytimes[keystroke]
 
     accuracy, MT, score  = scorePerformance(keys, RTs, sequence)
+    
     if accuracy < 1:
         showStimulus(win, error_sign)
-        buzzer.play()
+        #buzzer.play()
         core.wait(config["ERROR_TIME"])
         showStimulus(win, error_message)
         core.wait(config["ERROR_TIME"])
