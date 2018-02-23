@@ -146,14 +146,14 @@ while (trial <= n):
 
         continue
     else:
-#        print core.getTime()
+        print core.getTime()
         keys, keytimes, RTs = filter_keys(keypresses, config["MAX_CHORD_INTERVAL"], 
-                                keytime0)#, keys, keytimes)
-#        print core.getTime()
+                                keytime0, len(sequence))#, keys, keytimes)
+        print core.getTime()
 
-    print keys
-    print keytimes
-    print RTs
+#    print keys
+#    print keytimes
+#    print RTs
     
 #    if len(keys) >= config["SEQ_LENGTH"]:
 #        break

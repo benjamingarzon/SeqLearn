@@ -31,6 +31,6 @@ class Generator:
             for i in range(self.size) ]
         else:
             sequence = sample(self.chords, size=self.size) 
-        sequence_string = " \n ".join([" ".join(x) for x in sequence])
+        sequence_string = " - ".join([" ".join(x) for x in sequence])
  
         return (sequence, sequence_string)

@@ -10,6 +10,23 @@ import os, json, csv
 import numpy as np
 import pandas as pd
 from psychopy import gui
+from scipy.spatial.distance import pdist, squareform
+from scipy.cluster.hierarchy import linkage, fcluster, dendrogram, cut_tree
+from itertools import chain
+
+#from matplotlib import pyplot as plt
+
+
+def get_seq_types(type_file=None):
+    if type_file == None:
+        type_file = "./scheduling/seq_types.csv"
+    try:
+        type_data = pd.read_csv(type_file, sep = ";")
+    except IOError: 
+        print "Error: Config_file is missing!"
+
+    return(type_data)
+
 
 def get_config(config_file=None):
     if config_file == None:
@@ -114,32 +131,48 @@ def startSession():
            maxscore, maxgroupscore)
 
 
-def filter_keys(keypresses, max_chord_interval, keytime0):#, keys, keytimes):
+def filter_keys(keypresses, max_chord_interval, keytime0, n_chords):#, keys, keytimes):
     """ 
     Aggregate keypresses when they are close together (chords)
     """
+    allkeys = [x[0] for x in keypresses]
+    allkeytimes = np.array([x[1] for x in keypresses]) - keytime0
+    
+    # cluster the sequence in chords
+    d = pdist(np.reshape(allkeytimes, (-1, 1))) # can be done faster 
+    Z = linkage(d, 'complete')
+    clusters = np.array([ x[0] for x in cut_tree(Z, n_clusters = n_chords)])
+
     keys = []
     keytimes = []
-    RTs = np.array([])
-    lastkeytime = 0
-    
-    
-    
-    for key, keytime in keypresses:
-        keytime = keytime - keytime0
-        RT = keytime - lastkeytime
-        
-        if RT < max_chord_interval and len(keys) > 0:
-            # belongs to same chord, aggregate
-            #print RT, key, keys
-            
-            keys[-1] = keys[-1] +  list(key)
-            keys[-1].sort()
-        else:
-            # new chord           
-            keys.append(list(key))
-            keytimes.append(keytime)
-            RTs.append(RT)
-            lastkeytime = keytime           
-       
-    return(keys, keytimes, RTs)
+
+    indices = np.unique(clusters, return_index=True)[1]
+    myclusters = [clusters[index] for index in sorted(indices)]
+    for c in myclusters:
+        keys.append(sorted([allkeys[i] for i, cluster in enumerate(clusters) if cluster == c]))
+        keytimes.append(np.mean(allkeytimes[np.where(clusters == c)]))
+
+    RTs = np.append(keytimes[0], np.diff(keytimes)).tolist()
+
+    return(keys, keytimes, RTs)        
+
+#    plt.figure(figsize=(25, 10))
+#    plt.title('Hierarchical Clustering Dendrogram')
+#    plt.xlabel('key')
+#    plt.ylabel('distance')
+#
+#
+#    print allkeys
+#    print allkeytimes
+#    print clusters
+#    
+#
+#    dendrogram(
+#            Z,
+#            leaf_rotation=90.,  # rotates the x axis labels
+#            leaf_font_size=8.,  # font size for the x axis labels
+#            )
+#    plt.show()
+
+
+
