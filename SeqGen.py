@@ -65,10 +65,11 @@ for index, row in type_data.iterrows():
                 true_sess_num,
                 sess_type,
                 n_trials,
+                " ".join(seq_keys),
                 seq_type,
-                sequence,
+#                sequence,
                 sequence_string, 
-                seq_train
+                seq_train 
                 ])
 
         if sess < n_sess:    
@@ -79,8 +80,9 @@ schedule = pd.DataFrame(row_list, columns = (
         "sess_num",
         "sess_type",
         "n_trials",    
+        "seq_keys", 
         "seq_type", 
-        "sequence", 
+#        "sequence", 
         "sequence_string", 
         "seq_train",
 )

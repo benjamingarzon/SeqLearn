@@ -6,16 +6,13 @@ Created on Tue Feb 20 08:41:28 2018
 
 Some functions for SeqLearn.
 """
-import os, json, csv
+import json, csv
 import numpy as np
 import pandas as pd
 from psychopy import gui
-from scipy.spatial.distance import pdist, squareform
-from scipy.cluster.hierarchy import linkage, fcluster, dendrogram, cut_tree
-from itertools import chain
-
-#from matplotlib import pyplot as plt
-
+from scipy.spatial.distance import pdist #, squareform
+from scipy.cluster.hierarchy import linkage, cut_tree
+from collections import defaultdict
 
 def get_seq_types(type_file=None):
     if type_file == None:
@@ -36,7 +33,7 @@ def get_config(config_file=None):
         config = json.load(config_json)
         config_json.close()
     except IOError: 
-        print "Error: Config_file is missing!"
+        print "Error: Configuration file is missing!"
 
     config["ALLOWED_KEYS"] = config["SEQ_KEYS"] + ["escape"]  
     
@@ -51,23 +48,35 @@ def scorePerformance(keys, RTs, sequence):
     Returns accuracy and total movement time.
     """
     # accuracy
-    print keys, sequence
-    correct = [keys[k] == s for k, s in enumerate(sequence) if k < len(sequence)]
+    correct = np.array([1.0*(keys[k] == s) for k, s in enumerate(sequence) \
+                        if k < len(keys)])
     accuracy = np.sum(correct) / len(sequence)
 
     # MT
     MT = np.sum(RTs[1:])
+    
     score = 1/MT
     return((accuracy, MT, score))
 
-def startSession():
+def startSession(config_file=None, schedule_file=None):
+
     """ 
     Starts a new session.
-    """
+    """    
+    config = get_config()
+    
+    if schedule_file == None:
+        schedule_file = "./scheduling/schedule.csv"
+    try:
+        schedule = pd.read_csv(schedule_file, sep = ";")
+    except IOError: 
+        print "Error: Schedule file is missing!"
+
+    
     # get username
     myDlg = gui.Dlg(title="Sequence training.")
     myDlg.addField('Enter your username:')
-    ok_data = myDlg.show()
+    myDlg.show()
     if myDlg.OK:  
         username = myDlg.data[0]
     else:
@@ -76,27 +85,32 @@ def startSession():
     keysfilename = "./data/keysfile-{}.csv".format(username)
     trialsfilename = "./data/trialsfile-{}.csv".format(username) 
     
-    try: #if os.path.exists(keysfilename) and os.path.exists(trialsfilename) :
+    try:
         # proceed from where it was left before
         keysfile = open(keysfilename, "a")
         trialsfile = open(trialsfilename, "a")
         trialstable = pd.read_csv(trialsfilename, sep=';')
         sess_num = np.max(trialstable["sess_num"]) + 1
-        maxscore = np.max(trialstable["score"])
-        maxgroupscore = maxscore*1.2
+        maxscore = defaultdict(float)
+        maxgroupscore = defaultdict(float)
+        for seq in np.unique(trialstable["true_sequence"]):
+            maxscore[seq] = np.max(
+                    trialstable.loc[trialstable["true_sequence"] == seq, 
+                                    "score"])
+            maxgroupscore[seq] = maxscore[seq]*1.2
         
         # connect files with a csv writer
         keyswriter = csv.writer(keysfile, delimiter=";")
         trialswriter = csv.writer(trialsfile, delimiter=";")
 
-    except: # else
+    except pd.errors.EmptyDataError: 
         # create new session
         keysfile = open(keysfilename, "wb")
         trialsfile = open(trialsfilename, "wb")
         sess_num = 1
-        maxscore = 0
-        maxgroupscore = 2
-        
+        maxscore = defaultdict(float)
+        maxgroupscore = defaultdict(lambda:2.0, {})
+
         # connect files with a csv writer
         keyswriter = csv.writer(keysfile, delimiter=";")
         trialswriter = csv.writer(trialsfile, delimiter=";")
@@ -106,6 +120,10 @@ def startSession():
                 "sess_num",
                 "sess_date",    
                 "sess_time",    
+                "seq_type",
+                "sess_type",
+                "seq_train",
+                "sequence", 
                 "cumulative_trial", 
                 "trial", 
                 "keystroke",
@@ -117,6 +135,9 @@ def startSession():
                 "sess_num",
                 "sess_date",    
                 "sess_time",    
+                "seq_type",
+                "sess_type",
+                "seq_train",
                 "cumulative_trial", 
                 "trial", 
                 "true_sequence", 
@@ -126,22 +147,25 @@ def startSession():
                 "MT",
                 "score"
         ])
-        
+
+    # select schedule for this session
+    schedule = schedule.query('sess_num == %d'%(sess_num))
     return(sess_num, username, keyswriter, trialswriter, keysfile, trialsfile,
-           maxscore, maxgroupscore)
+           maxscore, maxgroupscore, config, schedule)
 
 
-def filter_keys(keypresses, max_chord_interval, keytime0, n_chords):#, keys, keytimes):
+def filter_keys(keypresses, max_chord_interval, n_chords):#, keys, keytimes):
     """ 
     Aggregate keypresses when they are close together (chords)
     """
     allkeys = [x[0] for x in keypresses]
-    allkeytimes = np.array([x[1] for x in keypresses]) - keytime0
+    allkeytimes = np.array([x[1] for x in keypresses])
     
     # cluster the sequence in chords
     d = pdist(np.reshape(allkeytimes, (-1, 1))) # can be done faster 
     Z = linkage(d, 'complete')
     clusters = np.array([ x[0] for x in cut_tree(Z, n_clusters = n_chords)])
+#    clusters = np.array([ x[0] for x in cut_tree(Z, height= max_chord_interval)])
 
     keys = []
     keytimes = []
@@ -151,11 +175,11 @@ def filter_keys(keypresses, max_chord_interval, keytime0, n_chords):#, keys, key
     for c in myclusters:
         keys.append(sorted([allkeys[i] for i, cluster in enumerate(clusters) if cluster == c]))
         keytimes.append(np.mean(allkeytimes[np.where(clusters == c)]))
-
+    print allkeytimes
+    print keytimes
     RTs = np.append(keytimes[0], np.diff(keytimes)).tolist()
-
-    return(keys, keytimes, RTs)        
-
+#    from matplotlib import pyplot as plt
+#    from scipy.cluster.hierarchy import dendrogram
 #    plt.figure(figsize=(25, 10))
 #    plt.title('Hierarchical Clustering Dendrogram')
 #    plt.xlabel('key')
@@ -175,4 +199,5 @@ def filter_keys(keypresses, max_chord_interval, keytime0, n_chords):#, keys, key
 #    plt.show()
 
 
+    return(keys, keytimes, RTs)        
 

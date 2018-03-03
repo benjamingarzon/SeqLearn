@@ -7,7 +7,6 @@ Created on Tue Feb 20 09:46:11 2018
 Discrete sequence production generator class.
 """
 from itertools import combinations
-import numpy as np
 from random import choice, sample
     
 class Generator:
@@ -31,6 +30,16 @@ class Generator:
             for i in range(self.size) ]
         else:
             sequence = sample(self.chords, size=self.size) 
-        sequence_string = " - ".join([" ".join(x) for x in sequence])
+        sequence_string = seq_to_string(sequence)
  
         return (sequence, sequence_string)
+    
+def string_to_seq(mystring):
+    myseq = mystring.split(" - ")
+    myseq = [ x.split(" ") for x in myseq ]
+    return(myseq)
+    
+def seq_to_string(myseq):
+   mystring = " - ".join([" ".join(x) for x in myseq])
+   return(mystring)
+   

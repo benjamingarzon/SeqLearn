@@ -8,13 +8,24 @@ output:
 ---
 
 
+
 ```{r}
 rm(list=ls())
 library(ggplot2)
 library(reshape2)
+library(dplyr)
+library(GGally)
+library(network)
+library(boot)
+library(rstan)
 
-keys.table = read.table('../data/keysfile-.csv', sep =';', header = T)
-trials.table = read.table('../data/trialsfile-.csv', sep =';', header = T)
+options(mc.cores = parallel::detectCores())
+username = 'benji'
+keysfile = paste0('../data/keysfile-', username, '.csv')
+trialsfile = paste0('../data/trialsfile-', username, '.csv')
+
+keys.table = read.table(keysfile, sep =';', header = T)
+trials.table = read.table(trialsfile, sep =';', header = T)
 #keys.melt = melt(keys.table, id.vars = c("cumulative_trial","trial","keystroke","response") )
 #trials.melt = melt(keys.table, id.vars = c("cumulative_trial","trial","keystroke","response") )
 
@@ -22,21 +33,387 @@ trials.table = read.table('../data/trialsfile-.csv', sep =';', header = T)
 Analyze keys
 
 ```{r}
-plot.res = ggplot(keys.table, aes(x = key_to, y = RT)) + geom_point()
-plot.keystroke = ggplot(keys.table, aes(x = key_to, y = RT)) + geom_point()
-print(plot.res)
+keys.table = subset(keys.table, keystroke > 0) # only after movement started 
+
+plot.keystroke = ggplot(keys.table, aes(x = key_to, y = RT)) + geom_point() 
+
+keys.table.median = keys.table %>% group_by(key_from, key_to) %>% summarise(RT = median(RT))
+
+plot.keystrokepairs = ggplot(keys.table.median, aes(x = key_from, y = key_to, fill = RT)) + geom_tile() + theme_classic()
+
+#keys.table.mat = as.matrix(acast(keys.table.median, key_from ~ key_to, value.var="RT"), margins = T, drop = F)
+#net = network(keys.table.mat, directed = TRUE, na.omit = T, matrix.type = "adjacency")
+
 print(plot.keystroke)
+print(plot.keystrokepairs)
+
 ```
 
 Analyze trials
 ```{r}
-plot.RT = ggplot(trials.table, aes(x = cumulative_trial, y = RT)) + geom_line() + geom_point()
-plot.MT = ggplot(trials.table, aes(x = trial, y = MT)) + geom_line() + geom_point()
-plot.acc = ggplot(trials.table, aes(x = trial, y = accuracy)) + geom_line() + geom_point()
+
+#trials.table = subset(trials.table, accuracy == 1)
+                      
+plot.RT = ggplot(subset(trials.table, accuracy == 1), aes(x = trial, y = RT, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( . ~ sess_num) + theme(legend.position="none")
+plot.MT = ggplot(subset(trials.table, accuracy == 1), aes(x = trial, y = MT, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( . ~ sess_num) + theme(legend.position="none")
+plot.acc = ggplot(trials.table, aes(x = trial, y = accuracy, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( . ~ sess_num) + theme(legend.position="none")
 
 print(plot.RT)
 print(plot.MT)
 print(plot.acc)
 
 ```
+```{r}
+# fit LBA model
 
+trials.table = read.table(trialsfile, sep =';', header = T)
+rawdata = subset(trials.table, seq_train == "train") 
+rawdata[] <- lapply(rawdata, function(x) if(is.factor(x)) factor(x) else x) # drop factor levels
+rawdata = rawdata %>% mutate(choice = as.numeric(obs_sequence), condition = as.numeric(true_sequence))
+
+# prepare data
+
+choice_labels = levels(rawdata$obs_sequence)
+condition_labels = levels(rawdata$true_sequence)
+
+choices = sort(unique(rawdata$choice))
+conditions = sort(unique(rawdata$condition))
+num_choices <- length(choices)
+num_cond <- length(conditions)
+
+# To store number of trials/condition for given subject
+n_tr_cond <- array(NA, dim = c(num_cond))
+
+# Loop through conditions
+for (j in 1:num_cond) {
+  n_tr_cond[j] <- sum(rawdata$condition == j)
+}
+# Max trials across conditions
+max_tr <- max(n_tr_cond)
+
+# Array for storing RT + choice data
+choicedata <- array(-1, dim = c(num_cond, 2, max_tr))
+
+# Reaction time + choice matrix
+for (cond in 1:num_cond) {
+  for (choice in 1:num_choices) {
+    # Subset current data
+    tmp <- subset(rawdata, rawdata$condition == cond & rawdata$choice == choice)
+    # trials for current subject/condition pair
+    tmp_trials <- n_tr_cond[cond]
+    # Store reaction time + choice
+    choicedata[cond, 1, 1:tmp_trials] <- tmp$MT/1000 # time in sec
+    choicedata[cond, 2, 1:tmp_trials] <- tmp$choice
+  }
+}
+
+dataList <- list(
+  N_tr_cond   = n_tr_cond,
+  N_choices   = num_choices,
+  N_cond      = num_cond,
+  ChoiceData  = choicedata,
+  Max_tr      = max_tr
+)
+
+POI     <- c("k", "A", "v", "tau", 
+             "log_lik")
+genInitList <- "random"
+
+modelPath <- "./model/Lba_single.stan"
+m = rstan::stan_model(modelPath)
+
+fit = rstan::vb(m,
+                   data   = dataList,
+                   pars   = POI,
+                   init   = genInitList)
+
+niter          = 3000 
+nwarmup        = 1000 
+nchain         = 4
+nthin          = 1
+inits          = "random" 
+adapt_delta    = 0.95
+stepsize       = 1
+max_treedepth  = 10
+
+if (F) fit = rstan::sampling(m,
+                        data   = dataList,
+                        pars   = POI,
+                        warmup = nwarmup,
+                        init   = genInitList,
+                        iter   = niter,
+                        chains = nchain,
+                        thin   = nthin,
+                        control = list(adapt_delta   = adapt_delta,
+                                       max_treedepth = max_treedepth,
+                                       stepsize      = stepsize) )
+
+traceplot(fit, par = c("k","A","tau"))
+print(fit)
+
+parVals <- rstan::extract(fit, permuted=T)
+
+k.samples   <- parVals$k
+A.samples   <- parVals$A
+v.samples   <- parVals$v
+tau.samples <- parVals$tau
+
+k = mean(k.samples)
+A = mean(A.samples)
+v = apply(v.samples, c(2,3), mean)
+colnames(v) = choice_labels
+rownames(v) = condition_labels
+tau = mean(tau.samples)
+
+```
+
+
+Explore results
+
+```{r}
+
+plot.v = ggplot(melt(v) %>% mutate(choice = Var1, condition = Var2, v = value), aes(x = choice, y = condition, fill = v)) + geom_tile() + theme_classic() + theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 8), axis.text.y = element_text(size = 8))
+print(plot.v)
+```
+
+
+```{r}
+# fit RL model
+rawdata$outcome = ifelse(rawdata$accuracy == 1, rawdata$score, -1)
+conditionxchoice = sapply(conditions, function(x) which(condition_labels[x]==choice_labels) )
+datetime = paste(rawdata$sess_date, rawdata$sess_time)
+rawdata$timediff = as.numeric(difftime(datetime, datetime[1], units = "hours"))
+
+dataList <- list(
+  N_choices   = num_choices,
+  N_cond      = num_cond,
+  N_tr = nrow(rawdata),
+  condition = rawdata$condition,
+  choice = rawdata$choice,
+  outcome = rawdata$outcome, 
+  conditionxchoice = conditionxchoice,
+  sess_time = rawdata$timediff
+)
+
+
+POI     <- c("alpha", "logit_alpha0", "logit_alpha1", "beta_reward", "beta_punishment", "Q0", "Q0_on", "Q0_off", "f", "forget")
+genInitList <- "random"
+
+modelPath <- "./model/RL_single.stan"
+m = rstan::stan_model(modelPath)
+
+ fit = rstan::vb(m,  output_samples = 100,
+                     data   = dataList,
+                     #   = POI,
+                     init   = genInitList)
+
+niter          = 3000 
+nwarmup        = 1000 
+nchain         = 4
+nthin          = 1
+inits          = "random" 
+adapt_delta    = 0.95
+stepsize       = 1
+max_treedepth  = 10
+
+if (F) fit = rstan::sampling(m,
+                        data   = dataList,
+                        pars   = POI,
+                        warmup = nwarmup,
+                        init   = genInitList,
+                        iter   = niter,
+                        chains = nchain,
+                        thin   = nthin,
+                        control = list(adapt_delta   = adapt_delta,
+                                       max_treedepth = max_treedepth,
+                                       stepsize      = stepsize) )
+
+traceplot(fit, par = c("logit_alpha0", "logit_alpha1", "beta_reward","beta_punishment","f"))
+print(fit)
+
+parVals <- rstan::extract(fit, permuted=T)
+
+alpha.samples <- parVals$alpha
+alpha0.samples <- inv.logit(parVals$logit_alpha0)
+logit_alpha1.samples <- parVals$logit_alpha1
+f.samples <- parVals$f 
+forget.samples <- parVals$forget 
+
+beta_reward.samples   <- parVals$beta_reward
+beta_punishment.samples   <- parVals$beta_punishment
+Q0_on.samples <- parVals$Q0_on
+Q0_off.samples <- parVals$Q0_off
+Q0.samples <- parVals$Q0
+Qt.samples <- parVals$Qt
+PEt.samples <- parVals$PEt
+
+alpha = apply(alpha.samples, 2, median)
+alpha0 = median(alpha0.samples)
+logit_alpha1 = median(logit_alpha1.samples)
+
+beta_reward = median(beta_reward.samples)
+beta_punishment = median(beta_punishment.samples)
+Q0_on = apply(Q0_on.samples, 2, median)
+Q0_off = apply(Q0_off.samples, 2, median)
+Qt = apply(Qt.samples, c(2,3), median)
+PEt = apply(PEt.samples, 2, median)
+forget = apply(forget.samples, 2, median)
+f = median(f.samples)
+Q0 = apply(Q0.samples, c(2,3), median)
+colnames(Q0) = choice_labels
+rownames(Q0) = condition_labels
+
+#View(cbind(rawdata$sess_num[rawdata$condition==1], rawdata$cumulative_trial[rawdata$condition==1], ff[rawdata$condition==1], rawdata$choice[rawdata$condition==1], rawdata$outcome[rawdata$condition==1], PEt[rawdata$condition==1], Qt[rawdata$condition==1, 1:5]))
+```
+
+
+Explore results
+
+```{r}
+plot.Q0 = ggplot(melt(Q0) %>% mutate(choice = Var1, condition = Var2, Q0 = value), aes(x = choice, y = condition, fill = Q0)) + geom_tile() + scale_fill_gradient2(midpoint=0, low="blue", mid="white", high="red") + theme_classic() + theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 8), axis.text.y = element_text(size = 8)) 
+print(plot.Q0)
+
+
+plot.Qt = ggplot(melt(Qt) %>% mutate(trial = Var1, condition = Var2, Qt = value), aes(x = trial, y = condition, fill = Qt)) + geom_tile() + scale_fill_gradient2(midpoint=0, low="blue", mid="white", high="red") + theme_classic() + theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 8), axis.text.y = element_text(size = 8)) 
+print(plot.Qt)
+```
+
+
+```{r}
+# RL + LBA
+
+
+dataList <- list(
+  N_choices   = num_choices,
+  N_cond      = num_cond,
+  N_tr = nrow(rawdata),
+  condition = rawdata$condition,
+  choice = rawdata$choice,
+  time = rawdata$MT,
+  outcome = rawdata$outcome, 
+  conditionxchoice = conditionxchoice,
+  sess_time = rawdata$timediff
+)
+
+
+POI     <- c("alpha", "logit_alpha0", "logit_alpha1", "beta_reward", "beta_punishment", "Q0", "Q0_on", "Q0_off","k", "A", "tau", "gamma", "f", "forget", "Qt", "PEt", "time_rng", "choice_rng")
+genInitList <- "random"
+
+modelPath <- "./model/RL_lba_single.stan"
+m = rstan::stan_model(modelPath)
+
+ fit = rstan::vb(m,  output_samples = 100,
+                     data   = dataList,
+                     #   = POI,
+                     init   = genInitList)
+
+niter          = 3000 
+nwarmup        = 1000 
+nchain         = 4
+nthin          = 1
+inits          = "random" 
+adapt_delta    = 0.95
+stepsize       = 1
+max_treedepth  = 10
+
+if (F) fit = rstan::sampling(m,
+                        data   = dataList,
+                        pars   = POI,
+                        warmup = nwarmup,
+                        init   = genInitList,
+                        iter   = niter,
+                        chains = 4,#nchain,
+                        thin   = nthin,
+                        control = list(adapt_delta   = adapt_delta,
+                                       max_treedepth = max_treedepth,
+                                       stepsize      = stepsize) )
+
+traceplot(fit, par = c("logit_alpha0", "logit_alpha1", "beta_reward","beta_punishment","f","tau","gamma","k","A"))
+#print(fit)
+```
+```{r}
+
+Mode <- function(x) {
+  ux <- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+
+parVals <- rstan::extract(fit, permuted=T)
+
+alpha.samples <- parVals$alpha
+alpha0.samples <- inv.logit(parVals$logit_alpha0)
+logit_alpha1.samples <- parVals$logit_alpha1
+f.samples <- parVals$f 
+forget.samples <- parVals$forget 
+
+beta_reward.samples   <- parVals$beta_reward
+beta_punishment.samples   <- parVals$beta_punishment
+#Q0_on.samples <- parVals$Q0_on
+#Q0_off.samples <- parVals$Q0_off
+Q0.samples <- parVals$Q0
+Qt.samples <- parVals$Qt
+PEt.samples <- parVals$PEt
+k.samples   <- parVals$k
+A.samples   <- parVals$A
+tau.samples <- parVals$tau
+gamma.samples <- parVals$gamma
+choice_rng.samples <- parVals$choice_rng
+time_rng.samples <- parVals$time_rng
+
+# get median values
+alpha = apply(alpha.samples, 2, median)
+alpha0 = median(alpha0.samples)
+logit_alpha1 = median(logit_alpha1.samples)
+
+beta_reward = median(beta_reward.samples)
+beta_punishment = median(beta_punishment.samples)
+#Q0_on = apply(Q0_on.samples, 2, median)
+#Q0_off = apply(Q0_off.samples, 2, median)
+forget = apply(forget.samples, 2, median)
+f = median(f.samples)
+Q0 = apply(Q0.samples, c(2,3), median)
+colnames(Q0) = choice_labels
+rownames(Q0) = condition_labels
+Qt = apply(Qt.samples, c(2,3), median)
+PEt = apply(PEt.samples, 2, median)
+k = median(k.samples)
+A = median(A.samples)
+tau = median(tau.samples)
+gamma = median(gamma.samples)
+choice_rng <- apply(choice_rng.samples, 2, Mode)
+time_rng <- apply(time_rng.samples, 2, median)
+
+
+```
+
+
+Explore results
+
+```{r}
+plot.Q0 = ggplot(melt(Q0) %>% mutate(choice = Var1, condition = Var2, Q0 = value), aes(x = choice, y = condition, fill = Q0)) + geom_tile() + scale_fill_gradient2(midpoint=0, low="blue", mid="white", high="red") + theme_classic() + theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 8), axis.text.y = element_text(size = 8)) 
+print(plot.Q0)
+
+
+plot.Qt = ggplot(melt(Qt) %>% mutate(trial = Var1, condition = Var2, Qt = value), aes(x = trial, y = condition, fill = Qt)) + geom_tile() + scale_fill_gradient2(midpoint=0, low="blue", mid="white", high="red") + theme_classic() + theme(axis.text.x = element_text(size = 8), axis.text.y = element_text(size = 8)) 
+print(plot.Qt)
+
+rawdata$PEt = PEt
+rawdata$choice_rng = choice_rng
+rawdata$time_rng = time_rng
+rawdata$correct = 1*(choice_rng == conditionxchoice[rawdata$condition])
+
+print(ggplot(rawdata, aes(x = cumulative_trial, y = choice_rng, col = correct)) + geom_line() + facet_grid(true_sequence ~ sess_num))
+print(ggplot(rawdata, aes(x = cumulative_trial, y = PEt)) + geom_line() + facet_grid(true_sequence ~ sess_num))
+print(ggplot(rawdata, aes(x = cumulative_trial, y = time_rng)) + geom_line() + facet_grid(true_sequence ~ sess_num))
+
+myQt = data.frame(Qt[, conditionxchoice])
+myQt$sess_num = rawdata$sess_num
+myQt$cumulative_trial = rawdata$cumulative_trial
+myQt$condition = rawdata$condition
+Qt.melt = melt(myQt, id.vars = c("cumulative_trial", "sess_num", "condition"))
+
+print(ggplot(Qt.melt, aes(x = cumulative_trial, y = value, group = condition, col = as.factor(condition))) + geom_line() + facet_grid(variable ~ sess_num)+ theme(legend.position = "bottom"))
+
+
+```
