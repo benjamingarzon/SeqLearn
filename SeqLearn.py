@@ -13,9 +13,8 @@ Training tool for discrete sequence production.
 from __future__ import division
 from psychopy import core, visual, event, prefs
 from datetime import datetime
-from lib.utils import showStimulus, scorePerformance, get_config, \
-startSession, filter_keys
-from generator.generator import Generator, string_to_seq, seq_to_string
+from lib.utils import showStimulus, scorePerformance, startSession, filter_keys
+from generator.generator import string_to_seq, seq_to_string
 prefs.general['audioLib'] = ['pygame']
 from psychopy import sound
 import numpy as np
@@ -38,39 +37,61 @@ intro_message = visual.TextStim(win,
                                            height = \
                                            config["HEADING_TEXT_HEIGHT"], 
                                            alignHoriz='center') 
-instructions_message = visual.TextStim(win, 
-                                       text=config["TEXT_INSTRUCT"].format(
+instructions1_message = visual.TextStim(win, 
+                                       text=config["TEXT_INSTRUCT1"].format(
                                                config["MAX_WAIT"], 
                                                config["TOTAL_TRIALS"]), 
                                        height = config["TEXT_HEIGHT"], 
                                        alignHoriz='center') 
+
+instructions2_message = visual.TextStim(win, 
+                                       text=config["TEXT_INSTRUCT2"], 
+                                       height = config["TEXT_HEIGHT"], 
+                                       alignHoriz='center') 
+
+
 last_label = visual.TextStim(win, 
                                 text=config["LAST_LABEL"], 
                                 height = config["TEXT_HEIGHT"], 
                                 pos = (-3*config["BAR_WIDTH"], 
-                                       -0.5*config["BAR_HEIGHT"]),
+                                       -0.5*config["BAR_HEIGHT"] - 2),
                                 alignHoriz='center') 
 best_label = visual.TextStim(win, 
                              text=config["BEST_LABEL"], 
                              height = config["TEXT_HEIGHT"],
                              pos = (0, 
-                                    -0.5*config["BAR_HEIGHT"]),
+                                    -0.5*config["BAR_HEIGHT"] - 2),
                              alignHoriz='center') 
 
 group_best_label = visual.TextStim(win, 
                              text=config["GROUP_BEST_LABEL"], 
                              height = config["TEXT_HEIGHT"],
                              pos = (3*config["BAR_WIDTH"], 
-                                    -0.5*config["BAR_HEIGHT"]),
+                                    -0.5*config["BAR_HEIGHT"] - 2),
                              alignHoriz='center') 
 error_message = visual.TextStim(win, 
                                 text=config["TEXT_ERROR"], 
-                                alignHoriz="center")  
+                                alignHoriz="center", 
+                                pos = (0, -3))  
 error_sign = visual.ImageStim(win, 
-                              image=config["WRONG_FILE"]) 
+                              image=config["WRONG_FILE"],
+                              pos = (0, 2))
+
+hand_sign = visual.ImageStim(win, 
+                              image=config["HAND_FILE"])
+ 
 late_message = visual.TextStim(win, 
                                 text=config["TEXT_LATE"], 
+                                alignHoriz="center", 
+                                pos = (0, -3))  
+miss_message = visual.TextStim(win, 
+                                text=config["TEXT_MISS"], 
                                 alignHoriz="center")
+
+new_message = visual.TextStim(win, 
+                                text=config["TEXT_NEW"], 
+                                alignHoriz="center", pos = (0, 5), 
+                                color="yellow")  
 
 # fixation cross
 fixation = visual.ShapeStim(win, 
@@ -85,66 +106,89 @@ trialClock = core.Clock()
 ## Experiment Section
 
 #display instructions and wait
-showStimulus(win, intro_message)
+showStimulus(win, [intro_message])
 core.wait(config["INTRO_TIME"])
-showStimulus(win, instructions_message)
-
-#check for a keypress
+showStimulus(win, [instructions1_message])
 event.waitKeys() 
+showStimulus(win, [instructions2_message])
+event.waitKeys() 
+
          
 for row in schedule.itertuples():
     sess_num, sess_type, n_trials, seq_keys, seq_type, \
     sequence_string, seq_train = row.sess_num, row.sess_type, row.n_trials, \
     row.seq_keys.split(" "), row.seq_type, row.sequence_string, \
     row.seq_train 
+    
+    trialStimulus = []
     textStimuli = []
     
     sequence = string_to_seq(sequence_string)
     # turn the text strings into stimuli
-    for iTrial in range(n_trials):
-        if iTrial == 0:
-            add_text = "NEW SEQUENCE\n"
-        else:
-            add_text = ""
-                
-        text = config["TEXT_DO_SEQ"].format(add_text, iTrial+1, 
-                     sequence_string.replace("-", "\n"))
+    for iTrial in range(n_trials):                
+        texttrial = config["TEXT_TRIAL"].format(iTrial+1)
+        text = config["TEXT_DO_SEQ"].format(sequence_string.replace("-", "\n"))
+        trialStimulus.append(visual.TextStim(win, 
+                                             height=config["TEXT_HEIGHT"],
+                                             text=texttrial, pos = (-9, 9)))
         textStimuli.append(visual.TextStim(win, text=text, 
-                                           height=config["TEXT_HEIGHT"])) 
+                                           height=config["TEXT_HEIGHT"]*2,
+                                           color = "red")) 
     
     cum_trial = 1 
     trial = 1
+    misses = 0
     while (trial <= n_trials):
-
         # present fixation
-        showStimulus(win, fixation)
+        showStimulus(win, [fixation])
         core.wait(config["FIXATION_TIME"])     
         
-        # present stimulus text and wait a maximum of 2 second for a response
+#        textStimuli[trial-1].draw()
+#        if cum_trial == 1:
+#            showStimulus(win, [new_message, textStimuli[trial-1]])    
+#        else:
+        showStimulus(win, [trialStimulus[trial-1], textStimuli[trial-1]])    
+
+#        core.wait(config["PRESENTATION_TIME"])     
+
+#        hand_sign.draw()
         event.clearEvents()
-        textStimuli[trial-1].draw()
         trialClock.reset()
-#        showStimulus(win, textStimuli[trial-1])    
-        win.flip()
+#        win.flip()
+
         core.wait(config["MAX_WAIT"], hogCPUperiod=config["MAX_WAIT"])
         
         keypresses = event.getKeys(keyList=seq_keys, 
                                    timeStamped = trialClock)
-    
-        if len(keypresses) == 0:
-            showStimulus(win, error_sign)
+        print keypresses
+        if len(keypresses) <= 1:
+            showStimulus(win, [late_message, error_sign])
             if config["BUZZER_ON"] == 1:
                 buzzer.play()
             core.wait(config["ERROR_TIME"])
-            showStimulus(win, late_message)
-            core.wait(config["ERROR_TIME"])
-    
-            continue
+            misses = misses + 1
+            
+            accuracy = 0
+            score = 0
+            MT = 0
+            keys = ["0"]
+            keytimes = [0]
+            RTs = [config["MAX_WAIT"]]
+            trial_type = "missed"
+
+            if misses > config["MAX_MISSES"]:
+                showStimulus(win, [miss_message])
+                core.wait(config["ERROR_TIME"])
+            if misses > config["MAX_TOTAL_MISSES"]:
+                exit()
+#            continue
+
         else:
+            misses = 0
             keys, keytimes, RTs = filter_keys(keypresses, 
                                               config["MAX_CHORD_INTERVAL"], 
                                               len(sequence))
-   
+            trial_type = "done"
 #        print keys
 #        print keytimes
 #        print RTs
@@ -154,10 +198,59 @@ for row in schedule.itertuples():
     #        if key=="escape":
     #            break
     
-           
-        # print out the data
-        key_from = ["0"]
+
+                
+            accuracy, MT, score  = scorePerformance(keys, RTs, sequence)
+            if accuracy < 1:
+                showStimulus(win, [error_message, error_sign])
+                if config["BUZZER_ON"] == 1:
+                    buzzer.play()
+                core.wait(config["ERROR_TIME"])        
+                score = 0
+            else:
+                print score
+                #feedback
+                maxscore[sequence_string] = np.maximum(score, 
+                        maxscore[sequence_string])
+    
+                max_height = maxscore[sequence_string]*config["BAR_HEIGHT"]/\
+                maxgroupscore[sequence_string]
+                last_height = score*config["BAR_HEIGHT"]/\
+                maxgroupscore[sequence_string]
+                
+                last_bar = visual.Rect(win, height=last_height, 
+                                          width=config["BAR_WIDTH"], 
+                                          lineWidth=0, 
+                                          fillColor="blue", 
+                                          pos=(-3*config["BAR_WIDTH"], 
+                                               0.5*last_height - 2)
+                                          ) 
+                best_bar = visual.Rect(win, height=max_height, 
+                                       width=config["BAR_WIDTH"], 
+                                       lineWidth=0, 
+                                       fillColor="green",
+                                       pos=(0, 
+                                            0.5*max_height - 2)
+                                       )
+        
+                group_best_bar = visual.Rect(win, height=config["BAR_HEIGHT"], 
+                                       width=config["BAR_WIDTH"], 
+                                       lineWidth=0, 
+                                       fillColor="yellow",
+                                       pos=(3*config["BAR_WIDTH"], 
+                                            0.5*config["BAR_HEIGHT"] - 2)
+                                       )
+    
+                showStimulus(win, [last_bar, last_label, best_bar, best_label, 
+                                   group_best_bar, group_best_label])
+                core.wait(config["FEEDBACK_TIME"])
             
+                trial = trial + 1
+    
+        # write result to data file
+
+        key_from = ["0"]
+
         for keystroke in range(len(keys)):
             
             key_to = keys[keystroke]
@@ -171,8 +264,12 @@ for row in schedule.itertuples():
                 sess_type,
                 seq_train,
                 seq_to_string(sequence),
+                seq_to_string(keys),
+                accuracy, 
+                score,
                 cum_trial, 
-                trial, 
+                trial,
+                trial_type,
                 keystroke, 
                 " ".join(key_from), 
                 " ".join(key_to), 
@@ -180,69 +277,8 @@ for row in schedule.itertuples():
             ])
             key_from = key_to
             keytime0 = keytimes[keystroke]
-    
-        accuracy, MT, score  = scorePerformance(keys, RTs, sequence)
-        
-        if accuracy < 1:
-            showStimulus(win, error_sign)
-            if config["BUZZER_ON"] == 1:
-                buzzer.play()
-            core.wait(config["ERROR_TIME"])
-            showStimulus(win, error_message)
-            core.wait(config["ERROR_TIME"])
-        else:
 
-            #feedback
-            maxscore[sequence_string] = np.maximum(score, 
-                    maxscore[sequence_string])
-            print score, maxscore
 
-            max_height = maxscore[sequence_string]*config["BAR_HEIGHT"]/\
-            maxgroupscore[sequence_string]
-            last_height = score*config["BAR_HEIGHT"]/\
-            maxgroupscore[sequence_string]
-            
-            last_bar = visual.Rect(win, height=last_height, 
-                                      width=config["BAR_WIDTH"], 
-                                      lineWidth=0, 
-                                      fillColor="blue", 
-                                      pos=(-3*config["BAR_WIDTH"], 
-                                           0.5*last_height)
-                                      ) 
-            best_bar = visual.Rect(win, height=max_height, 
-                                   width=config["BAR_WIDTH"], 
-                                   lineWidth=0, 
-                                   fillColor="green",
-                                   pos=(0, 
-                                        0.5*max_height)
-                                   )
-    
-            group_best_bar = visual.Rect(win, height=config["BAR_HEIGHT"], 
-                                   width=config["BAR_WIDTH"], 
-                                   lineWidth=0, 
-                                   fillColor="yellow",
-                                   pos=(3*config["BAR_WIDTH"], 
-                                        0.5*config["BAR_HEIGHT"])
-                                   )
-    
-            last_bar.draw()
-            last_label.draw()
-            
-            best_bar.draw()
-            best_label.draw()
-            
-            group_best_bar.draw()
-            group_best_label.draw()
-            
-            win.flip()
-            core.wait(config["FEEDBACK_TIME"])
-    
-    #        best_group_bar = visual.Rect(win, height=5, width=config.BAR_WIDTH, 
-    #                                  lineWidth=3, lineColor="blue")         
-    
-            trial = trial + 1
-    
-        # write result to data file
         trialswriter.writerow([
                 sess_num,
                 sess_date,    
@@ -252,6 +288,7 @@ for row in schedule.itertuples():
                 seq_train,
                 cum_trial,
                 trial, 
+                trial_type,
                 seq_to_string(sequence),
                 seq_to_string(keys),
                 accuracy, 
@@ -262,10 +299,7 @@ for row in schedule.itertuples():
     
         cum_trial = cum_trial + 1    
         core.wait(config["FIXATION_TIME"]) 
-    #    if key==None:
-    #        key=[]
-    #        key.append("no key")
-    # end loop
+
 keysfile.close()
 trialsfile.close()
  

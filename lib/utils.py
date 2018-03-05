@@ -39,8 +39,9 @@ def get_config(config_file=None):
     
     return(config)
 
-def showStimulus(window, stimulus):
-    stimulus.draw()
+def showStimulus(window, stimuli):
+    for stimulus in stimuli:
+        stimulus.draw()
     window.flip()
 
 def scorePerformance(keys, RTs, sequence):
@@ -98,7 +99,8 @@ def startSession(config_file=None, schedule_file=None):
                     trialstable.loc[trialstable["true_sequence"] == seq, 
                                     "score"])
             maxgroupscore[seq] = maxscore[seq]*1.2
-        
+        print maxscore
+        print maxgroupscore
         # connect files with a csv writer
         keyswriter = csv.writer(keysfile, delimiter=";")
         trialswriter = csv.writer(trialsfile, delimiter=";")
@@ -123,9 +125,13 @@ def startSession(config_file=None, schedule_file=None):
                 "seq_type",
                 "sess_type",
                 "seq_train",
-                "sequence", 
+                "true_sequence",
+                "obs_sequence", 
+                "accuracy", 
+                "score",
                 "cumulative_trial", 
                 "trial", 
+                "trial_type",
                 "keystroke",
                 "key_from",
                 "key_to", 
@@ -140,6 +146,7 @@ def startSession(config_file=None, schedule_file=None):
                 "seq_train",
                 "cumulative_trial", 
                 "trial", 
+                "trial_type",
                 "true_sequence", 
                 "obs_sequence", 
                 "accuracy", 
@@ -175,8 +182,6 @@ def filter_keys(keypresses, max_chord_interval, n_chords):#, keys, keytimes):
     for c in myclusters:
         keys.append(sorted([allkeys[i] for i, cluster in enumerate(clusters) if cluster == c]))
         keytimes.append(np.mean(allkeytimes[np.where(clusters == c)]))
-    print allkeytimes
-    print keytimes
     RTs = np.append(keytimes[0], np.diff(keytimes)).tolist()
 #    from matplotlib import pyplot as plt
 #    from scipy.cluster.hierarchy import dendrogram
