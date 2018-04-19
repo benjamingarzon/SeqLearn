@@ -8,13 +8,11 @@ Created on Tue Feb 20 08:41:28 2018
 Training tool for discrete sequence production.
 """
 
-#config["TOTAL_TRIALS"]
-
 from __future__ import division
-from psychopy import core, visual, event, prefs
+from psychopy import visual, core, event, prefs
 from datetime import datetime
 from lib.utils import showStimulus, scorePerformance, startSession, filter_keys
-from generator.generator import string_to_seq, seq_to_string
+from generator.generator import string_to_seq, seq_to_string, seq_to_stim
 prefs.general['audioLib'] = ['pygame']
 from psychopy import sound
 import numpy as np
@@ -116,25 +114,30 @@ event.waitKeys()
          
 for row in schedule.itertuples():
     sess_num, sess_type, n_trials, seq_keys, seq_type, \
-    sequence_string, seq_train = row.sess_num, row.sess_type, row.n_trials, \
-    row.seq_keys.split(" "), row.seq_type, row.sequence_string, \
-    row.seq_train 
+    sequence_string, seq_train, seq_color = row.sess_num, row.sess_type, \
+    row.n_trials, row.seq_keys.split(" "), row.seq_type, row.sequence_string, \
+    row.seq_train, row.seq_color 
     
     trialStimulus = []
-    textStimuli = []
+ #   textStimuli = []
+    squareStimuli = []
     
     sequence = string_to_seq(sequence_string)
     # turn the text strings into stimuli
     for iTrial in range(n_trials):                
         texttrial = config["TEXT_TRIAL"].format(iTrial+1)
-        text = config["TEXT_DO_SEQ"].format(sequence_string.replace("-", "\n"))
+        squares = seq_to_stim(sequence_string, seq_color, win, 
+                              config["SQUARE_SIZE"])
+#        text = config["TEXT_DO_SEQ"].format(sequence_string.replace("-", "\n"))
         trialStimulus.append(visual.TextStim(win, 
                                              height=config["TEXT_HEIGHT"],
                                              text=texttrial, pos = (-9, 9)))
-        textStimuli.append(visual.TextStim(win, text=text, 
-                                           height=config["TEXT_HEIGHT"]*2,
-                                           color = "red")) 
-    
+
+#        textStimuli.append(visual.TextStim(win, text=text, 
+#                                           height=config["TEXT_HEIGHT"]*2,
+#                                           color = "red")) 
+        squareStimuli.append(squares)
+        
     cum_trial = 1 
     trial = 1
     misses = 0
@@ -147,7 +150,7 @@ for row in schedule.itertuples():
 #        if cum_trial == 1:
 #            showStimulus(win, [new_message, textStimuli[trial-1]])    
 #        else:
-        showStimulus(win, [trialStimulus[trial-1], textStimuli[trial-1]])    
+        showStimulus(win, [trialStimulus[trial-1]] + squareStimuli[trial-1])    
 
 #        core.wait(config["PRESENTATION_TIME"])     
 
@@ -302,7 +305,11 @@ for row in schedule.itertuples():
 
 keysfile.close()
 trialsfile.close()
+
+# synchronize local file and database
+
  
 ## Closing Section
 win.close()
 core.quit()
+

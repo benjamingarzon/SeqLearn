@@ -8,7 +8,8 @@ Discrete sequence production generator class.
 """
 from itertools import combinations
 from random import choice, sample
-    
+from psychopy import visual
+
 class Generator:
     """ Create a generator """
 
@@ -35,11 +36,50 @@ class Generator:
         return (sequence, sequence_string)
     
 def string_to_seq(mystring):
+    """ Translate string to a sequence. """
+
     myseq = mystring.split(" - ")
     myseq = [ x.split(" ") for x in myseq ]
     return(myseq)
     
 def seq_to_string(myseq):
-   mystring = " - ".join([" ".join(x) for x in myseq])
-   return(mystring)
+    """ Translate sequence to a string. """
+
+    mystring = " - ".join([" ".join(x) for x in myseq])
+    return(mystring)
+
+def seq_to_stim(mystring, color, win, size):
+    """ Translate sequence to squares. """
+    myseq = string_to_seq(mystring)
+    length = len(myseq)*size
+    seq_pos = length - size
+ 
+    print(myseq)
+    square_list = [] 
+    for mychord in myseq:
+        
+        for mykey in mychord:
+            square = visual.Rect(win, 
+                         height=size, 
+                         width=size,
+                         lineWidth=0, 
+                         fillColor=color, 
+                         pos=((int(mykey) - 2.5)*1.5*size, 
+                              seq_pos))
+            square_list.append(square)
+        seq_pos = seq_pos - 2*size
+    
+    lines = []
+    for x in [-3, -1.5, 0, 1.5, 3]:
+        vertices = [(size*x, length + 0.25*size), (size*x, - length + 0.25*size)]
+        lines.append(visual.ShapeStim(win, 
+                                      vertices=vertices, 
+                                      lineWidth=0.5,
+                                      closeShape=False, 
+                                      lineColor='black', 
+                                      pos = (0, 0))
+                )
+                
+    square_list = square_list + lines 
+    return(square_list)
    

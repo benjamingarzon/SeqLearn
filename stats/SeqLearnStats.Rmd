@@ -20,7 +20,7 @@ library(boot)
 library(rstan)
 
 options(mc.cores = parallel::detectCores())
-username = 'benji'
+username = 'benji2'
 keysfile = paste0('../data/archive/keysfile-', username, '.csv')
 trialsfile = paste0('../data/archive/trialsfile-', username, '.csv')
 
@@ -34,6 +34,7 @@ Analyze keys
 
 ```{r}
 keys.table = subset(keys.table, keystroke > 0) # only after movement started 
+keys.table = subset(keys.table, accuracy == 1)
 
 plot.keystroke = ggplot(keys.table, aes(x = key_to, y = RT)) + geom_point() 
 

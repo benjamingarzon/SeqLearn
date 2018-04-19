@@ -13,15 +13,16 @@ from lib.utils import get_config, get_seq_types
 from generator.generator import Generator
 import pandas as pd
 import numpy as np
+import random
 
 # get config
 config = get_config()
 type_data = get_seq_types()
 schedulefilename = "./scheduling/schedule.csv"
 
+color_list = config["COLOR_LIST"]
+
 # create sequences
-
-
 row_list = []
 
 sess_num = 1
@@ -30,6 +31,7 @@ for index, row in type_data.iterrows():
     row
     
     seq_list = []
+    seq_color = []
 
     seq_keys = seq_keys.split(" ")
 
@@ -39,9 +41,12 @@ for index, row in type_data.iterrows():
         maxchordsize=max_chord_size)
 
     # generate the sequences
-    for seq in range(2*n_seqs):        
-        seq_list.append(mygenerator.random()) 
-
+    for seq in range(2*n_seqs): # 2 times: trained and untrained       
+        seq_list.append(mygenerator.random())
+        index = random.randint(0, len(color_list)-1)
+        seq_color.append(color_list[index])
+        del color_list[index]
+        
     for sess in range(n_sess + 1): 
         for seq in range(2*n_seqs):        
 
@@ -60,7 +65,7 @@ for index, row in type_data.iterrows():
                     seq_train = "test"
 
             sequence, sequence_string = seq_list[seq]
-
+            color = seq_color[seq]
             row_list.append([
                 true_sess_num,
                 sess_type,
@@ -69,7 +74,8 @@ for index, row in type_data.iterrows():
                 seq_type,
 #                sequence,
                 sequence_string, 
-                seq_train 
+                seq_train,
+                color
                 ])
 
         if sess < n_sess:    
@@ -85,6 +91,7 @@ schedule = pd.DataFrame(row_list, columns = (
 #        "sequence", 
         "sequence_string", 
         "seq_train",
+        "seq_color"
 )
 )
 

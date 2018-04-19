@@ -25,14 +25,16 @@
 "BAR_WIDTH":3,
 "BAR_HEIGHT":5,
 "SCREEN_RES":[1100, 700],
+"SQUARE_SIZE":1,
 "BUZZER_FILE":"./sounds/buzzer.wav",
 "BUZZER_ON":0,
 "WRONG_FILE":"./pics/wrong.png",
 "HAND_FILE":"./pics/lefthand.JPG",
-"MAX_WAIT":4.0,
+"MAX_WAIT":5.0,
 "MAX_CHORD_SIZE":3,
 "MAX_CHORD_INTERVAL":0.0005,
 "MAX_MISSES":10,
 "MAX_TOTAL_MISSES":20,
-"N_SESS":40
+"N_SESS":40,
+"COLOR_LIST":["darkblue","lightblue","darkred","lightred","darkgreen","lightgreen","darkgray","lightgray"]
 }
