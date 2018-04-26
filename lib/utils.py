@@ -39,6 +39,22 @@ def get_config(config_file=None):
     
     return(config)
 
+def get_texts(language):
+    # select language here
+    if language == None:
+        texts_file = "./config/texts.json"
+    else:
+        texts_file = "./config/texts_%s.json"%language
+    try:
+        texts_json = open(texts_file, "r")
+        texts = json.load(texts_json)
+        texts_json.close()
+    except IOError: 
+        print "Error: Texts file is missing!"
+    
+    return(texts)
+
+
 def showStimulus(window, stimuli):
     for stimulus in stimuli:
         stimulus.draw()
@@ -65,6 +81,7 @@ def startSession(config_file=None, schedule_file=None):
     Starts a new session.
     """    
     config = get_config()
+    texts = get_texts(config["LANGUAGE"])
     
     if schedule_file == None:
         schedule_file = "./scheduling/schedule.csv"
@@ -75,13 +92,22 @@ def startSession(config_file=None, schedule_file=None):
 
     
     # get username
-    myDlg = gui.Dlg(title="Sequence training.")
-    myDlg.addField('Enter your username:')
-    myDlg.show()
-    if myDlg.OK:  
-        username = myDlg.data[0]
+    if config["ASK_USER"] == 0:
+        try:
+            user_json = open("./config/user.json", "r")
+            username = json.load(user_json)["USERNAME"]
+            user_json.close()
+        except IOError: 
+            print "Error: User file is missing!"
+        
     else:
-        username = 'test0000'
+        myDlg = gui.Dlg(title="Sequence training.")
+        myDlg.addField("Enter your username:")
+        myDlg.show()
+        if myDlg.OK:  
+            username = myDlg.data[0]
+        else:
+            username = 'test0000'
         
     keysfilename = "./data/keysfile-{}.csv".format(username)
     trialsfilename = "./data/trialsfile-{}.csv".format(username) 
@@ -119,6 +145,7 @@ def startSession(config_file=None, schedule_file=None):
 
         # create output file header
         keyswriter.writerow([
+                "username",
                 "sess_num",
                 "sess_date",    
                 "sess_time",    
@@ -138,6 +165,7 @@ def startSession(config_file=None, schedule_file=None):
                 "RT"
         ])
         trialswriter.writerow([
+                "username",
                 "sess_num",
                 "sess_date",    
                 "sess_time",    
@@ -156,9 +184,12 @@ def startSession(config_file=None, schedule_file=None):
         ])
 
     # select schedule for this session
+    schedule_unique = schedule[["sequence_string", 
+                                "seq_color","seq_train"]].drop_duplicates()     
     schedule = schedule.query('sess_num == %d'%(sess_num))
+    
     return(sess_num, username, keyswriter, trialswriter, keysfile, trialsfile,
-           maxscore, maxgroupscore, config, schedule)
+           maxscore, maxgroupscore, config, texts, schedule, schedule_unique)
 
 
 def filter_keys(keypresses, max_chord_interval, n_chords):#, keys, keytimes):

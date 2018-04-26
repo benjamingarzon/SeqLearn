@@ -1,6 +1,9 @@
 from mysql.connector import MySQLConnection, Error
 from python_mysql_dbconfig import read_db_config
- 
+import numpy as np
+import pandas as pd
+from sqlalchemy import create_engine, SQLAlchemyError
+
 # define queries
 key_query = "CREATE TABLE keys_table (\
     key_id INT(6) NOT NULL AUTO_INCREMENT,\
@@ -98,7 +101,7 @@ def insert_data(keys_list, trials_list):
     try:
         db_config = read_db_config()
         conn = MySQLConnection(**db_config)
- 
+        
         cursor = conn.cursor()
         cursor.executemany(insert_key_query, keys_list)
         cursor.executemany(insert_trial_query, trials_list)
@@ -110,14 +113,26 @@ def insert_data(keys_list, trials_list):
     finally:
         cursor.close()
         conn.close()
+        
+def insert_fake_data():
+    try:
+        db_config = read_db_config()
+        print('mysql://%s:%s@%s/%s'%(db_config['user'], db_config['password'], db_config['host'], db_config['database']))
+        engine = create_engine('mysql://%s:%s@%s/%s'%(db_config['user'], db_config['password'], db_config['host'], db_config['database']))
+        df = pd.DataFrame(np.random.randint(0,100,size=(100, 4)), columns=list('ABCD'))
+        df.to_sql('keys_table', engine, if_exists = 'append')
+        
+    except Error as e:
+        print('Error:', e)
+ 
+#    finally:
+#        engine.close()
+
  
 def main():
-#    books = [('Harry Potter And The Order Of The Phoenix', '9780439358071'),
-#             ('Gone with the Wind', '9780446675536'),
-#             ('Pride and Prejudice (Modern Library Classics)', '9780679783268')]
-#   insert_books(books)
 #    query_with_fetchone() 
-    create_tables()
+#    create_tables()
+    insert_fake_data()
     
 if __name__ == '__main__':
     main()

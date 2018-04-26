@@ -16,13 +16,16 @@ from generator.generator import string_to_seq, seq_to_string, seq_to_stim
 prefs.general['audioLib'] = ['pygame']
 from psychopy import sound
 import numpy as np
+import pandas as pd
+from db.python_mysql_dbconfig import read_db_config
+from sqlalchemy import create_engine, exc
 
 # start session
 
 sess_date = str(datetime.now().date())
 sess_time = str(datetime.now().time())
 sess_num, username, keyswriter, trialswriter, keysfile, trialsfile, maxscore, \
-maxgroupscore, config, schedule = startSession()
+maxgroupscore, config, texts, schedule, schedule_unique = startSession()
 
 win = visual.Window(config["SCREEN_RES"], fullscr=False, monitor="testMonitor", 
                     units="cm")
@@ -30,45 +33,44 @@ win = visual.Window(config["SCREEN_RES"], fullscr=False, monitor="testMonitor",
 # define stimuli
 buzzer = sound.Sound(config["BUZZER_FILE"])
 intro_message = visual.TextStim(win, 
-                                text=config["TEXT_INTRO"].format(username, 
+                                text=texts["TEXT_INTRO"].format(username, 
                                            sess_num), 
                                            height = \
                                            config["HEADING_TEXT_HEIGHT"], 
                                            alignHoriz='center') 
 instructions1_message = visual.TextStim(win, 
-                                       text=config["TEXT_INSTRUCT1"].format(
+                                       text=texts["TEXT_INSTRUCT1"].format(
                                                config["MAX_WAIT"], 
                                                config["TOTAL_TRIALS"]), 
                                        height = config["TEXT_HEIGHT"], 
                                        alignHoriz='center') 
 
 instructions2_message = visual.TextStim(win, 
-                                       text=config["TEXT_INSTRUCT2"], 
+                                       text=texts["TEXT_INSTRUCT2"], 
                                        height = config["TEXT_HEIGHT"], 
                                        alignHoriz='center') 
 
-
 last_label = visual.TextStim(win, 
-                                text=config["LAST_LABEL"], 
+                                text=texts["LAST_LABEL"], 
                                 height = config["TEXT_HEIGHT"], 
                                 pos = (-3*config["BAR_WIDTH"], 
                                        -0.5*config["BAR_HEIGHT"] - 2),
                                 alignHoriz='center') 
 best_label = visual.TextStim(win, 
-                             text=config["BEST_LABEL"], 
+                             text=texts["BEST_LABEL"], 
                              height = config["TEXT_HEIGHT"],
                              pos = (0, 
                                     -0.5*config["BAR_HEIGHT"] - 2),
                              alignHoriz='center') 
 
 group_best_label = visual.TextStim(win, 
-                             text=config["GROUP_BEST_LABEL"], 
+                             text=texts["GROUP_BEST_LABEL"], 
                              height = config["TEXT_HEIGHT"],
                              pos = (3*config["BAR_WIDTH"], 
                                     -0.5*config["BAR_HEIGHT"] - 2),
                              alignHoriz='center') 
 error_message = visual.TextStim(win, 
-                                text=config["TEXT_ERROR"], 
+                                text=texts["TEXT_ERROR"], 
                                 alignHoriz="center", 
                                 pos = (0, -3))  
 error_sign = visual.ImageStim(win, 
@@ -79,15 +81,15 @@ hand_sign = visual.ImageStim(win,
                               image=config["HAND_FILE"])
  
 late_message = visual.TextStim(win, 
-                                text=config["TEXT_LATE"], 
+                                text=texts["TEXT_LATE"], 
                                 alignHoriz="center", 
                                 pos = (0, -3))  
 miss_message = visual.TextStim(win, 
-                                text=config["TEXT_MISS"], 
+                                text=texts["TEXT_MISS"], 
                                 alignHoriz="center")
 
 new_message = visual.TextStim(win, 
-                                text=config["TEXT_NEW"], 
+                                text=texts["TEXT_NEW"], 
                                 alignHoriz="center", pos = (0, 5), 
                                 color="yellow")  
 
@@ -111,7 +113,14 @@ event.waitKeys()
 showStimulus(win, [instructions2_message])
 event.waitKeys() 
 
-         
+if config["PRESHOW"]==1:
+   
+    for row in schedule_unique.itertuples():    
+        squares = seq_to_stim(row.sequence_string, row.seq_color, win, 
+                          config["SQUARE_SIZE"])
+        showStimulus(win, squares)
+        event.waitKeys()
+    
 for row in schedule.itertuples():
     sess_num, sess_type, n_trials, seq_keys, seq_type, \
     sequence_string, seq_train, seq_color = row.sess_num, row.sess_type, \
@@ -123,11 +132,11 @@ for row in schedule.itertuples():
     squareStimuli = []
     
     sequence = string_to_seq(sequence_string)
+    squares = seq_to_stim(sequence_string, seq_color, win, config["SQUARE_SIZE"])
+
     # turn the text strings into stimuli
     for iTrial in range(n_trials):                
-        texttrial = config["TEXT_TRIAL"].format(iTrial+1)
-        squares = seq_to_stim(sequence_string, seq_color, win, 
-                              config["SQUARE_SIZE"])
+        texttrial = texts["TEXT_TRIAL"].format(iTrial+1)
 #        text = config["TEXT_DO_SEQ"].format(sequence_string.replace("-", "\n"))
         trialStimulus.append(visual.TextStim(win, 
                                              height=config["TEXT_HEIGHT"],
@@ -141,6 +150,8 @@ for row in schedule.itertuples():
     cum_trial = 1 
     trial = 1
     misses = 0
+#    maxwait = config["MAX_WAIT"]
+    maxwait = len(sequence)*config["MAX_WAIT_PER_KEYPRESS"]
     while (trial <= n_trials):
         # present fixation
         showStimulus(win, [fixation])
@@ -159,7 +170,7 @@ for row in schedule.itertuples():
         trialClock.reset()
 #        win.flip()
 
-        core.wait(config["MAX_WAIT"], hogCPUperiod=config["MAX_WAIT"])
+        core.wait(maxwait, hogCPUperiod=maxwait)
         
         keypresses = event.getKeys(keyList=seq_keys, 
                                    timeStamped = trialClock)
@@ -260,6 +271,7 @@ for row in schedule.itertuples():
             RT = RTs[keystroke]
             # write result to data file    
             keyswriter.writerow([
+                username,
                 sess_num,
                 sess_date,    
                 sess_time,
@@ -283,6 +295,7 @@ for row in schedule.itertuples():
 
 
         trialswriter.writerow([
+                username,
                 sess_num,
                 sess_date,    
                 sess_time,
@@ -303,10 +316,31 @@ for row in schedule.itertuples():
         cum_trial = cum_trial + 1    
         core.wait(config["FIXATION_TIME"]) 
 
+# synchronize local file and database
 keysfile.close()
 trialsfile.close()
 
-# synchronize local file and database
+mykeys = pd.read_table(keysfile.name, sep = ';')
+mytrials = pd.read_table(trialsfile.name, sep = ';')
+
+# update only what we did in the current session
+mykeys = mykeys.loc[mykeys['sess_num'] == sess_num]
+mytrials= mytrials.loc[mytrials['sess_num'] == sess_num]
+
+try:
+    db_config = read_db_config()
+    engine_string = 'mysql://%s:%s@%s/%s'%(db_config['user'], 
+                                           db_config['password'], 
+                                           db_config['host'], 
+                                           db_config['database'])
+    engine = create_engine(engine_string)
+    mykeys.to_sql('keys_table', engine, if_exists = 'append') 
+    mytrials.to_sql('trials_table', engine, if_exists = 'append')
+    print('Synced with database.')
+except exc.SQLAlchemyError as e:
+    print('Error:', e)
+ 
+#finally:
 
  
 ## Closing Section
