@@ -50,7 +50,7 @@ for index, row in type_data.iterrows():
     for sess in range(n_sess + 1): 
         for seq in range(2*n_seqs):        
 
-            seq_train = "train"
+            seq_train = "trained"
             # create training and testing sessions
 
             if sess < n_sess:
@@ -62,7 +62,7 @@ for index, row in type_data.iterrows():
                 sess_type = "testing"
                 true_sess_num = 0
                 if seq >= n_seqs:
-                    seq_train = "test"
+                    seq_train = "untrained"
 
             sequence, sequence_string = seq_list[seq]
             color = seq_color[seq]

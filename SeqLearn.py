@@ -38,6 +38,12 @@ intro_message = visual.TextStim(win,
                                            height = \
                                            config["HEADING_TEXT_HEIGHT"], 
                                            alignHoriz='center') 
+
+instructionspre_message = visual.TextStim(win, 
+                                       text=texts["TEXT_INSTRUCTPRE"], 
+                                       height = config["TEXT_HEIGHT"], 
+                                       alignHoriz='center') 
+
 instructions1_message = visual.TextStim(win, 
                                        text=texts["TEXT_INSTRUCT1"].format(
                                                config["MAX_WAIT"], 
@@ -108,18 +114,23 @@ trialClock = core.Clock()
 #display instructions and wait
 showStimulus(win, [intro_message])
 core.wait(config["INTRO_TIME"])
-showStimulus(win, [instructions1_message])
-event.waitKeys() 
-showStimulus(win, [instructions2_message])
-event.waitKeys() 
 
 if config["PRESHOW"]==1:
-   
+
+    showStimulus(win, [instructionspre_message])
+    event.waitKeys() 
+    #mouse.isPressedIn(shape, buttons=[0]): 
     for row in schedule_unique.itertuples():    
         squares = seq_to_stim(row.sequence_string, row.seq_color, win, 
                           config["SQUARE_SIZE"])
         showStimulus(win, squares)
         event.waitKeys()
+
+showStimulus(win, [instructions1_message])
+event.waitKeys() 
+
+showStimulus(win, [instructions2_message])
+event.waitKeys() 
     
 for row in schedule.itertuples():
     sess_num, sess_type, n_trials, seq_keys, seq_type, \

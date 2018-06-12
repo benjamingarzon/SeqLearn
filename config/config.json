@@ -28,5 +28,5 @@
 "MAX_MISSES":10,
 "MAX_TOTAL_MISSES":20,
 "N_SESS":40,
-"COLOR_LIST":["darkblue","lightblue","darkred","lightred","darkgreen","lightgreen","darkgray","lightgray"]
+"COLOR_LIST":["#e6194b","#3cb44b","#ffe119","#0082c8","#f58231","#911eb4","#46f0f0","#f032e6"]
 }
