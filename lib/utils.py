@@ -60,7 +60,7 @@ def showStimulus(window, stimuli):
         stimulus.draw()
     window.flip()
 
-def scorePerformance(keys, RTs, sequence):
+def scorePerformance(keys, RTs, sequence, keytimes):
     """ 
     Returns accuracy and total movement time.
     """
@@ -70,7 +70,8 @@ def scorePerformance(keys, RTs, sequence):
     accuracy = np.sum(correct) / len(sequence)
 
     # MT
-    MT = np.sum(RTs[1:])
+    #MT = np.sum(RTs[1:])
+    MT = keytimes[-1] - keytimes[0]
     
     score = 1/MT
     return((accuracy, MT, score))
@@ -211,7 +212,8 @@ def filter_keys(keypresses, max_chord_interval, n_chords):#, keys, keytimes):
     indices = np.unique(clusters, return_index=True)[1]
     myclusters = [clusters[index] for index in sorted(indices)]
     for c in myclusters:
-        keys.append(sorted([allkeys[i] for i, cluster in enumerate(clusters) if cluster == c]))
+        keys.append(sorted([allkeys[i] for i, cluster in enumerate(clusters) 
+        if cluster == c]))
         keytimes.append(np.mean(allkeytimes[np.where(clusters == c)]))
     RTs = np.append(keytimes[0], np.diff(keytimes)).tolist()
 #    from matplotlib import pyplot as plt
@@ -233,7 +235,6 @@ def filter_keys(keypresses, max_chord_interval, n_chords):#, keys, keytimes):
 #            leaf_font_size=8.,  # font size for the x axis labels
 #            )
 #    plt.show()
-
 
     return(keys, keytimes, RTs)        
 

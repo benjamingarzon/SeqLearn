@@ -118,7 +118,7 @@ core.wait(config["INTRO_TIME"])
 if config["PRESHOW"]==1:
 
     showStimulus(win, [instructionspre_message])
-    event.waitKeys() 
+    event.waitKeys(keyList = ['space']) 
     #mouse.isPressedIn(shape, buttons=[0]): 
     for row in schedule_unique.itertuples():    
         squares = seq_to_stim(row.sequence_string, row.seq_color, win, 
@@ -127,10 +127,10 @@ if config["PRESHOW"]==1:
         event.waitKeys()
 
 showStimulus(win, [instructions1_message])
-event.waitKeys() 
+event.waitKeys(keyList = ['space']) 
 
 showStimulus(win, [instructions2_message])
-event.waitKeys() 
+event.waitKeys(keyList = ['space']) 
     
 for row in schedule.itertuples():
     sess_num, sess_type, n_trials, seq_keys, seq_type, \
@@ -185,7 +185,7 @@ for row in schedule.itertuples():
         
         keypresses = event.getKeys(keyList=seq_keys, 
                                    timeStamped = trialClock)
-        print keypresses
+        #print keypresses
         if len(keypresses) <= 1:
             showStimulus(win, [late_message, error_sign])
             if config["BUZZER_ON"] == 1:
@@ -225,7 +225,8 @@ for row in schedule.itertuples():
     
 
                 
-            accuracy, MT, score  = scorePerformance(keys, RTs, sequence)
+            accuracy, MT, score  = scorePerformance(keys, RTs, sequence, 
+                                                    keytimes)
             if accuracy < 1:
                 showStimulus(win, [error_message, error_sign])
                 if config["BUZZER_ON"] == 1:
@@ -275,7 +276,6 @@ for row in schedule.itertuples():
         # write result to data file
 
         key_from = ["0"]
-
         for keystroke in range(len(keys)):
             
             key_to = keys[keystroke]
