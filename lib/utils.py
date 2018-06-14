@@ -83,20 +83,14 @@ def startSession(config_file=None, schedule_file=None):
     """    
     config = get_config()
     texts = get_texts(config["LANGUAGE"])
-    
-    if schedule_file == None:
-        schedule_file = "./scheduling/schedule.csv"
-    try:
-        schedule = pd.read_csv(schedule_file, sep = ";")
-    except IOError: 
-        print "Error: Schedule file is missing!"
-
-    
-    # get username
+        
+    # get username and user group
     if config["ASK_USER"] == 0:
         try:
             user_json = open("./config/user.json", "r")
-            username = json.load(user_json)["USERNAME"]
+            json_obj = json.load(user_json)
+            username = json_obj["USERNAME"]
+            sched_group = json_obj["SCHEDULE_GROUP"]
             user_json.close()
         except IOError: 
             print "Error: User file is missing!"
@@ -109,6 +103,17 @@ def startSession(config_file=None, schedule_file=None):
             username = myDlg.data[0]
         else:
             username = 'test0000'
+        sched_group = 0
+        
+    # get schedule
+    if schedule_file == None:
+        schedule_file = "./scheduling/schedule{}.csv".format(sched_group)
+    try:
+        schedule = pd.read_csv(schedule_file, sep = ";")
+        print schedule_file
+    except IOError: 
+        print "Error: Schedule file is missing!"
+
         
     keysfilename = "./data/keysfile-{}.csv".format(username)
     trialsfilename = "./data/trialsfile-{}.csv".format(username) 

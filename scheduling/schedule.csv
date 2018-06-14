@@ -1,0 +1,15 @@
+sess_num;sess_type;n_trials;seq_keys;seq_type;sequence_string;seq_train;seq_color
+1;training;2;1 2 3 4;type1;3 - 3 4 - 1 4;trained;#f032e6
+1;training;2;1 2 3 4;type1;1 4 - 1 4 - 4;trained;#ffe119
+2;training;2;1 2 3 4;type1;1 4 - 1 4 - 4;trained;#ffe119
+2;training;2;1 2 3 4;type1;3 - 3 4 - 1 4;trained;#f032e6
+3;training;2;1 2 3 4;type1;3 - 3 4 - 1 4;trained;#f032e6
+3;training;2;1 2 3 4;type1;1 4 - 1 4 - 4;trained;#ffe119
+4;training;2;1 2 3 4;type1;1 4 - 1 4 - 4;trained;#ffe119
+4;training;2;1 2 3 4;type1;3 - 3 4 - 1 4;trained;#f032e6
+5;training;2;1 2 3 4;type1;3 - 3 4 - 1 4;trained;#f032e6
+5;training;2;1 2 3 4;type1;1 4 - 1 4 - 4;trained;#ffe119
+6;testing;2;1 2 3 4;type1;3 - 3 4 - 1 4;trained;#f032e6
+6;testing;2;1 2 3 4;type1;1 4 - 1 4 - 4;trained;#ffe119
+6;testing;2;1 2 3 4;type1;1 2 - 2 3 - 2 3;untrained;#0082c8
+6;testing;2;1 2 3 4;type1;2 - 1 3 - 3 4;untrained;#911eb4

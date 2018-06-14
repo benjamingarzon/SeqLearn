@@ -1,4 +1,4 @@
-name: C:\Users\benjamin\Anaconda3\envs\psychopyenv
+name: psychopyenv
 channels:
 - cogsci
 - anaconda
@@ -120,5 +120,5 @@ dependencies:
   - jupyter-core==4.3.0
   - prompt-toolkit==1.0.15
   - win-unicode-console==0.5
-prefix: C:\Users\benjamin\Anaconda3\envs\psychopyenv
+prefix: psychopyenv
 

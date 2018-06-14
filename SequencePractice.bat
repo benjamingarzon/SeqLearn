@@ -1,13 +1,9 @@
-@echo off
-set HOME=C:\Users\benjamin
-set SEQDIR=%HOME%\Documents\projects\SeqLearn
-
-set PATH=%HOME%\Anaconda3\;%PATH%
-cd %HOME%\Anaconda3
-call activate envs\psychopyenv
-
+set MYPATH=C:\Users\Public\SeqLearner
+set SEQDIR=%MYPATH%\SeqLearn
+set PATH=%MYPATH%\Anaconda3\Scripts;%MYPATH%\Anaconda3\;%PATH%
+call activate psychopyenv
 cd %SEQDIR%
-ls
 python SeqLearn.py
 call deactivate
-pause
+
+ 
