@@ -19,6 +19,7 @@ import numpy as np
 import pandas as pd
 from db.python_mysql_dbconfig import read_db_config
 from sqlalchemy import create_engine, exc
+from sshtunnel import SSHTunnelForwarder
 
 # start session
 
@@ -338,18 +339,26 @@ mytrials = pd.read_table(trialsfile.name, sep = ';')
 mykeys = mykeys.loc[mykeys['sess_num'] == sess_num]
 mytrials= mytrials.loc[mytrials['sess_num'] == sess_num]
 
-try:
-    db_config = read_db_config()
-    engine_string = 'mysql://%s:%s@%s/%s'%(db_config['user'], 
-                                           db_config['password'], 
-                                           db_config['host'], 
-                                           db_config['database'])
-    engine = create_engine(engine_string)
-    mykeys.to_sql('keys_table', engine, if_exists = 'append') 
-    mytrials.to_sql('trials_table', engine, if_exists = 'append')
-    print('Synced with database.')
-except exc.SQLAlchemyError as e:
-    print('Error:', e)
+#try:
+#    db_config = read_db_config()
+#    
+#    with SSHTunnelForwarder(
+#    (db_config['remotehost'], db_config['remoteport']),
+#    ssh_username = db_config['ssh_user'],
+#    ssh_pkey = db_config['key'],
+#    remote_bind_address = (db_config['remotehost'], db_config['remoteport'])
+#    ) as server:
+#        try:
+#            engine_string = 'mysql://%s:%s@%s/%s'%(db_config['user'], 
+#                                           db_config['password'], 
+#                                           db_config['localhost'], 
+#                                           db_config['database'])
+#            engine = create_engine(engine_string)
+#            mykeys.to_sql('keys_table', engine, if_exists = 'append') 
+#            mytrials.to_sql('trials_table', engine, if_exists = 'append')
+#            print('Synced with database.')
+#        except exc.SQLAlchemyError as e:
+#            print('Error:', e)
  
 #finally:
 

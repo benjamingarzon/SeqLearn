@@ -1,6 +1,7 @@
 name: psychopyenv
 channels:
 - cogsci
+- conda-forge
 - anaconda
 - defaults
 dependencies:
@@ -20,6 +21,15 @@ dependencies:
 - psychopy=1.82.01=py27_0
 - pygame=1.9.2a0=py27_0
 - pyglet=1.2.4=py27_0
+- asn1crypto=0.24.0=py27_0
+- cffi=1.11.5=py27_0
+- cryptography=2.2.1=py27_0
+- idna=2.7=py27_0
+- ipaddress=1.0.22=py_1
+- paramiko=2.1.2=py27_0
+- pyasn1=0.4.3=py_0
+- pycparser=2.18=py27_0
+- sshtunnel=0.1.1=py27_0
 - alabaster=0.7.10=py27_0
 - astroid=1.5.3=py27_0
 - babel=2.5.0=py27_0

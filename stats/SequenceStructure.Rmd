@@ -1,0 +1,244 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Untrained are mirrored and shifted
+What do I need to know?
+
+Try sequences with different distances between chords. 
+What is the effect of distance in performance and in learning?
+Is there a difference in learning when chords are repeated with different transitions, compared to learning new chords?
+
+
+Study timing
+```{r}
+rm(list=ls())
+library(reshape)
+library(sna)
+library(igraph)
+library(proxy)
+library(rjson)
+
+source("./SequenceStructureFuncs.R")
+
+```
+
+```{r}
+# define alphabet
+
+chords = rbind(
+  c(1, 1, 1, 0),
+  c(1, 1, 0, 1),
+  c(1, 0, 1, 1),
+  c(0, 1, 1, 1), 
+  c(1, 1, 0, 0),
+  c(0, 0, 1, 1),
+  c(1, 0, 1, 0),
+  c(0, 1, 0, 1),
+  c(1, 0, 0, 1),
+  c(0, 1, 1, 0),
+  c(1, 0, 0, 0),
+  c(0, 1, 0, 0),
+  c(0, 0, 1, 0),
+  c(0, 0, 0, 1)
+)             
+
+
+chords.1 = rbind(
+  c(1, 1, 1, 0),
+  c(1, 1, 0, 1),
+  c(1, 1, 0, 0),
+  c(0, 1, 0, 1)
+)             
+
+
+chords.2 = rbind(
+  c(0, 1, 1, 1), 
+  c(1, 0, 1, 1),
+  c(0, 0, 1, 1),
+  c(1, 0, 1, 0)
+)             
+
+
+```
+
+
+Path generation
+
+```{r}
+# generate all paths
+seq_size = 5
+
+paths = generate_paths(chords, c(3), seq_size)
+# select the most relevant paths
+chunks = select_unique(paths, seq_size)
+
+```
+
+Configuration 1:
+Untrained and trained have common chords but different transitions. Transitions involve 3 fingers always.
+
+
+```{r}
+maxdist.vec = 2*(seq_size - 1)
+
+# compute distances
+vecdist = get_vecdist(chunks, nrow(chords))
+eldist = proxy::dist(chunks, chunkdist)
+vecdist.mat = as.matrix(vecdist)
+eldist.mat = as.matrix(eldist)
+
+# cluster
+hc.complete = hclust(maxdist.vec - vecdist, method = "complete")
+plot(hc.complete)
+clusters = cutree(hc.complete, h = 1)
+clusters.table = table(clusters)
+sel.clus = which(clusters.table > 6)
+
+sel.chunks = list()
+degree = NULL
+for (i in seq(length(sel.clus))){
+  sel.chunks[[i]] = chunks[which(clusters == sel.clus[i])]
+  chunks.vecdist = get_vecdist(sel.chunks[[i]], nrow(chords))
+  chunks.eldist = proxy::dist(sel.chunks[[i]], chunkdist)
+  hc.el = hclust(chunks.eldist, method = "complete")
+  plot(hc.el)
+}
+sel.cluster = sel.chunks[[ 58 ]]
+
+# observe clustering
+sel.dist = proxy::dist(sel.chunk, chunkdist)
+hc.sel = hclust(sel.dist, method = "single")
+plot(hc.sel)
+
+trained.chunks = sel.cluster[c(1, 8, 5)]
+untrained.chunks = sel.cluster[c(9, 4, 6)]
+
+vecdist.results = get_vecdist(c(trained.chunks, untrained.chunks), nrow(chords))
+eldist.results = proxy::dist(c(trained.chunks, untrained.chunks), chunkdist)
+
+print(as.matrix(vecdist.results))
+print(as.matrix(eldist.results))
+
+
+# write out
+json_file = '../scheduling/sequences.json'
+
+
+trained = translate_seqs(trained.chunks, chords)
+untrained = translate_seqs(untrained.chunks, chords)
+myjson = toJSON(list(type1 = c(trained, untrained)))
+
+write(myjson, json_file)
+
+# run SeqGen.py to generate schedule
+```
+
+
+Configuration 1:
+Untrained and trained have different chords (and different transitions). Distance between consecutive chords is always 3.
+
+Confirm
+
+```{r}
+
+# trained.dist = get_vecdist(trained.cluster, nrow(chords))
+# untrained.dist = get_vecdist(untrained.cluster, nrow(chords))
+# hc = hclust(untrained.dist, method = "single")
+# plot(hc)
+# 
+# hc.complete = hclust(as.dist(eldist.mat[sel.chunks, sel.chunks]), method = "single")
+# hc.inverse = hclust(as.dist(seq_size - eldist.mat[sel.chunks, sel.chunks]), method = "single")
+# plot(hc.single)
+# plot(hc.complete)
+# clusters.2 = cutree(hc.complete, h = 4)
+# mychunks = chunks[as.numeric(names(which(clusters.2==1)))]
+# 
+# 
+# eldist.deg0 = colSums(eldist.mat == 0)
+# eldist.deg1 = colSums(eldist.mat == seq_size)
+# 
+# vecdist.deg = colSums(vecdist.mat == maxdist.vec)
+# maxdist = eldist.deg == max(eldist.deg)
+# 
+# eldist.max = eldist.mat[maxdist, maxdist]
+# vecdist.max = vecdist.mat[maxdist, maxdist]
+# 
+# 
+# # disjoint are sequences with distance seq_size -1
+# 
+# eldist.adj = 1*(eldist.mat == 0)
+# eldist.adj = 1*(as.matrix(sel.dist) == 5)
+# 
+# mygraph.el = graph_from_adjacency_matrix(eldist.adj, mode = "undirected")
+# modules.el = edge.betweenness.community(mygraph.el)
+# modules.el = fastgreedy.community(mygraph.el)
+# modules.el = walktrap.community(mygraph.el)
+# modules.el = leading.eigenvector.community(mygraph.el)
+# mod.table = table(modules.el$membership)
+# sel.mod = which(mod.table == max(mod.table))[1]
+# sel.chunks = chunks[modules.el$membership == sel.mod]
+# 
+# eldist.mod = eldist.mat[modules.el$membership == sel.mod, modules.el$membership == sel.mod]
+# vecdist.mod = vecdist.mat[modules.el$membership == sel.mod, modules.el$membership == sel.mod]
+# 
+# plot(mygraph.el)
+# vecdist.adj = 1*(vecdist.mat == maxdist.vec)
+# mygraph.vec = graph_from_adjacency_matrix(vecdist.adj, mode = "undirected")
+# modules.vec = fastgreedy.community(mygraph.vec)
+# modules.vec = walktrap.community(mygraph.vec)
+# print(modules.vec[[3]])
+# vecs.mod = vecs[ as.numeric(modules.vec[[3]]), ] 
+# vecdist.mod = dist(vecs.mod, method = "manhattan") 
+# hc = hclust(as.dist(eldist.mod), method = "single")
+#plot(hc)
+
+
+# save
+
+
+# modules.vec = getmodules(findModules(1*(vecdist.mat == 2*(seq_size - 1)), iter = 10, sparse = F))
+# modules.el = getmodules(findModules(1*(as.matrix(eldist) == 0), iter = 10, sparse = F))
+
+# hc = hclust(vecdist, method = "single")
+# plot(hc)
+# clusters = cutree(hc, h = 7)
+# 
+# chunks1 = chunks[clusters == 1]
+# chunks2 = chunks[clusters == 2]
+# 
+# # check 
+# 
+# vecs1 = vecs[clusters == 1, ]
+# vecs2 = vecs[clusters == 2, ]
+# 
+# vecdist.clus = dist(rbind(vecs1, vecs2), method = "manhattan") 
+```
+
+
+
+
+```{r}
+# # is reorganizing 3 digits more costly than reorganizing 2?
+# maxtransitions = sum(bindistance)
+# 
+# transitions = melt(bindistance)
+# colnames(transitions) = c("from", "to", "value")
+# transitions = subset(transitions, value != 0)[-3]
+# index = 1
+# seq_list = seqs[index, ]
+# 
+# for (i in 1:maxtransitions){
+#   s = subset(transitions, from == index)
+#   next_index = s["to"][1, ]
+#   if (is.na(next_index)) break
+#   print(c(index, next_index))
+#   transitions = subset(transitions, !(from == index & to == next_index))
+#   transitions = subset(transitions, !(from == next_index & to == index))
+#   index = next_index
+#   seq_list = rbind(seq_list, seqs[index, ]) 
+# }
+# print(seq_list)
+# print(transitions)
+```

@@ -9,12 +9,13 @@ Discrete sequence production generator class.
 from itertools import combinations
 from random import choice, sample
 from psychopy import visual
+import json
 
 class Generator:
     """ Create a generator """
 
     def __init__(self, set=0, size=1, maxchordsize=1):
-        """ Create a new point sequence generator"""
+        """ Create a new sequence generator"""
         self.set = [str(x) for x in set]
         self.size = size
         
@@ -34,6 +35,20 @@ class Generator:
         sequence_string = seq_to_string(sequence)
  
         return (sequence, sequence_string)
+
+    def read(self, seq_type=None):
+        """Read sequences from sequence file with predefined sequences."""
+        seq_file = "./scheduling/sequences.json"
+        try:
+            seq_json = open(seq_file, "r")
+            seqs = json.load(seq_json)
+            seq_json.close()
+        except IOError: 
+            print "Error: Sequence file is missing!"
+            
+        seq_list = [ (string_to_seq(x), x) for x in seqs[seq_type]]
+        return(seq_list)
+    
     
 def string_to_seq(mystring):
     """ Translate string to a sequence. """

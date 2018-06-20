@@ -20,7 +20,7 @@ def get_seq_types(type_file=None):
     try:
         type_data = pd.read_csv(type_file, sep = ";")
     except IOError: 
-        print "Error: Config_file is missing!"
+        print "Error: Sequence type file is missing!"
 
     return(type_data)
 
