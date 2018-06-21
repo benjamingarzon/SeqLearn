@@ -8,4 +8,5 @@ del Anaconda.exe
 set PATH=%MYPATH%\Anaconda3\Scripts;%MYPATH%\Anaconda3\;%PATH%
 
 cd %MYPATH%\SeqLearn
-conda env create -f psychopyenv.yml
+conda env create -f psychopyenv.yml --force
+conda install python=2.7.13

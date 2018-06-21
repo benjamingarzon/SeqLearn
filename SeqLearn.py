@@ -84,8 +84,8 @@ error_sign = visual.ImageStim(win,
                               image=config["WRONG_FILE"],
                               pos = (0, 2))
 
-hand_sign = visual.ImageStim(win, 
-                              image=config["HAND_FILE"])
+#hand_sign = visual.ImageStim(win, 
+#                              image=config["HAND_FILE"])
  
 late_message = visual.TextStim(win, 
                                 text=texts["TEXT_LATE"], 
