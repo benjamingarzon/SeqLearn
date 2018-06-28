@@ -243,3 +243,29 @@ def filter_keys(keypresses, max_chord_interval, n_chords):#, keys, keytimes):
 
     return(keys, keytimes, RTs)        
 
+
+def SetUsername():
+    
+    myDlg = gui.Dlg(title="Sequence training configuration.")
+    myDlg.addField("Enter username:")
+    myDlg.addField("Enter schedule group:", 0)
+    
+    myDlg.show()
+    
+    if myDlg.OK:  
+        username = myDlg.data[0]
+        sched_group = int(myDlg.data[1])
+    else:
+        username = ''
+        sched_group = 0
+        print("Cancelled.")
+        
+    print("Username: {}".format(username))
+    print("Schedule group: {}".format(sched_group))
+    
+    json_obj = {"USERNAME": username, 
+                "SCHEDULE_GROUP": sched_group}
+    
+    with open("./config/user.json", "w") as outfile:
+        json.dump(json_obj, outfile)
+        
