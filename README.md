@@ -101,12 +101,12 @@ chmod a+x SequencePracticeDemo.sh
 
 Now you can move the wrappers wherever you want. 
 
-# Windows
+## Windows
 Run the script Installation.bat and follow the instructions. 
 It will create shortcuts called SequencePractice.bat and SequencePracticeDemo.bat in your desktop directory that will run the program and a demo, respectively.  
 
 
-## Database connections
+# Database connections
 To allow connections to the remote database, after installation save the private key inside the db directory in a file called 'db/id_rsa'.
 Make sure that the subjects are 
 Configure database parameters in a file 'db/db_config.json':
@@ -125,7 +125,7 @@ Configure database parameters in a file 'db/db_config.json':
 }
 ```
 
-## Configuring the database
+# Configuring the database
 
 To create a database and users: 
 
@@ -145,7 +145,7 @@ echo "GRANT INSERT,SELECT,CREATE,INDEX ON zzzdb.* TO 'subject00$x'@'localhost';"
 done
 ```
 
-## Preparing a study
+# Preparing a study
 
 - Create a database and users.
 
