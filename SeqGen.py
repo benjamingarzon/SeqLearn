@@ -58,26 +58,28 @@ def generate_with_predefined_sequences(sched_group):
             mypermutation = list(reorder[sess % len(reorder)])        
             for seq in range(2*n_seqs):        
     
-                seq_train = "trained"
-                # create training and testing sessions
-    
+                # create training and testing sessions    
                 if sess < n_sess:
                     sess_type = "training"
                     true_sess_num = sess_num
                     if seq >= n_seqs:
                         continue
                     seq_index = mypermutation[seq]
+                    seq_train = "trained"
                     
                 else:
                     sess_type = "testing"
                     true_sess_num = 0
-                    if seq >= n_seqs:
+ 
+                    if seq % 2 == 1: # interleave trained/untrained
+                        # use the same permutation, 
+                        # although it possibly won't make a difference
+                        seq_index = mypermutation[(seq - 1)/2] + n_seqs 
                         seq_train = "untrained"
-                        seq_index = seq
-                        mypermutation = []
                     else :
-                        seq_index = mypermutation[seq]
-                    
+                        seq_index = mypermutation[seq/2]
+                        seq_train = "trained"
+
                 sequence, sequence_string = seq_list[seq_index]
                 color = seq_color[seq_index]
                     
@@ -116,8 +118,8 @@ def generate_with_predefined_sequences(sched_group):
     
     schedule.loc[schedule["sess_num"] == 0, "sess_num"] = \
         np.max(schedule["sess_num"]) + 1
-    schedule.sort_values(by = ["sess_num", "seq_type", "seq_train"], 
-                         inplace = True)
+#    schedule.sort_values(by = ["sess_num", "seq_type", "seq_train"], 
+#                         inplace = True)
     schedule.to_csv(schedulefilename, sep =";", index=False)
 
 
@@ -163,7 +165,6 @@ def generate_with_random_sequences(sched_group):
     
                 seq_train = "trained"
                 # create training and testing sessions
-    
                 if sess < n_sess:
                     sess_type = "training"
                     true_sess_num = sess_num
@@ -174,13 +175,16 @@ def generate_with_random_sequences(sched_group):
                 else:
                     sess_type = "testing"
                     true_sess_num = 0
-                    if seq >= n_seqs:
+
+                    if seq % 2 == 1: # interleave trained/untrained
+                        # use the same permutation, 
+                        # although it possibly won't make a difference
+                        seq_index = mypermutation[(seq - 1)/2] + n_seqs 
                         seq_train = "untrained"
-                        seq_index = seq
-                        mypermutation = []
                     else :
-                        seq_index = mypermutation[seq]
-                    
+                        seq_index = mypermutation[seq/2]
+                        seq_train = "trained"
+                        
                 sequence, sequence_string = seq_list[seq_index]
                 color = seq_color[seq_index]
                     

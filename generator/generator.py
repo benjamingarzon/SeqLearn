@@ -95,6 +95,27 @@ def seq_to_stim(mystring, color, win, size):
                                       pos = (0, 0))
                 )
                 
-    square_list = square_list + lines 
+    arrowVertLeft = [(-size*3.2 , - length + 0.25*size ), 
+                     (-size*3, - length ),
+                     (-size*2.8, - length + 0.25*size)]
+
+    arrowVertRight = [(size*3.2, - length + 0.25*size), 
+                     (size*3, - length ),
+                     (size*2.8, - length + 0.25*size)]
+    
+    
+    arrowLeft = visual.ShapeStim(win, 
+                                 vertices=arrowVertLeft, 
+                                 lineColor='black',
+                                 fillColor='black',
+                                 lineWidth=0.5)
+        
+    arrowRight = visual.ShapeStim(win, 
+                                  vertices=arrowVertRight, 
+                                  lineColor='black',
+                                  fillColor='black',
+                                  lineWidth=0.5)        
+                
+    square_list = square_list + lines + [arrowLeft, arrowRight]
     return(square_list)
    

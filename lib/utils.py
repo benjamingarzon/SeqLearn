@@ -6,6 +6,7 @@ Created on Tue Feb 20 08:41:28 2018
 
 Some functions for SeqLearn.
 """
+from __future__ import division
 import json, csv
 import numpy as np
 import pandas as pd
@@ -13,7 +14,7 @@ from psychopy import gui
 from scipy.spatial.distance import pdist #, squareform
 from scipy.cluster.hierarchy import linkage, cut_tree
 from collections import defaultdict
-
+import glob, os
 def get_seq_types(type_file=None):
     if type_file == None:
         type_file = "./scheduling/seq_types.csv"
@@ -73,15 +74,26 @@ def scorePerformance(keys, RTs, sequence, keytimes):
     #MT = np.sum(RTs[1:])
     MT = keytimes[-1] - keytimes[0]
     
-    score = 1/MT
+    score = len(sequence)/MT
     return((accuracy, MT, score))
 
-def startSession(config_file=None, schedule_file=None):
+def calcmaxgroupscore(session, n_sessions, factor, baseline, maxscore):
+
+    """ 
+    Calculate the maxscore. 
+    """    
+    maxgroupscore = np.max(
+            (baseline*np.exp(-(session-1)/n_sessions),
+            maxscore*(1 + factor*np.exp(-(session-1)/n_sessions)))
+            )
+    return(maxgroupscore)
+
+def startSession(opts):
 
     """ 
     Starts a new session.
     """    
-    config = get_config()
+    config = get_config(opts.config_file)
     texts = get_texts(config["LANGUAGE"])
         
     # get username and user group
@@ -104,24 +116,38 @@ def startSession(config_file=None, schedule_file=None):
         else:
             username = 'test0000'
         sched_group = 0
-        
-    # get schedule
-    if schedule_file == None:
-        schedule_file = "./scheduling/schedule{}.csv".format(sched_group)
+    
+    
+    if opts.demo: # load demo schedule instead
+        schedule_file = "./scheduling/schedule-demo.csv"
+        keysfilename = "./data/keysfile-demo.csv".format(username)
+        trialsfilename = "./data/trialsfile-demo.csv".format(username)
+        # remove previous demo files
+        for fl in glob.glob("./data/*-demo.csv"):
+            os.remove(fl)    
+
+    else:
+
+        # get schedule
+        if opts.schedule_file == None:
+            schedule_file = "./scheduling/schedule{}.csv".format(sched_group)
+        else:
+            schedule_file = opts.schedule_file
+
+        keysfilename = "./data/keysfile-{}.csv".format(username)
+        trialsfilename = "./data/trialsfile-{}.csv".format(username) 
+ 
     try:
         schedule = pd.read_csv(schedule_file, sep = ";")
-        print schedule_file
+        n_sess = np.max(schedule["sess_num"])
+
     except IOError: 
         print "Error: Schedule file is missing!"
-
-        
-    keysfilename = "./data/keysfile-{}.csv".format(username)
-    trialsfilename = "./data/trialsfile-{}.csv".format(username) 
-    
+   
     try:
         # proceed from where it was left before
-        keysfile = open(keysfilename, "a")
-        trialsfile = open(trialsfilename, "a")
+        keysfile = open(keysfilename, "ab")
+        trialsfile = open(trialsfilename, "ab")
         trialstable = pd.read_csv(trialsfilename, sep=';')
         sess_num = np.max(trialstable["sess_num"]) + 1
         maxscore = defaultdict(float)
@@ -130,9 +156,16 @@ def startSession(config_file=None, schedule_file=None):
             maxscore[seq] = np.max(
                     trialstable.loc[trialstable["true_sequence"] == seq, 
                                     "score"])
-            maxgroupscore[seq] = maxscore[seq]*1.2
-        print maxscore
-        print maxgroupscore
+            maxgroupscore[seq] = calcmaxgroupscore(
+                    sess_num, 
+                    n_sess, 
+                    config["MAXSCORE_FACTOR"], 
+                    config["MAXSCORE_BASELINE"], 
+                    maxscore[seq]
+                    )
+
+        #print maxscore
+        #print maxgroupscore
         # connect files with a csv writer
         keyswriter = csv.writer(keysfile, delimiter=";")
         trialswriter = csv.writer(trialsfile, delimiter=";")
@@ -143,7 +176,7 @@ def startSession(config_file=None, schedule_file=None):
         trialsfile = open(trialsfilename, "wb")
         sess_num = 1
         maxscore = defaultdict(float)
-        maxgroupscore = defaultdict(lambda:2.0, {})
+        maxgroupscore = defaultdict(lambda:config["MAXSCORE_BASELINE"], {})
 
         # connect files with a csv writer
         keyswriter = csv.writer(keysfile, delimiter=";")
@@ -152,6 +185,7 @@ def startSession(config_file=None, schedule_file=None):
         # create output file header
         keyswriter.writerow([
                 "username",
+                "sched_group",
                 "sess_num",
                 "sess_date",    
                 "sess_time",    
@@ -172,6 +206,7 @@ def startSession(config_file=None, schedule_file=None):
         ])
         trialswriter.writerow([
                 "username",
+                "sched_group",
                 "sess_num",
                 "sess_date",    
                 "sess_time",    
@@ -194,8 +229,9 @@ def startSession(config_file=None, schedule_file=None):
                                 "seq_color","seq_train"]].drop_duplicates()     
     schedule = schedule.query('sess_num == %d'%(sess_num))
     
-    return(sess_num, username, keyswriter, trialswriter, keysfile, trialsfile,
-           maxscore, maxgroupscore, config, texts, schedule, schedule_unique)
+    return(sched_group, sess_num, username, keyswriter, trialswriter, keysfile, 
+           trialsfile, maxscore, maxgroupscore, config, texts, schedule, 
+           schedule_unique)
 
 
 def filter_keys(keypresses, max_chord_interval, n_chords):#, keys, keytimes):

@@ -1,7 +1,7 @@
 name: psychopyenv
 channels:
-- cogsci
 - conda-forge
+- cogsci
 - anaconda
 - defaults
 dependencies:
