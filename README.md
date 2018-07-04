@@ -1,5 +1,5 @@
 
-## SeqLearn
+# SeqLearn
 
 A program for practicing discrete sequence production.
 
@@ -23,13 +23,13 @@ optional arguments:
 ```
 
 
-## Installation
+# Installation
 
-# Dependencies 
+## Dependencies 
 
 Anaconda3.
 
-# Linux manual installation
+## Linux manual installation
 
 Install Anaconda3 and make sure it is in the PATH.
 
@@ -49,7 +49,7 @@ conda install python=2.7.13
 ```
 
 Now run:
-````
+```
 source activate psychopyenv
 python SetUsername.py
 ```
