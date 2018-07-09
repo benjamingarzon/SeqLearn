@@ -69,7 +69,7 @@ def seq_to_stim(mystring, color, win, size):
     length = len(myseq)*size
     seq_pos = length - size
  
-    print(myseq)
+    #print(myseq)
     square_list = [] 
     for mychord in myseq:
         

@@ -202,7 +202,7 @@ def SeqLearn(opts):
         cum_trial = 1 
         trial = 1
         misses = 0
-
+        exiting = False
         maxwait = len(sequence)*config["MAX_WAIT_PER_KEYPRESS"]
         while (trial <= n_trials):
 
@@ -243,18 +243,23 @@ def SeqLearn(opts):
                     core.wait(config["ERROR_TIME"])
                 if misses > config["MAX_TOTAL_MISSES"]:
                     exit()    
+
             else:
                 misses = 0
                 keys, keytimes, RTs = filter_keys(keypresses, 
                                                   config["MAX_CHORD_INTERVAL"], 
                                                   len(sequence))
                 trial_type = "done"
-
-                if config["ESCAPE_KEY"] in keys:
-                    break
                     
                 accuracy, MT, score  = scorePerformance(keys, RTs, sequence, 
                                                         keytimes)
+
+                if [config["ESCAPE_KEY"]] in keys:
+                    
+                    if np.sum([key == [config["ESCAPE_KEY"]] 
+                        for key in keys]) > 1:
+                        exiting = True
+                        break
                 
                 if accuracy < 1:
                     showStimulus(win, [error_message, error_sign])
@@ -367,6 +372,10 @@ def SeqLearn(opts):
             cum_trial = cum_trial + 1    
             core.wait(config["FIXATION_TIME"]) 
     
+        if exiting:
+            print "Session has been interrupted. Bye!"
+            break
+            
     # synchronize local file and database
     keysfile.close()
     trialsfile.close()
