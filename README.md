@@ -75,7 +75,7 @@ and then copy-paste to the terminal:
 
 ``` 
 echo "SEQDIR=$SEQDIR" > SequencePractice.sh
-echo "PATH=$ANACONDAPATH/Scripts;$ANACONDAPATH;$PATH" >> SequencePractice.sh
+echo "PATH=$ANACONDAPATH/Scripts:$ANACONDAPATH:$PATH" >> SequencePractice.sh
 echo "source activate psychopyenv" >> SequencePractice.sh
 echo "cd $SEQDIR" >> SequencePractice.sh
 echo "python SeqLearn.py" > /dev/null >> SequencePractice.sh
@@ -86,7 +86,7 @@ chmod a+x SequencePractice.sh
 Similarly, to create a wrapper for the demo:
 ``` 
 echo "SEQDIR=$SEQDIR" > SequencePracticeDemo.sh
-echo "PATH=$ANACONDAPATH/Scripts;$ANACONDAPATH;$PATH" >> SequencePracticeDemo.sh
+echo "PATH=$ANACONDAPATH/Scripts:$ANACONDAPATH:$PATH" >> SequencePracticeDemo.sh
 echo "source activate psychopyenv" >> SequencePracticeDemo.sh
 echo "cd $SEQDIR" >> SequencePracticeDemo.sh
 echo "python SeqLearn.py --demo" > /dev/null >> SequencePracticeDemo.sh
