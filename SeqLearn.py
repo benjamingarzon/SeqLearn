@@ -50,16 +50,24 @@ def SeqLearn(opts):
                                                config["HEADING_TEXT_HEIGHT"], 
                                                alignHoriz='center') 
     
-    instructionspre_message = visual.TextStim(win, 
-                                           text=texts["TEXT_INSTRUCTPRE"], 
+    instructionspre1_message = visual.TextStim(win, 
+                                           text=texts["TEXT_INSTRUCTPRE1"], 
                                            height = config["TEXT_HEIGHT"], 
-                                           alignHoriz='center') 
+                                           alignHoriz='center',
+                                           pos = (-5, 0), 
+                                           wrapWidth = 11 ) 
+
+    instructionspre2_message = visual.TextStim(win, 
+                                           text=texts["TEXT_INSTRUCTPRE2"], 
+                                           height = config["TEXT_HEIGHT"], 
+                                           alignHoriz='center')
     
     instructions1_message = visual.TextStim(win, 
                                            text=texts["TEXT_INSTRUCT1"], 
                                            height = config["TEXT_HEIGHT"], 
                                            alignHoriz='center',
-                                           pos = (0, 3)) 
+                                           pos = (-5, 0), 
+                                           wrapWidth = 11) 
     
     instructions2_message = visual.TextStim(win, 
                                            text=texts["TEXT_INSTRUCT2"].format(
@@ -79,14 +87,13 @@ def SeqLearn(opts):
                                            alignHoriz='center',
                                            color='red') 
     
-    
-    
     last_label = visual.TextStim(win, 
                                     text=texts["LAST_LABEL"], 
                                     height = config["TEXT_HEIGHT"], 
                                     pos = (-3*config["BAR_WIDTH"], 
                                            -0.5*config["BAR_HEIGHT"] - 2),
                                     alignHoriz='center') 
+
     best_label = visual.TextStim(win, 
                                  text=texts["BEST_LABEL"], 
                                  height = config["TEXT_HEIGHT"],
@@ -111,12 +118,13 @@ def SeqLearn(opts):
     
     hand_sign = visual.ImageStim(win, 
                                   image=config["HAND_FILE"],
-                                  pos = (0, -4))
+                                  pos = (6, 0))
      
     late_message = visual.TextStim(win, 
                                     text=texts["TEXT_LATE"], 
                                     alignHoriz="center", 
                                     pos = (0, -3))  
+
     miss_message = visual.TextStim(win, 
                                     text=texts["TEXT_MISS"], 
                                     alignHoriz="center")
@@ -139,8 +147,12 @@ def SeqLearn(opts):
     
     if config["PRESHOW"]==1:
     
-        showStimulus(win, [instructionspre_message])
+        showStimulus(win, [instructionspre1_message, hand_sign])
         event.waitKeys(keyList = ['space']) 
+
+        showStimulus(win, [instructionspre2_message])
+        event.waitKeys(keyList = ['space']) 
+
         #mouse.isPressedIn(shape, buttons=[0]): 
         for row in schedule_unique.itertuples():    
             squares = seq_to_stim(row.sequence_string, row.seq_color, win, 
@@ -165,8 +177,7 @@ def SeqLearn(opts):
         row.sess_num, row.sess_type, row.n_trials, row.seq_keys.split(" ") 
         
         sequence_string, seq_train, seq_color, seq_type =\
-        row.sequence_string, row.seq_train, row.seq_color, row.seq_type 
-        
+        row.sequence_string, row.seq_train, row.seq_color, row.seq_type         
         
         trialStimulus = []
         squareStimuli = []
@@ -206,9 +217,12 @@ def SeqLearn(opts):
             trialClock.reset()    
             core.wait(maxwait, hogCPUperiod=maxwait)
             
-            keypresses = event.getKeys(keyList=seq_keys, 
+            keypresses = event.getKeys(keyList=seq_keys + 
+                                       [config["ESCAPE_KEY"]], 
                                        timeStamped = trialClock)
-            #print keypresses
+            
+            trialincrease = 0
+
             if len(keypresses) <= 1:
                 showStimulus(win, [late_message, error_sign])
                 if config["BUZZER_ON"] == 1:
@@ -236,20 +250,18 @@ def SeqLearn(opts):
                                                   len(sequence))
                 trial_type = "done"
 
-        #    if len(keys) >= config["SEQ_LENGTH"]:
-        #        break
-        #        if key=="escape":
-        #            break
+                if config["ESCAPE_KEY"] in keys:
+                    break
                     
                 accuracy, MT, score  = scorePerformance(keys, RTs, sequence, 
                                                         keytimes)
+                
                 if accuracy < 1:
                     showStimulus(win, [error_message, error_sign])
                     if config["BUZZER_ON"] == 1:
                         buzzer.play()
                     core.wait(config["ERROR_TIME"])        
                     score = 0
-                    trialincrease = 0
                 else:
 
                     #print score
@@ -366,42 +378,42 @@ def SeqLearn(opts):
     mykeys = mykeys.loc[mykeys['sess_num'] == sess_num]
     mytrials= mytrials.loc[mytrials['sess_num'] == sess_num]
     
-    #if not opts.demo:
-    try:
-        db_config_json = open("./db/db_config.json", "r")
-        db_config = json.load(db_config_json)
-        db_config_json.close()
-
-        with SSHTunnelForwarder(
-                (db_config['REMOTEHOST'], 
-                int(db_config['REMOTEPORT'])),
-                ssh_username = db_config['SSH_USER'],
-                ssh_password = db_config['SSH_PASS'],
-                ssh_pkey = os.path.abspath(db_config['KEY']),
-                remote_bind_address = (db_config['LOCALHOST'], 
-                                       int(db_config['LOCALPORT']))
-            ) as server:
-                port = server.local_bind_port
-                try:
-                    engine_string = 'mysql://%s:%s@%s:%d/%s'%(username, 
-                                                   db_config['DB_PASS'], 
-                                                   db_config['LOCALHOST'],
-                                                   port,
-                                                   db_config['DATABASE'])
+    if not opts.demo:
+        try:
+            db_config_json = open("./db/db_config.json", "r")
+            db_config = json.load(db_config_json)
+            db_config_json.close()
     
-                    engine = create_engine(engine_string)
-                    mykeys.to_sql('keys_table', engine, 
-                                  if_exists = 'append') 
-                    mytrials.to_sql('trials_table', engine, 
-                                    if_exists = 'append')
-                    print('Synced with database.')
-                except exc.SQLAlchemyError as e:
-                    print('Error:', e)
-
-    except:
-        print('Could not connect to database!')
-     
-    #finally:
+            with SSHTunnelForwarder(
+                    (db_config['REMOTEHOST'], 
+                    int(db_config['REMOTEPORT'])),
+                    ssh_username = db_config['SSH_USER'],
+                    ssh_password = db_config['SSH_PASS'],
+                    ssh_pkey = os.path.abspath(db_config['KEY']),
+                    remote_bind_address = (db_config['LOCALHOST'], 
+                                           int(db_config['LOCALPORT']))
+                ) as server:
+                    port = server.local_bind_port
+                    try:
+                        engine_string = 'mysql://%s:%s@%s:%d/%s'%(username, 
+                                                       db_config['DB_PASS'], 
+                                                       db_config['LOCALHOST'],
+                                                       port,
+                                                       db_config['DATABASE'])
+        
+                        engine = create_engine(engine_string)
+                        mykeys.to_sql('keys_table', engine, 
+                                      if_exists = 'append') 
+                        mytrials.to_sql('trials_table', engine, 
+                                        if_exists = 'append')
+                        print('Synced with database.')
+                    except exc.SQLAlchemyError as e:
+                        print('Error:', e)
+    
+        except:
+            print('Could not connect to database!')
+         
+        #finally:
 
     ## Closing Section
     win.close()

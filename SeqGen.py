@@ -17,6 +17,9 @@ import random
 from itertools import permutations
 
 def generate_with_predefined_sequences(sched_group):
+    """
+    Generate schedule using sequences already defined. 
+    """
     # get config
     config = get_config()
     type_data = get_seq_types()
@@ -26,12 +29,11 @@ def generate_with_predefined_sequences(sched_group):
     
     # create sequences
     row_list = []
-    
     sess_num = 1
     for index, row in type_data.iterrows():
         seq_type, seq_length, max_chord_size, seq_keys, n_trials, n_seqs, \
-        n_sess = row
-        
+        n_sess, testing_sessions = row
+        testing_session_list = [int(x) for x in testing_sessions.split(",")]
         reorder = list(permutations(range(n_seqs)))    
         seq_list = []
         seq_color = []
@@ -54,22 +56,20 @@ def generate_with_predefined_sequences(sched_group):
             seq_color.append(color_list[index])
             del color_list[index]            
                  
-        for sess in range(n_sess + 1):
-            mypermutation = list(reorder[sess % len(reorder)])        
+        for sess in range(n_sess):
+            mypermutation = list(reorder[sess_num % len(reorder)])        
             for seq in range(2*n_seqs):        
     
                 # create training and testing sessions    
-                if sess < n_sess:
+                if not sess+1 in testing_session_list:
                     sess_type = "training"
-                    true_sess_num = sess_num
                     if seq >= n_seqs:
                         continue
                     seq_index = mypermutation[seq]
                     seq_train = "trained"
-                    
+     
                 else:
                     sess_type = "testing"
-                    true_sess_num = 0
  
                     if seq % 2 == 1: # interleave trained/untrained
                         # use the same permutation, 
@@ -84,7 +84,7 @@ def generate_with_predefined_sequences(sched_group):
                 color = seq_color[seq_index]
                     
                 row_list.append([
-                    true_sess_num,
+                    sess_num,
                     sess_type,
                     n_trials,
                     " ".join(seq_keys),
@@ -97,9 +97,8 @@ def generate_with_predefined_sequences(sched_group):
                     seq_index
                     ])
     
-            if sess < n_sess:    
-                sess_num = sess_num + 1
-    
+            sess_num = sess_num + 1
+
     
     schedule = pd.DataFrame(row_list, columns = (
             "sess_num",
@@ -122,8 +121,10 @@ def generate_with_predefined_sequences(sched_group):
 #                         inplace = True)
     schedule.to_csv(schedulefilename, sep =";", index=False)
 
-
+# fix for TESTING_SESSIONS
 def generate_with_random_sequences(sched_group):
+# fix for TESTING_SESSIONS
+
     # get config
     config = get_config()
     type_data = get_seq_types()
@@ -137,7 +138,7 @@ def generate_with_random_sequences(sched_group):
     sess_num = 1
     for index, row in type_data.iterrows():
         seq_type, seq_length, max_chord_size, seq_keys, n_trials, n_seqs, \
-        n_sess = row
+        n_sess, testing_sessions = row
         
         reorder = list(permutations(range(n_seqs)))    
         seq_list = []

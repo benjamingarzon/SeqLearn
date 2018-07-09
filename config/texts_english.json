@@ -8,9 +8,10 @@
 "TEXT_LATE":"Too slow, you need to respond faster!",
 "TEXT_MISS":"Hey! Are you here??",
 "TEXT_INTRO":"Welcome!\nParticipant: {}\nSession: {}",
-"TEXT_INSTRUCTPRE":"INSTRUCTIONS:\n\nYou will be shown a set of sequences. Each row corresponds to a combination of keys that needs to be pressed simultaneously, starting from the top row down to the bottom row.\n\nBy the moment you just need to memorize the sequences without typing them. When you have memorized a sequence, press space to move to the next one. Take as long as you need to memorize the sequences. \n\nPress space to start.",
-"TEXT_INSTRUCT1":"INSTRUCTIONS:\n\nNow the sequences you memorized will appear and you will have to type them with your left hand. Each finger corresponds to a key, as shown in the figure.\n\nPress space.",
+"TEXT_INSTRUCTPRE1":"INSTRUCTIONS:\n\nIn this task, you will be shown a set of sequences. Each row corresponds to a combination of keys that need to be pressed simultaneously with the fingers of your left hand, starting from the top row down to the bottom row. Each column corresponds to one of the keys '1', '2', '3', '4', assigned to fingers as the figure shows.\n\nPress space to start.",
+"TEXT_INSTRUCTPRE2":"INSTRUCTIONS:\n\nFirst you will be shown the sequences and you just need to familiarize with them WITHOUT typing them. When you have memorized a sequence, press space to move to the next one. Take as long as you need to memorize the sequences. \n\nPress space to start.",
+"TEXT_INSTRUCT1":"INSTRUCTIONS:\n\nNow the sequences you have been observing will appear and you will have to type them with your left hand.\n\nPress space.",
 "TEXT_INSTRUCT2":"INSTRUCTIONS:\n\nType as fast as you can without making any errors. In each trial, after the sequence is presented, you will have a maximum of {} seconds to type the sequence. You will practice different sequences during the session, repeating as many times as necessary until you have done {} correct trials of each sequence.\n\nPress space.",
 "TEXT_INSTRUCT3":"INSTRUCTIONS:\n\nAfter each trial you will get feedback about your performance. The BLUE bar represents your last score, the GREEN bar is your best score for the current sequence, and the YELLOW bar is the best score for the current sequence across all participants. The faster you perform a sequence, the larger the bar will be. \n\nPress space.",
-"TEXT_INSTRUCT4":"INSTRUCTIONS:\n\nBefore you start, make sure the computer is connected to the internet and the volume is on.\n\nPress space when ready to start the task."
+"TEXT_INSTRUCT4":"INSTRUCTIONS:\n\nBefore you start, make sure that all other applications are closed, the computer is connected to the internet and the volume is on.\n\nPress space when ready to start the task."
 }

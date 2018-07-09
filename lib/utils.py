@@ -35,8 +35,6 @@ def get_config(config_file=None):
         config_json.close()
     except IOError: 
         print "Error: Configuration file is missing!"
-
-    config["ALLOWED_KEYS"] = config["SEQ_KEYS"] + ["escape"]  
     
     return(config)
 
