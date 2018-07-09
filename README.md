@@ -28,7 +28,7 @@ optional arguments:
 ## Dependencies 
 
 Anaconda3 (https://www.anaconda.com/download/).
-Python packages: psychopy, sqlachemy, sshtunnel.
+Python packages: psychopy, sqlachemy, sshtunnel, wxpython, pandas.
 
 ## Linux manual installation
 
@@ -37,6 +37,7 @@ Install Anaconda3 and make sure it is in the PATH.
 Download and unzip (or clone) the files into a directory INSTALLPATH. To create an environment with the necessary python packages:
 
 ```
+mv $INSTALLPATH\SeqLearn-master $INSTALLPATH\SeqLearn
 cd $INSTALLPATH\SeqLearn
 conda env create -n psychopyenv
 source activate psychopyenv

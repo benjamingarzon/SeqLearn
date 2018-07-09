@@ -5,7 +5,7 @@ md %INSTALLPATH%
 echo Installation path: %INSTALLPATH%
 xcopy "%HOMEPATH%\Downloads\SeqLearn-Master\SeqLearn-master" "%INSTALLPATH%\SeqLearn" /E
 
-PowerShell -executionpolicy remotesigned -File "%HOMEPATH%\SeqLearn\InstallAnaconda.ps1"
+PowerShell -executionpolicy remotesigned -File "%INSTALLPATH%\SeqLearn\InstallAnaconda.ps1"
 echo Downloading Anaconda. This may take a while. Press a key when you have finished installing it.
 pause
 del Anaconda.exe
@@ -14,13 +14,13 @@ set PATH=%ANACONDAPATH%\Scripts;%ANACONDAPATH%\;%PATH%
 
 cd %INSTALLPATH%\SeqLearn
 echo Installing python environment and program. This may take a while.
-cd $INSTALLPATH\SeqLearn
+cd %INSTALLPATH%\SeqLearn
 conda env create -n psychopyenv
-source activate psychopyenv
+call activate psychopyenv
+conda install -y python=2.7.13
 conda install -y -c cogsci psychopy
 conda install -y -c anaconda sqlalchemy pandas
 conda install -y -c conda-forge sshtunnel wxpython
-conda install -y python=2.7.13
 echo Done installing python environment and program.
 
 call activate psychopyenv
