@@ -27,30 +27,27 @@ optional arguments:
 
 ## Dependencies 
 
-Anaconda3.
+Anaconda3 (https://www.anaconda.com/download/).
+Python packages: psychopy, sqlachemy, sshtunnel.
 
 ## Linux manual installation
 
 Install Anaconda3 and make sure it is in the PATH.
 
-```
-cd $INSTALLPATH\SeqLearn
-conda env create -f psychopyenv.yml --force
-conda install python=2.7.13
-```
-
-
 Download and unzip (or clone) the files into a directory INSTALLPATH. To create an environment with the necessary python packages:
 
 ```
 cd $INSTALLPATH\SeqLearn
-conda env create -f psychopyenv.yml --force
-conda install python=2.7.13
+conda env create -n psychopyenv
+source activate psychopyenv
+conda install -y -c cogsci psychopy
+conda install -y -c anaconda sqlalchemy pandas
+conda install -y -c conda-forge sshtunnel wxpython
+conda install -y python=2.7.13
 ```
 
 Now run:
 ```
-source activate psychopyenv
 python SetUsername.py
 ```
 
@@ -70,15 +67,14 @@ You can also do this manually.
 To create a wrapper 'SequencePractice.sh' to run the program assign the correct variables to these variables: 
 
 ``` 
-INSTALLPATH=/full/path/to/containing/SeqLearn/folder
+SEQDIR=/full/path/to/SeqLearn/folder
 ANACONDAPATH=/full/path/to/anaconda3
 ``` 
 
 and then copy-paste to the terminal:
 
 ``` 
-echo "INSTALLPATH=$INSTALLPATH" > SequencePractice.sh
-echo "SEQDIR=$INSTALLPATH/SeqLearn" >> SequencePractice.sh
+echo "SEQDIR=$SEQDIR" > SequencePractice.sh
 echo "PATH=$ANACONDAPATH/Scripts;$ANACONDAPATH;$PATH" >> SequencePractice.sh
 echo "source activate psychopyenv" >> SequencePractice.sh
 echo "cd $SEQDIR" >> SequencePractice.sh
@@ -89,8 +85,7 @@ chmod a+x SequencePractice.sh
 
 Similarly, to create a wrapper for the demo:
 ``` 
-echo "INSTALLPATH=$INSTALLPATH" > SequencePracticeDemo.sh
-echo "SEQDIR=$INSTALLPATH/SeqLearn" >> SequencePracticeDemo.sh
+echo "SEQDIR=$SEQDIR" > SequencePracticeDemo.sh
 echo "PATH=$ANACONDAPATH/Scripts;$ANACONDAPATH;$PATH" >> SequencePracticeDemo.sh
 echo "source activate psychopyenv" >> SequencePracticeDemo.sh
 echo "cd $SEQDIR" >> SequencePracticeDemo.sh
@@ -154,3 +149,11 @@ done
 - Create a schedule (use SeqGen.py).
 
 - Adjust options in config/config.json.
+
+
+# Exporting the environment
+```
+conda env export -n psychopyenv > psychopyenv.yml
+conda env export -n psychopyenv --no-builds > psychopyenv_nb.yml
+
+```

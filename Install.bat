@@ -14,8 +14,13 @@ set PATH=%ANACONDAPATH%\Scripts;%ANACONDAPATH%\;%PATH%
 
 cd %INSTALLPATH%\SeqLearn
 echo Installing python environment and program. This may take a while.
-conda env create -f psychopyenv.yml --force
-conda install python=2.7.13
+cd $INSTALLPATH\SeqLearn
+conda env create -n psychopyenv
+source activate psychopyenv
+conda install -y -c cogsci psychopy
+conda install -y -c anaconda sqlalchemy pandas
+conda install -y -c conda-forge sshtunnel wxpython
+conda install -y python=2.7.13
 echo Done installing python environment and program.
 
 call activate psychopyenv
