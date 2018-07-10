@@ -14,7 +14,7 @@ set PATH=%ANACONDAPATH%\Scripts;%ANACONDAPATH%\;%PATH%
 
 echo Installing python environment and program. This may take a while.
 cd %INSTALLPATH%\SeqLearn
-conda create -n psychopyenv
+conda create -y -n psychopyenv
 call activate psychopyenv
 conda install -y python=2.7.13
 conda install -y -c anaconda pandas mysql-python sqlalchemy

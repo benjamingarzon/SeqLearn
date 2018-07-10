@@ -39,7 +39,7 @@ Download and unzip (or clone) the files into a directory INSTALLPATH. To create 
 ```
 mv $INSTALLPATH\SeqLearn-master $INSTALLPATH\SeqLearn
 cd $INSTALLPATH\SeqLearn
-conda env create -n psychopyenv
+conda create -y -n psychopyenv
 source activate psychopyenv
 conda install -y python=2.7.13
 conda install -y -c anaconda pandas mysql-python sqlalchemy
@@ -98,6 +98,12 @@ chmod a+x SequencePracticeDemo.sh
 ```
 
 Now you can move the wrappers wherever you want. 
+
+To clean unnecessary files:
+``` 
+rm -r $SEQDIR/stats
+``` 
+
 
 ## Windows
 Run the script Installation.bat and follow the instructions. 
