@@ -392,6 +392,7 @@ def SeqLearn(opts):
             db_config_json = open("./db/db_config.json", "r")
             db_config = json.load(db_config_json)
             db_config_json.close()
+            print db_config
     
             with SSHTunnelForwarder(
                     (db_config['REMOTEHOST'], 
@@ -404,6 +405,7 @@ def SeqLearn(opts):
                 ) as server:
                     port = server.local_bind_port
                     try:
+                        print "server"
                         engine_string = 'mysql://%s:%s@%s:%d/%s'%(username, 
                                                        db_config['DB_PASS'], 
                                                        db_config['LOCALHOST'],
@@ -421,7 +423,7 @@ def SeqLearn(opts):
     
         except:
             print('Could not connect to database!')
-         
+            
         #finally:
 
     ## Closing Section

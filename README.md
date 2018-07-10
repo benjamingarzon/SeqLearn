@@ -41,10 +41,10 @@ mv $INSTALLPATH\SeqLearn-master $INSTALLPATH\SeqLearn
 cd $INSTALLPATH\SeqLearn
 conda env create -n psychopyenv
 source activate psychopyenv
-conda install -y -c cogsci psychopy
-conda install -y -c anaconda sqlalchemy pandas
-conda install -y -c conda-forge sshtunnel wxpython
 conda install -y python=2.7.13
+conda install -y -c anaconda pandas mysql-python sqlalchemy
+conda install -y -c conda-forge sshtunnel wxpython=3.0
+conda install -y -c cogsci psychopy pygame
 ```
 
 Now run:
@@ -80,6 +80,7 @@ echo "PATH=$ANACONDAPATH/Scripts:$ANACONDAPATH:$PATH" >> SequencePractice.sh
 echo "source activate psychopyenv" >> SequencePractice.sh
 echo "cd $SEQDIR" >> SequencePractice.sh
 echo "python SeqLearn.py" > /dev/null >> SequencePractice.sh
+echo "echo Starting program. This may take a few seconds..." >> SequencePractice.sh 
 echo "source deactivate" >> SequencePractice.sh
 chmod a+x SequencePractice.sh
 ```
@@ -90,6 +91,7 @@ echo "SEQDIR=$SEQDIR" > SequencePracticeDemo.sh
 echo "PATH=$ANACONDAPATH/Scripts:$ANACONDAPATH:$PATH" >> SequencePracticeDemo.sh
 echo "source activate psychopyenv" >> SequencePracticeDemo.sh
 echo "cd $SEQDIR" >> SequencePracticeDemo.sh
+echo "echo Starting program. This may take a few seconds..." >> SequencePracticeDemo.sh 
 echo "python SeqLearn.py --demo" > /dev/null >> SequencePracticeDemo.sh
 echo "source deactivate" >> SequencePracticeDemo.sh
 chmod a+x SequencePracticeDemo.sh
