@@ -3,7 +3,7 @@
 set /p INSTALLPATH="Enter Installation PATH. Make sure the path does not contain spaces. (Default C:\Users\Public\SeqLearner): " || set INSTALLPATH="C:\Users\Public\SeqLearner"
 md %INSTALLPATH%
 echo Installation path: %INSTALLPATH%
-xcopy "%HOMEPATH%\Downloads\SeqLearn-Master\SeqLearn-master" "%INSTALLPATH%\SeqLearn" /E
+xcopy "%HOMEPATH%\Downloads\SeqLearn-master\SeqLearn-master" "%INSTALLPATH%\SeqLearn" /E
 
 PowerShell -executionpolicy remotesigned -File "%INSTALLPATH%\SeqLearn\InstallAnaconda.ps1"
 echo Downloading Anaconda. This may take a while. Press a key when you have finished installing it.
@@ -21,9 +21,6 @@ conda install -y -c anaconda pandas mysql-python sqlalchemy
 conda install -y -c conda-forge sshtunnel wxpython=3.0
 conda install -y -c cogsci psychopy pygame
 
-conda install -y -c numpy scipy matplotlib pandas pyopengl pillow lxml openpyxl xlrd configobj pyyaml gevent greenlet msgpack-python psutil pytables requests[security] cffi seaborn wxpython cython future pyzmq pyserial
-conda install -y -c conda-forge pyglet pysoundfile python-bidi moviepy pyosf
-pip install -y zmq json-tricks pyparallel sounddevice pygame pysoundcard psychopy_ext psychopy
 echo Done installing python environment and program.
 
 python SetUsername.py
