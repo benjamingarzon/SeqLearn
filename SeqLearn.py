@@ -11,9 +11,10 @@ Training tool for discrete sequence production.
 from __future__ import division
 from psychopy import visual, core, event, prefs
 from datetime import datetime
-from lib.utils import showStimulus, scorePerformance, startSession, filter_keys
+from lib.utils import showStimulus, scorePerformance, startSession, \
+filter_keys, test_sequence
 from generator.generator import string_to_seq, seq_to_string, seq_to_stim
-prefs.general['audioLib'] = ['pygame']
+prefs.general["audioLib"] = ["pygame"]
 from psychopy import sound
 import numpy as np
 import pandas as pd
@@ -33,7 +34,7 @@ def SeqLearn(opts):
     sess_time = str(datetime.now().time())
     sched_group, sess_num, username, keyswriter, trialswriter, keysfile, \
     trialsfile, maxscore, maxgroupscore, config, texts, schedule, \
-    schedule_unique = \
+    schedule_unique, total_trials, seq_length = \
     startSession(opts)
     
     win = visual.Window(config["SCREEN_RES"],
@@ -48,65 +49,86 @@ def SeqLearn(opts):
                                                sess_num), 
                                                height = \
                                                config["HEADING_TEXT_HEIGHT"], 
-                                               alignHoriz='center') 
+                                               alignHoriz="center") 
+
+    instructions_space = visual.TextStim(win, 
+                                           text=texts["TEXT_SPACE"], 
+                                           height = config["TEXT_HEIGHT"], 
+                                           alignHoriz="center",
+                                           pos = (0, -7)) 
+
+    instructions_select = visual.TextStim(win, 
+                                           text=texts["TEXT_SELECT"], 
+                                           height = config["TEXT_HEIGHT"], 
+                                           alignHoriz="center",
+                                           pos = (0, -7)) 
     
     instructionspre1_message = visual.TextStim(win, 
                                            text=texts["TEXT_INSTRUCTPRE1"], 
                                            height = config["TEXT_HEIGHT"], 
-                                           alignHoriz='center',
+                                           alignHoriz="center",
                                            pos = (-5, 0), 
                                            wrapWidth = 11 ) 
 
     instructionspre2_message = visual.TextStim(win, 
                                            text=texts["TEXT_INSTRUCTPRE2"], 
                                            height = config["TEXT_HEIGHT"], 
-                                           alignHoriz='center')
+                                           alignHoriz="center")
     
     instructions1_message = visual.TextStim(win, 
                                            text=texts["TEXT_INSTRUCT1"], 
                                            height = config["TEXT_HEIGHT"], 
-                                           alignHoriz='center',
+                                           alignHoriz="center",
                                            pos = (-5, 0), 
                                            wrapWidth = 11) 
     
     instructions2_message = visual.TextStim(win, 
-                                           text=texts["TEXT_INSTRUCT2"].format(
-                                                   config["MAX_WAIT"], 
-                                                   config["TOTAL_TRIALS"]), 
-                                           height = config["TEXT_HEIGHT"], 
-                                           alignHoriz='center') 
+                                        text=texts["TEXT_INSTRUCT2"].format(
+                                        seq_length*\
+                                        config["MAX_WAIT_PER_KEYPRESS"], 
+                                        total_trials), 
+                                        height = config["TEXT_HEIGHT"], 
+                                        alignHoriz="center") 
     
     instructions3_message = visual.TextStim(win, 
                                            text=texts["TEXT_INSTRUCT3"], 
                                            height = config["TEXT_HEIGHT"], 
-                                           alignHoriz='center') 
+                                           alignHoriz="center",
+                                           pos = (0, 2)) 
     
     instructions4_message = visual.TextStim(win, 
                                            text=texts["TEXT_INSTRUCT4"], 
                                            height = config["TEXT_HEIGHT"], 
-                                           alignHoriz='center',
-                                           color='red') 
+                                           alignHoriz="center", 
+                                           pos = (0, 1))
+
+    instructions4_space = visual.TextStim(win, 
+                                           text=texts["TEXT_SPACE4"], 
+                                           height = config["TEXT_HEIGHT"], 
+                                           alignHoriz="center",
+                                           pos = (0, -5),
+                                           color="red") 
     
     last_label = visual.TextStim(win, 
                                     text=texts["LAST_LABEL"], 
                                     height = config["TEXT_HEIGHT"], 
                                     pos = (-3*config["BAR_WIDTH"], 
                                            -0.5*config["BAR_HEIGHT"] - 2),
-                                    alignHoriz='center') 
+                                    alignHoriz="center") 
 
     best_label = visual.TextStim(win, 
                                  text=texts["BEST_LABEL"], 
                                  height = config["TEXT_HEIGHT"],
                                  pos = (0, 
                                         -0.5*config["BAR_HEIGHT"] - 2),
-                                 alignHoriz='center') 
+                                 alignHoriz="center") 
     
     group_best_label = visual.TextStim(win, 
                                  text=texts["GROUP_BEST_LABEL"], 
                                  height = config["TEXT_HEIGHT"],
                                  pos = (3*config["BAR_WIDTH"], 
                                         -0.5*config["BAR_HEIGHT"] - 2),
-                                 alignHoriz='center') 
+                                 alignHoriz="center") 
                                  
     error_message = visual.TextStim(win, 
                                     text=texts["TEXT_ERROR"], 
@@ -119,7 +141,10 @@ def SeqLearn(opts):
     hand_sign = visual.ImageStim(win, 
                                   image=config["HAND_FILE"],
                                   pos = (6, 0))
-     
+
+    bars_sign = visual.ImageStim(win, 
+                                  image=config["BARS_FILE"],
+                                  pos = (0, -6))     
     late_message = visual.TextStim(win, 
                                     text=texts["TEXT_LATE"], 
                                     alignHoriz="center", 
@@ -146,31 +171,34 @@ def SeqLearn(opts):
     core.wait(config["INTRO_TIME"])
     
     if config["PRESHOW"]==1:
-    
+        
         showStimulus(win, [instructionspre1_message, hand_sign])
-        event.waitKeys(keyList = ['space']) 
+        event.waitKeys(keyList = ["space"]) 
 
         showStimulus(win, [instructionspre2_message])
-        event.waitKeys(keyList = ['space']) 
+        event.waitKeys(keyList = ["space"]) 
 
-        #mouse.isPressedIn(shape, buttons=[0]): 
         for row in schedule_unique.itertuples():    
             squares = seq_to_stim(row.sequence_string, row.seq_color, win, 
-                              config["SQUARE_SIZE"])
-            showStimulus(win, squares)
-            event.waitKeys()
-    
+                                  config["SQUARE_SIZE"])
+            showStimulus(win, squares + [instructions_space])
+            event.waitKeys(keyList = ["space"])        
+            if config["TEST_MEM"] == 1:
+                test_sequence(row.sequence_string, win, config, row.seq_color, 
+                texts, instructions_space, instructions_select, error_message, 
+                error_sign, buzzer)
+                
     showStimulus(win, [instructions1_message, hand_sign])
-    event.waitKeys(keyList = ['space']) 
+    event.waitKeys(keyList = ["space"]) 
     
     showStimulus(win, [instructions2_message])
-    event.waitKeys(keyList = ['space']) 
+    event.waitKeys(keyList = ["space"]) 
     
-    showStimulus(win, [instructions3_message])
-    event.waitKeys(keyList = ['space']) 
+    showStimulus(win, [instructions3_message, bars_sign])
+    event.waitKeys(keyList = ["space"]) 
     
-    showStimulus(win, [instructions4_message])
-    event.waitKeys(keyList = ['space']) 
+    showStimulus(win, [instructions4_message, instructions4_space])
+    event.waitKeys(keyList = ["space"]) 
     
     for row in schedule.itertuples():
         sess_num, sess_type, n_trials, seq_keys =\
@@ -190,7 +218,7 @@ def SeqLearn(opts):
     
         # turn the text strings into stimuli
         for iTrial in range(n_trials):                
-            texttrial = texts["TEXT_TRIAL"].format(iTrial+1)
+            texttrial = texts["TEXT_TRIAL"].format(iTrial, n_trials)
 
             trialStimulus.append(
                     visual.TextStim(win, 
@@ -380,12 +408,12 @@ def SeqLearn(opts):
     keysfile.close()
     trialsfile.close()
     
-    mykeys = pd.read_table(keysfile.name, sep = ';')
-    mytrials = pd.read_table(trialsfile.name, sep = ';')
+    mykeys = pd.read_table(keysfile.name, sep = ";")
+    mytrials = pd.read_table(trialsfile.name, sep = ";")
     
     # update only what we did in the current session
-    mykeys = mykeys.loc[mykeys['sess_num'] == sess_num]
-    mytrials= mytrials.loc[mytrials['sess_num'] == sess_num]
+    mykeys = mykeys.loc[mykeys["sess_num"] == sess_num]
+    mytrials= mytrials.loc[mytrials["sess_num"] == sess_num]
     
     if not opts.demo:
         try:
@@ -395,34 +423,34 @@ def SeqLearn(opts):
             print db_config
     
             with SSHTunnelForwarder(
-                    (db_config['REMOTEHOST'], 
-                    int(db_config['REMOTEPORT'])),
-                    ssh_username = db_config['SSH_USER'],
-                    ssh_password = db_config['SSH_PASS'],
-                    ssh_pkey = os.path.abspath(db_config['KEY']),
-                    remote_bind_address = (db_config['LOCALHOST'], 
-                                           int(db_config['LOCALPORT']))
+                    (db_config["REMOTEHOST"], 
+                    int(db_config["REMOTEPORT"])),
+                    ssh_username = db_config["SSH_USER"],
+                    ssh_password = db_config["SSH_PASS"],
+                    ssh_pkey = os.path.abspath(db_config["KEY"]),
+                    remote_bind_address = (db_config["LOCALHOST"], 
+                                           int(db_config["LOCALPORT"]))
                 ) as server:
                     port = server.local_bind_port
                     try:
                         print "server"
-                        engine_string = 'mysql://%s:%s@%s:%d/%s'%(username, 
-                                                       db_config['DB_PASS'], 
-                                                       db_config['LOCALHOST'],
+                        engine_string = "mysql://%s:%s@%s:%d/%s"%(username, 
+                                                       db_config["DB_PASS"], 
+                                                       db_config["LOCALHOST"],
                                                        port,
-                                                       db_config['DATABASE'])
+                                                       db_config["DATABASE"])
         
                         engine = create_engine(engine_string)
-                        mykeys.to_sql('keys_table', engine, 
-                                      if_exists = 'append') 
-                        mytrials.to_sql('trials_table', engine, 
-                                        if_exists = 'append')
-                        print('Synced with database.')
+                        mykeys.to_sql("keys_table", engine, 
+                                      if_exists = "append") 
+                        mytrials.to_sql("trials_table", engine, 
+                                        if_exists = "append")
+                        print("Synced with database.")
                     except exc.SQLAlchemyError as e:
-                        print('Error:', e)
+                        print("Error:", e)
     
         except:
-            print('Could not connect to database!')
+            print("Could not connect to database!")
             
         #finally:
 
@@ -434,28 +462,28 @@ def SeqLearn(opts):
 def build_parser():
     parser = ArgumentParser()
 
-    parser.add_argument('--schedule_file', 
+    parser.add_argument("--schedule_file", 
                         type = str,
-                        dest = 'schedule_file', 
-                        help = 'Enter schedule file.',
+                        dest = "schedule_file", 
+                        help = "Enter schedule file.",
                         required = False)
 
-    parser.add_argument('--config_file', 
+    parser.add_argument("--config_file", 
                         type = str,
-                        dest = 'config_file', 
-                        help = 'Enter configuration file.',
+                        dest = "config_file", 
+                        help = "Enter configuration file.",
                         required = False)
     
-    parser.add_argument('--restart', 
-                        dest='restart', 
-                        help='Remove previous data and start from session 1.',
-                        action='store_true',
+    parser.add_argument("--restart", 
+                        dest="restart", 
+                        help="Remove previous data and start from session 1.",
+                        action="store_true",
                         required = False)
 
-    parser.add_argument('--demo', 
-                        dest='demo', 
-                        help='Do a demo, no saving.',
-                        action='store_true',
+    parser.add_argument("--demo", 
+                        dest="demo", 
+                        help="Do a demo, no saving.",
+                        action="store_true",
                         required = False)
 
     return(parser)

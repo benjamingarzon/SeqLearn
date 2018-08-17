@@ -118,4 +118,60 @@ def seq_to_stim(mystring, color, win, size):
                 
     square_list = square_list + lines + [arrowLeft, arrowRight]
     return(square_list)
-   
+
+def seq_to_stim_binary(mystring, color, win, size):
+    """ Translate sequence to squares. """
+    myseq = string_to_seq(mystring)
+    length = len(myseq)*size
+    seq_pos = length - size
+ 
+    #print(myseq)
+    square_list = [] 
+    for mychord in myseq:
+        
+        for mykey in mychord:
+            square = visual.Rect(win, 
+                         height=size, 
+                         width=size,
+                         lineWidth=0, 
+                         fillColor=color, 
+                         pos=((int(mykey) - 2.5)*1.5*size, 
+                              seq_pos))
+            square_list.append(square)
+        seq_pos = seq_pos - 2*size
+    
+    lines = []
+    for x in [-3, -1.5, 0, 1.5, 3]:
+        vertices = [(size*x, length + 0.25*size), (size*x, - length + 0.25*size)]
+        lines.append(visual.ShapeStim(win, 
+                                      vertices=vertices, 
+                                      lineWidth=0.5,
+                                      closeShape=False, 
+                                      lineColor='black', 
+                                      pos = (0, 0))
+                )
+                
+    arrowVertLeft = [(-size*3.2 , - length + 0.25*size ), 
+                     (-size*3, - length ),
+                     (-size*2.8, - length + 0.25*size)]
+
+    arrowVertRight = [(size*3.2, - length + 0.25*size), 
+                     (size*3, - length ),
+                     (size*2.8, - length + 0.25*size)]
+    
+    
+    arrowLeft = visual.ShapeStim(win, 
+                                 vertices=arrowVertLeft, 
+                                 lineColor='black',
+                                 fillColor='black',
+                                 lineWidth=0.5)
+        
+    arrowRight = visual.ShapeStim(win, 
+                                  vertices=arrowVertRight, 
+                                  lineColor='black',
+                                  fillColor='black',
+                                  lineWidth=0.5)        
+                
+    square_list = square_list + lines + [arrowLeft, arrowRight]
+    return(square_list)
+      

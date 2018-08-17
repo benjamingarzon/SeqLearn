@@ -15,6 +15,10 @@ from scipy.spatial.distance import pdist #, squareform
 from scipy.cluster.hierarchy import linkage, cut_tree
 from collections import defaultdict
 import glob, os
+from generator.generator import seq_to_stim, seq_to_string, string_to_seq
+from psychopy import event, core
+
+
 def get_seq_types(type_file=None):
     if type_file == None:
         type_file = "./scheduling/seq_types.csv"
@@ -123,7 +127,8 @@ def startSession(opts):
         # remove previous demo files
         for fl in glob.glob("./data/*-demo.csv"):
             os.remove(fl)    
-
+        total_trials = config["TOTAL_TRIALS_DEMO"]
+        seq_length = config["SEQ_LENGTH_DEMO"]
     else:
 
         # get schedule
@@ -134,7 +139,9 @@ def startSession(opts):
 
         keysfilename = "./data/keysfile-{}.csv".format(username)
         trialsfilename = "./data/trialsfile-{}.csv".format(username) 
- 
+
+        total_trials = config["TOTAL_TRIALS"]
+        seq_length = config["SEQ_LENGTH"]
     try:
         schedule = pd.read_csv(schedule_file, sep = ";")
         n_sess = np.max(schedule["sess_num"])
@@ -229,7 +236,7 @@ def startSession(opts):
     
     return(sched_group, sess_num, username, keyswriter, trialswriter, keysfile, 
            trialsfile, maxscore, maxgroupscore, config, texts, schedule, 
-           schedule_unique)
+           schedule_unique, total_trials, seq_length)
 
 
 def filter_keys(keypresses, max_chord_interval, n_chords):#, keys, keytimes):
@@ -277,6 +284,63 @@ def filter_keys(keypresses, max_chord_interval, n_chords):#, keys, keytimes):
 
     return(keys, keytimes, RTs)        
 
+def test_sequence(mystring, win, config, mycolor, texts, instructions_space,
+                  instructions_select, error_message, error_sign, buzzer):
+
+    mouse = event.Mouse(visible=True,win=win)
+
+    myseq = string_to_seq(mystring)
+    full_seq = [config["SEQ_KEYS"] for i, _ in enumerate(myseq)]
+    full_string = seq_to_string(full_seq)
+    squares = seq_to_stim(mystring, mycolor, win, 
+                                    config["SQUARE_SIZE"])
+
+    attempts = 0
+    iscorrect = False
+    while not iscorrect:
+        squares_shown = seq_to_stim(full_string, config["BGCOLOR"], win, 
+                                    config["SQUARE_SIZE"])
+        showStimulus(win, squares_shown + [instructions_select])
+        running = True
+        while running:
+            if any(mouse.getPressed()):
+                for square in squares_shown:
+                    if mouse.isPressedIn(square, buttons=[0]):
+                        while mouse.isPressedIn(square, buttons=[0]):
+                            pass
+                        break
+        
+                if square.fillColor == mycolor:
+                    square.fillColor = config["BGCOLOR"]
+                else:
+                    square.fillColor = mycolor
+                showStimulus(win, squares_shown + [instructions_select])
+            if event.getKeys("space"):
+                running = False
+        
+        j = 0
+        pressed_indices = [ i for i, square in enumerate(squares_shown) \
+                           if square.fillColor == mycolor ]
+        pressed_seq = []
+        for row in full_seq:
+            chord = []
+            for key in row:
+                if j in pressed_indices:
+                    chord.append(key)
+                j = j + 1    
+                    
+            pressed_seq.append(chord)
+        if mystring == seq_to_string(pressed_seq):
+            iscorrect = True
+            
+        else:
+            attempts = attempts + 1
+            showStimulus(win, [error_message, error_sign])
+            if config["BUZZER_ON"] == 1:
+                buzzer.play()
+            core.wait(config["ERROR_TIME"])        
+            showStimulus(win, squares + [instructions_space])
+            event.waitKeys(keyList = ["space"])
 
 def SetUsername():
     
