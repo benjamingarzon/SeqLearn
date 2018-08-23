@@ -263,7 +263,7 @@ def SeqLearn(opts):
                 MT = 0
                 keys = ["0"]
                 keytimes = [0]
-                RTs = [config["MAX_WAIT"]]
+                RTs = [maxwait]
                 trial_type = "missed"
     
                 if misses > config["MAX_MISSES"]:
