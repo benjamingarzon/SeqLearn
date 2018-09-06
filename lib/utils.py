@@ -122,6 +122,7 @@ def startSession(opts):
     
     if opts.demo: # load demo schedule instead
         schedule_file = "./scheduling/schedule-demo.csv"
+        memofilename = "./data/memofile-demo.csv".format(username)
         keysfilename = "./data/keysfile-demo.csv".format(username)
         trialsfilename = "./data/trialsfile-demo.csv".format(username)
         # remove previous demo files
@@ -136,7 +137,7 @@ def startSession(opts):
             schedule_file = "./scheduling/schedule{}.csv".format(sched_group)
         else:
             schedule_file = opts.schedule_file
-
+        memofilename = "./data/memofile-{}.csv".format(username)
         keysfilename = "./data/keysfile-{}.csv".format(username)
         trialsfilename = "./data/trialsfile-{}.csv".format(username) 
 
@@ -151,6 +152,7 @@ def startSession(opts):
    
     try:
         # proceed from where it was left before
+        memofile = open(memofilename, "ab")
         keysfile = open(keysfilename, "ab")
         trialsfile = open(trialsfilename, "ab")
         trialstable = pd.read_csv(trialsfilename, sep=';')
@@ -172,11 +174,13 @@ def startSession(opts):
         #print maxscore
         #print maxgroupscore
         # connect files with a csv writer
+        memowriter = csv.writer(memofile, delimiter=";")
         keyswriter = csv.writer(keysfile, delimiter=";")
         trialswriter = csv.writer(trialsfile, delimiter=";")
 
     except pd.errors.EmptyDataError: 
         # create new session
+        memofile = open(memofilename, "wb")
         keysfile = open(keysfilename, "wb")
         trialsfile = open(trialsfilename, "wb")
         sess_num = 1
@@ -184,10 +188,27 @@ def startSession(opts):
         maxgroupscore = defaultdict(lambda:config["MAXSCORE_BASELINE"], {})
 
         # connect files with a csv writer
+        memowriter = csv.writer(memofile, delimiter=";")
         keyswriter = csv.writer(keysfile, delimiter=";")
         trialswriter = csv.writer(trialsfile, delimiter=";")
 
         # create output file header
+        memowriter.writerow([
+                "username",
+                "sched_group",
+                "sess_num",
+                "sess_date",    
+                "sess_time",    
+        #        "seq_type",
+        #        "sess_type",
+                "seq_train",
+                "trial", 
+                "true_sequence", 
+                "obs_sequence", 
+                "accuracy", 
+                "RT"
+        ])
+
         keyswriter.writerow([
                 "username",
                 "sched_group",
@@ -209,6 +230,7 @@ def startSession(opts):
                 "key_to", 
                 "RT"
         ])
+    
         trialswriter.writerow([
                 "username",
                 "sched_group",
@@ -234,8 +256,9 @@ def startSession(opts):
                                 "seq_color","seq_train"]].drop_duplicates()     
     schedule = schedule.query('sess_num == %d'%(sess_num))
     
-    return(sched_group, sess_num, username, keyswriter, trialswriter, keysfile, 
-           trialsfile, maxscore, maxgroupscore, config, texts, schedule, 
+    return(sched_group, sess_num, username, memowriter, keyswriter, 
+           trialswriter, memofile, keysfile, trialsfile, maxscore, 
+           maxgroupscore, config, texts, schedule, 
            schedule_unique, total_trials, seq_length)
 
 
@@ -250,7 +273,7 @@ def filter_keys(keypresses, max_chord_interval, n_chords):#, keys, keytimes):
     d = pdist(np.reshape(allkeytimes, (-1, 1))) # can be done faster 
     Z = linkage(d, 'complete')
     clusters = np.array([ x[0] for x in cut_tree(Z, n_clusters = n_chords)])
-#    clusters = np.array([ x[0] for x in cut_tree(Z, height= max_chord_interval)])
+# clusters = np.array([ x[0] for x in cut_tree(Z, height= max_chord_interval)])
 
     keys = []
     keytimes = []
@@ -285,7 +308,9 @@ def filter_keys(keypresses, max_chord_interval, n_chords):#, keys, keytimes):
     return(keys, keytimes, RTs)        
 
 def test_sequence(mystring, win, config, mycolor, texts, instructions_space,
-                  instructions_select, error_message, error_sign, buzzer):
+                  instructions_select, error_message, error_sign, buzzer, 
+                  memowriter, username, sched_group, sess_num, sess_date, 
+                  sess_time, seq_train):
 
     mouse = event.Mouse(visible=True,win=win)
 
@@ -297,11 +322,16 @@ def test_sequence(mystring, win, config, mycolor, texts, instructions_space,
 
     attempts = 0
     iscorrect = False
+    timer = core.Clock()
+
     while not iscorrect:
         squares_shown = seq_to_stim(full_string, config["BGCOLOR"], win, 
                                     config["SQUARE_SIZE"])
+
+        
         showStimulus(win, squares_shown + [instructions_select])
         running = True
+        timer.reset()
         while running:
             if any(mouse.getPressed()):
                 for square in squares_shown:
@@ -330,7 +360,8 @@ def test_sequence(mystring, win, config, mycolor, texts, instructions_space,
                 j = j + 1    
                     
             pressed_seq.append(chord)
-        if mystring == seq_to_string(pressed_seq):
+        mypressedstring = seq_to_string(pressed_seq)
+        if mystring == mypressedstring:
             iscorrect = True
             
         else:
@@ -341,6 +372,20 @@ def test_sequence(mystring, win, config, mycolor, texts, instructions_space,
             core.wait(config["ERROR_TIME"])        
             showStimulus(win, squares + [instructions_space])
             event.waitKeys(keyList = ["space"])
+        
+        memowriter.writerow([
+                    username,
+                    sched_group,
+                    sess_num,
+                    sess_date,    
+                    sess_time,
+                    seq_train,
+                    attempts + 1,
+                    mystring,
+                    mypressedstring, 
+                    1.0 if iscorrect else 0.0, # just check if correct
+                    timer.getTime()                    
+                ])
 
 def SetUsername():
     

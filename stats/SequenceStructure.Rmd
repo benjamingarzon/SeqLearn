@@ -84,7 +84,10 @@ Untrained and trained have common chords but different transitions. Transitions 
 maxdist.vec = 2*(seq_size - 1)
 
 # compute distances
+# hamming distance considering transitions
 vecdist = get_vecdist(chunks, nrow(chords))
+
+# number of different elements
 eldist = proxy::dist(chunks, chunkdist)
 vecdist.mat = as.matrix(vecdist)
 eldist.mat = as.matrix(eldist)

@@ -98,12 +98,10 @@ select_unique = function(paths, seq_size){
 }
 
 
-# number of common elements
-
+# number of different elements
 chunkdist = function(x, y) length(x) - length(intersect(x, y))
 
-# distance considering transitions
-
+# hamming distance considering transitions
 get_vecdist = function(chunks, nchords){
   
   vecs = t(sapply(chunks, chunk_to_bin, nchords))

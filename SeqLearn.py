@@ -32,9 +32,9 @@ def SeqLearn(opts):
     
     sess_date = str(datetime.now().date())
     sess_time = str(datetime.now().time())
-    sched_group, sess_num, username, keyswriter, trialswriter, keysfile, \
-    trialsfile, maxscore, maxgroupscore, config, texts, schedule, \
-    schedule_unique, total_trials, seq_length = \
+    sched_group, sess_num, username, memowriter, keyswriter, trialswriter, \
+    memofile, keysfile, trialsfile, maxscore, maxgroupscore, config, texts, \
+    schedule, schedule_unique, total_trials, seq_length = \
     startSession(opts)
     
     win = visual.Window(config["SCREEN_RES"],
@@ -163,13 +163,12 @@ def SeqLearn(opts):
     )
     
     trialClock = core.Clock()
-    
     ## Experiment Section
     
     #display instructions and wait
     showStimulus(win, [intro_message])
     core.wait(config["INTRO_TIME"])
-    
+
     if config["PRESHOW"]==1:
         
         showStimulus(win, [instructionspre1_message, hand_sign])
@@ -186,8 +185,11 @@ def SeqLearn(opts):
             if config["TEST_MEM"] == 1:
                 test_sequence(row.sequence_string, win, config, row.seq_color, 
                 texts, instructions_space, instructions_select, error_message, 
-                error_sign, buzzer)
+                error_sign, buzzer, memowriter, username, sched_group, 
+                sess_num, sess_date, sess_time, row.seq_train)
                 
+    memofile.close()
+    
     showStimulus(win, [instructions1_message, hand_sign])
     event.waitKeys(keyList = ["space"]) 
     
@@ -315,29 +317,37 @@ def SeqLearn(opts):
                                               lineWidth=0, 
                                               fillColor="blue", 
                                               pos=(-3*config["BAR_WIDTH"], 
-                                                   0.5*last_height - 2)
+                                                   0.5*last_height - 3)
                                               ) 
                     best_bar = visual.Rect(win, height=max_height, 
                                            width=config["BAR_WIDTH"], 
                                            lineWidth=0, 
                                            fillColor="green",
                                            pos=(0, 
-                                                0.5*max_height - 2)
+                                                0.5*max_height - 3)
                                            )
             
-                    group_best_bar = \
-                    visual.Rect(win, 
-                    height=config["BAR_HEIGHT"], 
-                    width=config["BAR_WIDTH"], 
-                    lineWidth=0, 
-                    fillColor="yellow",
-                    pos=(3*config["BAR_WIDTH"],
-                         0.5*config["BAR_HEIGHT"] - 2)
-                    )
-        
+                    group_best_bar = visual.Rect(win, 
+                                                 height=config["BAR_HEIGHT"], 
+                                                 width=config["BAR_WIDTH"], 
+                                                 lineWidth=0, 
+                                                 fillColor="yellow",
+                                                 pos=(3*config["BAR_WIDTH"],
+                                                 0.5*config["BAR_HEIGHT"] - 3)
+                                                 )
+                    
+                    bottomline = visual.ShapeStim(win, 
+                                      vertices= [(-3*config["BAR_WIDTH"] - 3,
+                                                  - 3 ), 
+                                                 (3*config["BAR_WIDTH"] + 3,
+                                                  - 3 )],
+                                      lineWidth=0.5,
+                                      closeShape=False, 
+                                      lineColor='black')
+                    
                     showStimulus(win, [last_bar, last_label, best_bar, 
                                        best_label, group_best_bar, 
-                                       group_best_label])
+                                       group_best_label, bottomline])
                     core.wait(config["FEEDBACK_TIME"])
 
                     trialincrease = 1
@@ -408,14 +418,16 @@ def SeqLearn(opts):
     keysfile.close()
     trialsfile.close()
     
+    mymemo = pd.read_table(memofile.name, sep = ";")
     mykeys = pd.read_table(keysfile.name, sep = ";")
     mytrials = pd.read_table(trialsfile.name, sep = ";")
     
     # update only what we did in the current session
-    mykeys = mykeys.loc[mykeys["sess_num"] == sess_num]
-    mytrials= mytrials.loc[mytrials["sess_num"] == sess_num]
+#    mymemo = mymemo.loc[mymemo["sess_num"] == sess_num]
+#    mykeys = mykeys.loc[mykeys["sess_num"] == sess_num]
+#    mytrials= mytrials.loc[mytrials["sess_num"] == sess_num]
     
-    if not opts.demo:
+    if opts.demo:
         try:
             db_config_json = open("./db/db_config.json", "r")
             db_config = json.load(db_config_json)
@@ -441,6 +453,8 @@ def SeqLearn(opts):
                                                        db_config["DATABASE"])
         
                         engine = create_engine(engine_string)
+                        mymemo.to_sql("memo_table", engine, 
+                                      if_exists = "append") 
                         mykeys.to_sql("keys_table", engine, 
                                       if_exists = "append") 
                         mytrials.to_sql("trials_table", engine, 
