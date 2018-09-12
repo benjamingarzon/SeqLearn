@@ -122,9 +122,9 @@ def startSession(opts):
     
     if opts.demo: # load demo schedule instead
         schedule_file = "./scheduling/schedule-demo.csv"
-        memofilename = "./data/memofile-demo.csv".format(username)
-        keysfilename = "./data/keysfile-demo.csv".format(username)
-        trialsfilename = "./data/trialsfile-demo.csv".format(username)
+        memofilename = "./data/memofile-demo.csv"
+        keysfilename = "./data/keysfile-demo.csv"
+        trialsfilename = "./data/trialsfile-demo.csv"
         # remove previous demo files
         for fl in glob.glob("./data/*-demo.csv"):
             os.remove(fl)    
@@ -136,7 +136,8 @@ def startSession(opts):
         if opts.schedule_file == None:
             schedule_file = "./scheduling/schedule{}.csv".format(sched_group)
         else:
-            schedule_file = opts.schedule_file
+            schedule_file = opts.schedule_file + "_{}.csv".format(sched_group)
+        print(schedule_file)    
         memofilename = "./data/memofile-{}.csv".format(username)
         keysfilename = "./data/keysfile-{}.csv".format(username)
         trialsfilename = "./data/trialsfile-{}.csv".format(username) 

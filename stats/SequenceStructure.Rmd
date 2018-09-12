@@ -81,62 +81,114 @@ Untrained and trained have common chords but different transitions. Transitions 
 
 
 ```{r}
+nchords = nrow(chords)
+
 maxdist.vec = 2*(seq_size - 1)
+size = 3
 
 # compute distances
 # hamming distance considering transitions
-vecdist = get_vecdist(chunks, nrow(chords))
+vecdist = get_vecdist(chunks, nchords)
 
 # number of different elements
 eldist = proxy::dist(chunks, chunkdist)
+
 vecdist.mat = as.matrix(vecdist)
 eldist.mat = as.matrix(eldist)
+```
 
-# cluster
+Find clusters
+```{r}
+
+#  find clusters of sequences with uncommon transitions
 hc.complete = hclust(maxdist.vec - vecdist, method = "complete")
 plot(hc.complete)
 clusters = cutree(hc.complete, h = 1)
 clusters.table = table(clusters)
-sel.clus = which(clusters.table > 6)
+sel.clus = which(clusters.table > 6)# at least 6 different sequences needed
 
-sel.chunks = list()
-degree = NULL
+sel.chunks =  list()
+degree = min.eldist = NULL
+myfinger_distance = mychord_distance = myschedules = mytransitions = NULL
 for (i in seq(length(sel.clus))){
   sel.chunks[[i]] = chunks[which(clusters == sel.clus[i])]
-  chunks.vecdist = get_vecdist(sel.chunks[[i]], nrow(chords))
+  chunks.vecdist = get_vecdist(sel.chunks[[i]], nchords)
   chunks.eldist = proxy::dist(sel.chunks[[i]], chunkdist)
-  hc.el = hclust(chunks.eldist, method = "complete")
-  plot(hc.el)
+  schedules = get_schedules(sel.chunks[[i]], size)
+  myfinger_distance = c(myfinger_distance,
+                        sapply(schedules, finger_distribution_distance, chords)
+  )
+  mychord_distance = c(mychord_distance,
+                       sapply(schedules, chord_distance)
+  )
+  myschedules =c(myschedules, 
+                 schedules)
+  mytransitions = rbind(mytransitions, 
+                 t(sapply(schedules, get_transition_distribution, nchords)))
+                 
+  print(i)
+  # min.eldist[i] = min(chunks.eldist)
+  # if(min(chunks.eldist)==2)
+  # hc.el = hclust(chunks.eldist, method = "complete")
+  # plot(hc.el)
 }
-sel.cluster = sel.chunks[[ 58 ]]
 
-# observe clustering
-sel.dist = proxy::dist(sel.chunk, chunkdist)
-hc.sel = hclust(sel.dist, method = "single")
-plot(hc.sel)
+plot(jitter(mychord_distance), jitter(myfinger_distance), pch = 20, cex = 0.3 ) 
+chosen_indices = which(myfinger_distance == 0 & mychord_distance==max(mychord_distance))
+chosen_schedules = myschedules[chosen_indices]
 
-trained.chunks = sel.cluster[c(1, 8, 5)]
-untrained.chunks = sel.cluster[c(9, 4, 6)]
-
-vecdist.results = get_vecdist(c(trained.chunks, untrained.chunks), nrow(chords))
-eldist.results = proxy::dist(c(trained.chunks, untrained.chunks), chunkdist)
-
-print(as.matrix(vecdist.results))
-print(as.matrix(eldist.results))
+# check distribution of fingers and transitions
+```
 
 
 # write out
-json_file = '../scheduling/sequences.json'
+```{r}
 
+vecs.trained = vecs.untrained = NULL
+for (i in seq(length(chosen_schedules))){
+  
+  schedule = chosen_schedules[[i]]
+    
+  print(i)
+  finger_distribution.trained = sapply(schedule$trained, get_finger_distribution, chords)
+  finger_distribution.untrained = sapply(schedule$untrained, get_finger_distribution, chords)  
+  vecs.trained = rbind(vecs.trained, rowSums(sapply(schedule$trained, chunk_to_bin, nchords)))
+  vecs.untrained = rbind(vecs.untrained, rowSums(sapply(schedule$untrained, chunk_to_bin, nchords)))
 
-trained = translate_seqs(trained.chunks, chords)
-untrained = translate_seqs(untrained.chunks, chords)
-myjson = toJSON(list(type1 = c(trained, untrained)))
+  print(t(finger_distribution.trained))
+  print(t(finger_distribution.untrained))
+  
+  json_file = paste0('../scheduling/sequences_', formatC(i, width = 3, flag = 0), '.json')
+  trained.chunks = schedule$trained
+  untrained.chunks = schedule$untrained
+  trained = translate_seqs(trained.chunks, chords)
+  untrained = translate_seqs(untrained.chunks, chords)
+  myjson = toJSON(list(type1 = c(trained, untrained)))
 
-write(myjson, json_file)
+  write(myjson, json_file)
+  
+} 
+
+# sel.chunk = sel.chunks[[ 58 ]]
+# 
+# # observe clustering
+# sel.dist = proxy::dist(sel.chunk, chunkdist)
+# hc.sel = hclust(sel.dist, method = "single")
+# plot(hc.sel)
+# 
+# trained.chunks = sel.cluster[c(1, 8, 5)]
+# untrained.chunks = sel.cluster[c(9, 4, 6)]
+# 
+# vecdist.results = get_vecdist(c(trained.chunks, untrained.chunks), nchords)
+# eldist.results = proxy::dist(c(trained.chunks, untrained.chunks), chunkdist)
+# 
+# print(as.matrix(vecdist.results))
+# print(as.matrix(eldist.results))
 
 # run SeqGen.py to generate schedule
+# python SeqGen.py --sequence_file=scheduling\sequences_001.json --schedule_file=scheduling\schedule001
 ```
+
 
 
 Configuration 1:
@@ -146,8 +198,8 @@ Confirm
 
 ```{r}
 
-# trained.dist = get_vecdist(trained.cluster, nrow(chords))
-# untrained.dist = get_vecdist(untrained.cluster, nrow(chords))
+# trained.dist = get_vecdist(trained.cluster, nchords)
+# untrained.dist = get_vecdist(untrained.cluster, nchords)
 # hc = hclust(untrained.dist, method = "single")
 # plot(hc)
 # 

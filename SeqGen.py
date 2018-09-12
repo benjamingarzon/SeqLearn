@@ -15,16 +15,26 @@ import pandas as pd
 import numpy as np
 import random
 from itertools import permutations
+from argparse import ArgumentParser
 
-def generate_with_predefined_sequences(sched_group):
+def generate_with_predefined_sequences(opts, sched_group):
     """
     Generate schedule using sequences already defined. 
     """
     # get config
     config = get_config()
     type_data = get_seq_types()
-    schedulefilename = "./scheduling/schedule{}.csv".format(sched_group) 
-        
+    if opts.schedule_file:
+        schedulefilename = opts.schedule_file + "_{}.csv".format(sched_group)
+    else:    
+        schedulefilename = "./scheduling/schedule{}.csv".format(sched_group) 
+     
+    if opts.seq_file:
+        seq_file = opts.seq_file
+    else:
+        seq_file = "./scheduling/sequences.json"
+    
+    print(schedulefilename, seq_file)
     color_list = config["COLOR_LIST"]
     
     # create sequences
@@ -45,7 +55,7 @@ def generate_with_predefined_sequences(sched_group):
             size=seq_length,
             maxchordsize=max_chord_size)
 
-        seq_list = mygenerator.read(seq_type)
+        seq_list = mygenerator.read(seq_file, seq_type)
 
         if sched_group == 1: # swap trained and untrained
             seq_list.reverse()
@@ -228,9 +238,29 @@ def generate_with_random_sequences(sched_group):
                          inplace = True)
     schedule.to_csv(schedulefilename, sep =";", index=False)
 
+def build_parser():
+    parser = ArgumentParser()
+
+    parser.add_argument("--sequence_file", 
+                        type = str,
+                        dest = "seq_file", 
+                        help = "Enter sequence file.",
+                        required = False)
+
+    parser.add_argument("--schedule_file", 
+                        type = str,
+                        dest = "schedule_file", 
+                        help = "Enter schedule file.",
+                        required = False)
+    return(parser)
+
 def main():
-  generate_with_predefined_sequences(sched_group = 0)
-  generate_with_predefined_sequences(sched_group = 1)
+  parser = build_parser()
+
+  opts = parser.parse_args()
+  print(opts)
+  generate_with_predefined_sequences(opts, sched_group = 0)
+  generate_with_predefined_sequences(opts, sched_group = 1)
   
 if __name__== "__main__":
   main()

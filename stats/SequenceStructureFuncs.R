@@ -38,11 +38,12 @@ generate_paths = function(chords, allowed_dist = c(3), seq_size){
   print(distance)
   print(bindistance)
   
-  colors = c(rep("red", 4), rep("blue", 6))
+  colors = c(rep("red", 4), rep("blue", 6), rep("green", 4))
   
   # plot transitions
-  gplot(max(distance)-distance, mode="mds", arrowhead.cex = 0, displaylabels=TRUE, vertex.col = colors, edge.lwd = distance)
+  gplot(bindistance, mode="kamadakawai", arrowhead.cex = 0, displaylabels=TRUE, vertex.col = colors, edge.lwd = bindistance)
   
+  print(paste("Total transitions:", sum(bindistance)))
   degrees = colSums(bindistance)
   print(degrees)
   transitions = melt(bindistance)
@@ -103,11 +104,60 @@ chunkdist = function(x, y) length(x) - length(intersect(x, y))
 
 # hamming distance considering transitions
 get_vecdist = function(chunks, nchords){
-  
   vecs = t(sapply(chunks, chunk_to_bin, nchords))
   vecdist = dist(vecs, method = 'manhattan')
-  
 }
+
+get_transition_distribution = function(schedule, nchords){
+  vecs.trained = rowSums(sapply(schedule$trained, chunk_to_bin, nchords))
+  vecs.untrained = rowSums(sapply(schedule$untrained, chunk_to_bin, nchords))
+  
+  return(c(sum(vecs.trained), 
+        sum(vecs.untrained)))
+}
+
+
+get_finger_distribution = function(chunk, chords){
+  return(colSums(chords[chunk, ]))
+}
+
+finger_distribution_distance = function(schedule, chords){
+  
+  finger_distribution.trained = rowSums(sapply(schedule$trained, get_finger_distribution, chords))
+  finger_distribution.untrained = rowSums(sapply(schedule$untrained, get_finger_distribution, chords))  
+
+    return(sum(abs(finger_distribution.trained - finger_distribution.untrained)))
+
+  }
+
+chord_distance = function(schedule){
+  eldist = as.matrix(proxy::dist(c(schedule$trained, schedule$untrained), chunkdist))
+  n = ncol(eldist)
+  return(min(eldist[1:n/2, (n/2+1):n]))
+  }
+  
+get_schedules = function(cluster, size){
+  
+  get_groups = function(taken, cluster, size){
+    myset = seq(length(cluster))
+    new = combn(setdiff(myset, taken), size)
+    schedule = list()
+    for (c in seq(ncol(new))){
+      schedule[[c]] = list(trained = cluster[taken], untrained = cluster[ new[, c]] )
+    }
+    return(schedule)
+  } 
+  
+  # select k, and put in two groups
+  myset = seq(length(cluster))
+  trained = combn(myset, size)
+  
+  schedules = NULL
+  for (c in seq(ncol(trained)))
+  schedules = c(schedules, get_groups(trained[, c], cluster, size))
+  return(schedules)
+} 
+
 
 # translate sequences
 translate_seqs = function(chunks, chords){

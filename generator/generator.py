@@ -36,9 +36,9 @@ class Generator:
  
         return (sequence, sequence_string)
 
-    def read(self, seq_type=None):
+    def read(self, seq_file, seq_type=None):
         """Read sequences from sequence file with predefined sequences."""
-        seq_file = "./scheduling/sequences.json"
+                    
         try:
             seq_json = open(seq_file, "r")
             seqs = json.load(seq_json)
