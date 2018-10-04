@@ -7,6 +7,7 @@
 "TEXT_ERROR":"You made a mistake!\nTry again.",
 "TEXT_LATE":"Too slow, you need to respond faster!",
 "TEXT_MISS":"Hey! Are you here??",
+"TEXT_BYE":"Closing... bye!",
 "TEXT_SPACE":"Press space when you have memorized the sequence.",
 "TEXT_SELECT":"Click on the correct keys of the sequence and press space.",
 "TEXT_INTRO":"Welcome!\nParticipant: {}\nSession: {}",
@@ -16,5 +17,6 @@
 "TEXT_INSTRUCT2":"INSTRUCTIONS:\n\nType as fast as you can without making any errors. In each trial, after the sequence is presented, you will have a maximum of {} seconds to type the sequence. You will practice different sequences during the session, repeating as many times as necessary until you have done {} correct trials of each sequence.\n\nPress space.",
 "TEXT_INSTRUCT3":"INSTRUCTIONS:\n\nAfter each trial you will get feedback about your performance. The BLUE bar represents your last score, the GREEN bar is your best score for the current sequence, and the YELLOW bar is the best score for the current sequence across all participants. The faster you perform a sequence, the larger the bar will be.\n\nPress space.",
 "TEXT_INSTRUCT4":"INSTRUCTIONS:\n\nBefore you start, make sure that all other applications are closed and there are no potential distractions, the computer is connected to the internet and the volume is on.\n\nTry to do the task until the end, but if you need to interrupt the task, press 'Esc' twice while a sequence is being presented.",
+"TEXT_INSTRUCTPACED1":"INSTRUCTIONS:\n\nNow you will repeat the same sequences but at a given pace. You will hear a beat and you need to press the chords following it. First there will be {} beats to give you the tempo and then you need to start pressing.",
 "TEXT_SPACE4":"Press space when ready to start the task."
 }

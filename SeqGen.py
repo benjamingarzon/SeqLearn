@@ -14,7 +14,7 @@ from generator.generator import Generator
 import pandas as pd
 import numpy as np
 import random
-from itertools import permutations
+from itertools import permutations, product
 from argparse import ArgumentParser
 
 def generate_with_predefined_sequences(opts, sched_group):
@@ -23,16 +23,14 @@ def generate_with_predefined_sequences(opts, sched_group):
     """
     # get config
     config = get_config()
-    type_data = get_seq_types()
+    type_data = get_seq_types(opts.type_file)
     if opts.schedule_file:
         schedulefilename = opts.schedule_file + "_{}.csv".format(sched_group)
     else:    
         schedulefilename = "./scheduling/schedule{}.csv".format(sched_group) 
      
-    if opts.seq_file:
-        seq_file = opts.seq_file
-    else:
-        seq_file = "./scheduling/sequences.json"
+    seq_file = \
+    opts.seq_file if opts.seq_file else "./scheduling/sequences.json"
     
     print(schedulefilename, seq_file)
     color_list = config["COLOR_LIST"]
@@ -41,8 +39,8 @@ def generate_with_predefined_sequences(opts, sched_group):
     row_list = []
     sess_num = 1
     for index, row in type_data.iterrows():
-        seq_type, seq_length, max_chord_size, seq_keys, n_trials, n_seqs, \
-        n_sess, testing_sessions = row
+        seq_type, seq_length, max_chord_size, seq_keys, n_free_trials, \
+        n_paced_trials, n_seqs, n_sess, testing_sessions = row
         testing_session_list = [int(x) for x in testing_sessions.split(",")]
         reorder = list(permutations(range(n_seqs)))    
         seq_list = []
@@ -67,45 +65,53 @@ def generate_with_predefined_sequences(opts, sched_group):
             del color_list[index]            
                  
         for sess in range(n_sess):
-            mypermutation = list(reorder[sess_num % len(reorder)])        
-            for seq in range(2*n_seqs):        
-    
-                # create training and testing sessions    
-                if not sess+1 in testing_session_list:
-                    sess_type = "training"
-                    if seq >= n_seqs:
-                        continue
-                    seq_index = mypermutation[seq]
-                    seq_train = "trained"
-     
-                else:
-                    sess_type = "testing"
- 
-                    if seq % 2 == 1: # interleave trained/untrained
-                        # use the same permutation, 
-                        # although it possibly won't make a difference
-                        seq_index = mypermutation[(seq - 1)/2] + n_seqs 
-                        seq_train = "untrained"
-                    else :
-                        seq_index = mypermutation[seq/2]
-                        seq_train = "trained"
+            for paced in range(2):
 
-                sequence, sequence_string = seq_list[seq_index]
-                color = seq_color[seq_index]
+                mypermutation = list(reorder[sess_num % len(reorder)])     
+                n_trials = n_free_trials if paced == 0 else n_paced_trials
+           
+                for seq in range(2*n_seqs):        
+        
+                    instruct = 1 if seq == 0 else 0
                     
-                row_list.append([
-                    sess_num,
-                    sess_type,
-                    n_trials,
-                    " ".join(seq_keys),
-                    seq_type,
-    #                sequence,
-                    sequence_string, 
-                    seq_train,
-                    color,
-                    mypermutation,
-                    seq_index
-                    ])
+                    # create training and testing sessions    
+                    if not sess+1 in testing_session_list:
+                        sess_type = "training"
+                        if seq >= n_seqs:
+                            continue
+                        seq_index = mypermutation[seq]
+                        seq_train = "trained"
+         
+                    else:
+                        sess_type = "testing"
+     
+                        if seq % 2 == 1: # interleave trained/untrained
+                            # use the same permutation, 
+                            # although it possibly won't make a difference
+                            seq_index = mypermutation[(seq - 1)/2] + n_seqs 
+                            seq_train = "untrained"
+                        else :
+                            seq_index = mypermutation[seq/2]
+                            seq_train = "trained"
+    
+                    sequence, sequence_string = seq_list[seq_index]
+                    color = seq_color[seq_index]
+                        
+                    row_list.append([
+                        sess_num,
+                        sess_type,
+                        n_trials,
+                        " ".join(seq_keys),
+                        seq_type,
+#                       sequence,
+                        sequence_string, 
+                        seq_train,
+                        color,
+                        mypermutation,
+                        seq_index,
+                        paced,
+                        instruct
+                        ])
     
             sess_num = sess_num + 1
 
@@ -121,7 +127,9 @@ def generate_with_predefined_sequences(opts, sched_group):
             "seq_train",
             "seq_color",
             "seq_permutation",
-            "seq_order"
+            "seq_order",
+            "paced",
+            "instruct"
     )
     )
     
@@ -131,9 +139,13 @@ def generate_with_predefined_sequences(opts, sched_group):
 #                         inplace = True)
     schedule.to_csv(schedulefilename, sep =";", index=False)
 
-# fix for TESTING_SESSIONS
 def generate_with_random_sequences(sched_group):
-# fix for TESTING_SESSIONS
+    """
+    Generate schedule using random sequences.
+    
+    ------- NEEDS UPDATE!!!! ---------
+    """
+    # fix for TESTING_SESSIONS
 
     # get config
     config = get_config()
@@ -252,13 +264,19 @@ def build_parser():
                         dest = "schedule_file", 
                         help = "Enter schedule file.",
                         required = False)
+
+    parser.add_argument("--type_file", 
+                        type = str,
+                        dest = "type_file", 
+                        help = "Enter sequence type file.",
+                        required = False)
+
     return(parser)
 
 def main():
   parser = build_parser()
 
   opts = parser.parse_args()
-  print(opts)
   generate_with_predefined_sequences(opts, sched_group = 0)
   generate_with_predefined_sequences(opts, sched_group = 1)
   

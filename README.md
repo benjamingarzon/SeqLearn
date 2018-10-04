@@ -110,6 +110,13 @@ Run the script Installation.bat and follow the instructions.
 It will create shortcuts called SequencePractice.bat and SequencePracticeDemo.bat in your desktop directory that will run the program and a demo, respectively.  
 
 
+# Exporting the environment
+```
+conda env export -n psychopyenv > psychopyenv.yml
+conda env export -n psychopyenv --no-builds > psychopyenv_nb.yml
+
+```
+
 # Database connections
 To allow connections to the remote database, after installation save the private key inside the db directory in a file called 'db/id_rsa'.
 Make sure that the subjects are 
@@ -160,9 +167,32 @@ done
 - Adjust options in config/config.json.
 
 
-# Exporting the environment
-```
-conda env export -n psychopyenv > psychopyenv.yml
-conda env export -n psychopyenv --no-builds > psychopyenv_nb.yml
 
+# Sequence groups
+It is possible to use several schedules, so that different subjects are required to perform different sequences. 
+Use flag  --schedule_file with the prefix of the file (e.g. scheduling/schedule000 when the files for the schedule groups are scheduling/schedule000_0.csv and scheduling/schedule000_1.csv)
+
+# fMRI configuration
+In the config.json file, set:
+PRESHOW = 0
+
+# Generating sequences
+Use the script called SeqGen.py. 
 ```
+python SeqGen.py -h
+
+usage: SeqGen.py [-h] [--sequence_file SEQ_FILE]
+                 [--schedule_file SCHEDULE_FILE]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --sequence_file SEQ_FILE
+                        Enter sequence file.
+  --schedule_file SCHEDULE_FILE
+                        Enter schedule file.
+  --type_file TYPE_FILE
+                        Enter sequence type file.
+```
+Example: 
+python SeqGen.py --sequence_file=./scheduling/sequences_001.json --schedule_file=./scheduling/schedule001 --type_file=./scheduling/seq_types.csv
+

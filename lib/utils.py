@@ -20,6 +20,10 @@ from psychopy import event, core
 
 
 def get_seq_types(type_file=None):
+    """ 
+    Reads the file with sequence type info. 
+    """
+
     if type_file == None:
         type_file = "./scheduling/seq_types.csv"
     try:
@@ -31,6 +35,10 @@ def get_seq_types(type_file=None):
 
 
 def get_config(config_file=None):
+    """ 
+    Reads the configuration file.
+    """
+
     if config_file == None:
         config_file = "./config/config.json"
     try:
@@ -41,8 +49,13 @@ def get_config(config_file=None):
         print "Error: Configuration file is missing!"
     
     return(config)
+    
 
 def get_texts(language):
+    """ 
+    Reads the file all texts.
+    """
+
     # select language here
     if language == None:
         texts_file = "./config/texts.json"
@@ -56,12 +69,16 @@ def get_texts(language):
         print "Error: Texts file is missing!"
     
     return(texts)
-
+    
 
 def showStimulus(window, stimuli):
+    """ 
+    Shows a stimulus or a list of stimuli. 
+    """
     for stimulus in stimuli:
         stimulus.draw()
     window.flip()
+
 
 def scorePerformance(keys, RTs, sequence, keytimes):
     """ 
@@ -79,10 +96,10 @@ def scorePerformance(keys, RTs, sequence, keytimes):
     score = len(sequence)/MT
     return((accuracy, MT, score))
 
-def calcmaxgroupscore(session, n_sessions, factor, baseline, maxscore):
 
+def calcmaxgroupscore(session, n_sessions, factor, baseline, maxscore):
     """ 
-    Calculate the maxscore. 
+    Calculates the maxscore. 
     """    
     maxgroupscore = np.max(
             (baseline*np.exp(-(session-1)/n_sessions),
@@ -90,8 +107,8 @@ def calcmaxgroupscore(session, n_sessions, factor, baseline, maxscore):
             )
     return(maxgroupscore)
 
-def startSession(opts):
 
+def startSession(opts):
     """ 
     Starts a new session.
     """    
@@ -137,7 +154,7 @@ def startSession(opts):
             schedule_file = "./scheduling/schedule{}.csv".format(sched_group)
         else:
             schedule_file = opts.schedule_file + "_{}.csv".format(sched_group)
-        print(schedule_file)    
+        #print(schedule_file)    
         memofilename = "./data/memofile-{}.csv".format(username)
         keysfilename = "./data/keysfile-{}.csv".format(username)
         trialsfilename = "./data/trialsfile-{}.csv".format(username) 
@@ -308,12 +325,16 @@ def filter_keys(keypresses, max_chord_interval, n_chords):#, keys, keytimes):
 
     return(keys, keytimes, RTs)        
 
+
 def test_sequence(mystring, win, config, mycolor, texts, instructions_space,
                   instructions_select, error_message, error_sign, buzzer, 
                   memowriter, username, sched_group, sess_num, sess_date, 
                   sess_time, seq_train):
-
-    mouse = event.Mouse(visible=True,win=win)
+    """ 
+    Test that the subject has memorized the sequence.
+    """
+    
+    mouse = event.Mouse(visible=True, win=win)
 
     myseq = string_to_seq(mystring)
     full_seq = [config["SEQ_KEYS"] for i, _ in enumerate(myseq)]
@@ -387,9 +408,13 @@ def test_sequence(mystring, win, config, mycolor, texts, instructions_space,
                     1.0 if iscorrect else 0.0, # just check if correct
                     timer.getTime()                    
                 ])
+            
 
 def SetUsername():
-    
+    """ 
+    Opens a dialogue to set the username.
+    """
+
     myDlg = gui.Dlg(title="Sequence training configuration.")
     myDlg.addField("Enter username:")
     myDlg.addField("Enter schedule group:", 0)
@@ -413,3 +438,4 @@ def SetUsername():
     with open("./config/user.json", "w") as outfile:
         json.dump(json_obj, outfile)
         
+    

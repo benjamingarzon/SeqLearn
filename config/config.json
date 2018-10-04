@@ -1,5 +1,5 @@
 {
-"PRESHOW":1,
+"PRESHOW":0,
 "LANGUAGE":"english",
 "ASK_USER":0,
 "TEST_MEM":1,
@@ -23,6 +23,9 @@
 "SQUARE_SIZE":1.0,
 "BUZZER_FILE":"./sounds/buzzer.wav",
 "BUZZER_ON":1,
+"BEAT_FILE":"./sounds/metronome.wav",
+"BEAT_INTERVAL":0.8,
+"EXTRA_BEATS":4,
 "WRONG_FILE":"./pics/wrong.JPG",
 "HAND_FILE":"./pics/lefthand_sequence.JPG",
 "BARS_FILE":"./pics/bars.JPG",
