@@ -119,7 +119,7 @@ conda env export -n psychopyenv --no-builds > psychopyenv_nb.yml
 
 # Database connections
 To allow connections to the remote database, after installation save the private key inside the db directory in a file called 'db/id_rsa'.
-Make sure that the subjects are 
+Make sure that the subject has been created in the database. 
 Configure database parameters in a file 'db/db_config.json':
 
 ```
