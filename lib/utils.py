@@ -438,4 +438,18 @@ def SetUsername():
     with open("./config/user.json", "w") as outfile:
         json.dump(json_obj, outfile)
         
+
+def update_table(engine, table_name, mytable):
+    """ 
+    Insert in the database only new rows.
+    """
+    cols = list(set(mytable.columns) - set(["MT", "accuracy", "RT", "score"]))
     
+    if not engine.dialect.has_table(engine, table_name):
+        mytable.to_sql(table_name, engine, 
+                      if_exists = 'fail')
+    else:        
+        myoldtable = pd.read_sql_table(table_name, engine)[cols]
+        mytable = mytable[~mytable[cols].isin(myoldtable).all(1)]
+        mytable.to_sql(table_name, engine, if_exists = 'append') 
+

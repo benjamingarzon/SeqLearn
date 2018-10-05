@@ -12,7 +12,7 @@ from __future__ import division
 from psychopy import visual, core, event, prefs
 from datetime import datetime
 from lib.utils import showStimulus, scorePerformance, startSession, \
-filter_keys, test_sequence
+filter_keys, test_sequence, update_table
 from generator.generator import string_to_seq, seq_to_string, seq_to_stim
 prefs.general["audioLib"] = ["pygame"]
 from psychopy import sound
@@ -393,12 +393,12 @@ def SeqLearn(opts):
 #    mykeys = mykeys.loc[mykeys["sess_num"] == sess_num]
 #    mytrials= mytrials.loc[mytrials["sess_num"] == sess_num]
     
-    if opts.demo:
+    if not opts.demo:
         try:
             db_config_json = open("./db/db_config.json", "r")
             db_config = json.load(db_config_json)
             db_config_json.close()
-            print db_config
+            #print db_config
     
             with SSHTunnelForwarder(
                     (db_config["REMOTEHOST"], 
@@ -411,7 +411,6 @@ def SeqLearn(opts):
                 ) as server:
                     port = server.local_bind_port
                     try:
-                        print "server"
                         engine_string = "mysql://%s:%s@%s:%d/%s"%(username, 
                                                        db_config["DB_PASS"], 
                                                        db_config["LOCALHOST"],
@@ -419,12 +418,11 @@ def SeqLearn(opts):
                                                        db_config["DATABASE"])
         
                         engine = create_engine(engine_string)
-                        mymemo.to_sql("memo_table", engine, 
-                                      if_exists = "append") 
-                        mykeys.to_sql("keys_table", engine, 
-                                      if_exists = "append") 
-                        mytrials.to_sql("trials_table", engine, 
-                                        if_exists = "append")
+                        if config["TEST_MEM"] == 1 and config["PRESHOW"] == 1:
+                            update_table(engine, "memo_table", mymemo) 
+                        update_table(engine, "keys_table", mykeys) 
+                        update_table(engine, "trials_table", mytrials)
+                        
                         print("Synced with database.")
                     except exc.SQLAlchemyError as e:
                         print("Error:", e)
