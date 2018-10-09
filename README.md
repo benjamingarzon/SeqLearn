@@ -167,14 +167,9 @@ done
 - Adjust options in config/config.json.
 
 
-
 # Sequence groups
 It is possible to use several schedules, so that different subjects are required to perform different sequences. 
 Use flag  --schedule_file with the prefix of the file (e.g. scheduling/schedule000 when the files for the schedule groups are scheduling/schedule000_0.csv and scheduling/schedule000_1.csv)
-
-# fMRI configuration
-In the config.json file, set:
-PRESHOW = 0
 
 # Generating sequences
 Use the script called SeqGen.py. 
@@ -196,3 +191,16 @@ optional arguments:
 Example: 
 python SeqGen.py --sequence_file=./scheduling/sequences_001.json --schedule_file=./scheduling/schedule001 --type_file=./scheduling/seq_types.csv
 
+# Function modes
+## Home training
+In the config.json file, set:
+"MODE":"home"
+"PRESHOW":1
+"TEST_MEM":1
+
+## fMRI experiment
+In the config.json file, set:
+"MODE":"fmri"
+"PRESHOW":0
+"TEST_MEM":0
+In the schedule file, set only paced trials (optional)

@@ -19,45 +19,45 @@ def define_stimuli(win, username, config, texts, sess_num, seq_length,
     stimuli["beat"] = sound.Sound(config["BEAT_FILE"])
     
     stimuli["intro_message"] = visual.TextStim(win, 
-                                    text=texts["TEXT_INTRO"].format(username, 
+                                    text = texts["TEXT_INTRO"].format(username, 
                                                sess_num), 
                                                height = \
                                                config["HEADING_TEXT_HEIGHT"], 
                                                alignHoriz="center") 
 
     stimuli["instructions_space"] = visual.TextStim(win, 
-                                           text=texts["TEXT_SPACE"], 
+                                           text = texts["TEXT_SPACE"], 
                                            height = config["TEXT_HEIGHT"], 
                                            alignHoriz="center",
                                            pos = (0, -7)) 
 
     stimuli["instructions_select"] = visual.TextStim(win, 
-                                           text=texts["TEXT_SELECT"], 
+                                           text = texts["TEXT_SELECT"], 
                                            height = config["TEXT_HEIGHT"], 
                                            alignHoriz="center",
                                            pos = (0, -7)) 
     
     stimuli["instructionspre1_message"] = visual.TextStim(win, 
-                                           text=texts["TEXT_INSTRUCTPRE1"], 
+                                           text = texts["TEXT_INSTRUCTPRE1"], 
                                            height = config["TEXT_HEIGHT"], 
                                            alignHoriz="center",
                                            pos = (-5, 0), 
                                            wrapWidth = 11 ) 
 
     stimuli["instructionspre2_message"] = visual.TextStim(win, 
-                                           text=texts["TEXT_INSTRUCTPRE2"], 
+                                           text = texts["TEXT_INSTRUCTPRE2"], 
                                            height = config["TEXT_HEIGHT"], 
                                            alignHoriz="center")
     
     stimuli["instructions1_message"] = visual.TextStim(win, 
-                                           text=texts["TEXT_INSTRUCT1"], 
+                                           text = texts["TEXT_INSTRUCT1"], 
                                            height = config["TEXT_HEIGHT"], 
                                            alignHoriz="center",
                                            pos = (-5, 0), 
                                            wrapWidth = 11) 
     
     stimuli["instructions2_message"] = visual.TextStim(win, 
-                                        text=texts["TEXT_INSTRUCT2"].format(
+                                        text = texts["TEXT_INSTRUCT2"].format(
                                         seq_length*\
                                         config["MAX_WAIT_PER_KEYPRESS"], 
                                         total_trials), 
@@ -65,52 +65,67 @@ def define_stimuli(win, username, config, texts, sess_num, seq_length,
                                         alignHoriz="center") 
     
     stimuli["instructions3_message"] = visual.TextStim(win, 
-                                           text=texts["TEXT_INSTRUCT3"], 
+                                           text = texts["TEXT_INSTRUCT3"], 
                                            height = config["TEXT_HEIGHT"], 
                                            alignHoriz="center",
                                            pos = (0, 2)) 
     
     stimuli["instructions4_message"] = visual.TextStim(win, 
-                                           text=texts["TEXT_INSTRUCT4"], 
+                                           text = texts["TEXT_INSTRUCT4"], 
                                            height = config["TEXT_HEIGHT"], 
                                            alignHoriz="center", 
                                            pos = (0, 1))
 
     stimuli["instructions4_space"] = visual.TextStim(win, 
-                                           text=texts["TEXT_SPACE4"], 
+                                           text = texts["TEXT_SPACE4"], 
                                            height = config["TEXT_HEIGHT"], 
                                            alignHoriz="center",
                                            pos = (0, -5),
                                            color="red") 
     
     stimuli["instructionspaced1_message"] = visual.TextStim(win, 
-                                           text=texts["TEXT_INSTRUCTPACED1"], 
+                                           text = texts["TEXT_INSTRUCTPACED1"]\
+                                           .format(config["EXTRA_BEATS"]), 
                                            height = config["TEXT_HEIGHT"], 
                                            alignHoriz="center") 
 
+    stimuli["instructionsfmri1_message"] = visual.TextStim(win, 
+                                           text = texts["TEXT_INSTRUCTFMRI1"]\
+                                           .format(config["EXTRA_BEATS"]), 
+                                           height = config["TEXT_HEIGHT"], 
+                                           alignHoriz="center", 
+                                           pos = (0, 1))
+
+    stimuli["instructionsfmripaced1_message"] = visual.TextStim(win, 
+                                           text = texts["TEXT_INSTRUCTFMRIPACED1"]\
+                                           .format(config["EXTRA_BEATS"]), 
+                                           height = config["TEXT_HEIGHT"], 
+                                           alignHoriz="center", 
+                                           pos = (0, 1))
+
     stimuli["last_label"] = visual.TextStim(win, 
-                                    text=texts["LAST_LABEL"], 
+                                    text = texts["LAST_LABEL"], 
                                     height = config["TEXT_HEIGHT"], 
                                     pos = (-3*config["BAR_WIDTH"], 
                                            -0.5*config["BAR_HEIGHT"] - 2),
                                     alignHoriz="center") 
 
     stimuli["best_label"] = visual.TextStim(win, 
-                                 text=texts["BEST_LABEL"], 
+                                 text = texts["BEST_LABEL"], 
                                  height = config["TEXT_HEIGHT"],
                                  pos = (0, 
                                         -0.5*config["BAR_HEIGHT"] - 2),
                                  alignHoriz="center") 
     
     stimuli["group_best_label"] = visual.TextStim(win, 
-                                 text=texts["GROUP_BEST_LABEL"], 
+                                 text = texts["GROUP_BEST_LABEL"], 
                                  height = config["TEXT_HEIGHT"],
                                  pos = (3*config["BAR_WIDTH"], 
                                         -0.5*config["BAR_HEIGHT"] - 2),
                                  alignHoriz="center") 
                                  
     stimuli["error_message"] = visual.TextStim(win, 
-                                    text=texts["TEXT_ERROR"], 
+                                    text = texts["TEXT_ERROR"], 
                                     alignHoriz="center", 
                                     pos = (0, -3))  
 
@@ -133,12 +148,12 @@ def define_stimuli(win, username, config, texts, sess_num, seq_length,
                       lineColor='black')
 
     stimuli["late_message"] = visual.TextStim(win, 
-                                    text=texts["TEXT_LATE"], 
+                                    text = texts["TEXT_LATE"], 
                                     alignHoriz="center", 
                                     pos = (0, -3))  
 
     stimuli["miss_message"] = visual.TextStim(win, 
-                                    text=texts["TEXT_MISS"], 
+                                    text = texts["TEXT_MISS"], 
                                     alignHoriz="center")
 
     stimuli["fixation"] = visual.ShapeStim(win, 
@@ -148,7 +163,11 @@ def define_stimuli(win, username, config, texts, sess_num, seq_length,
         lineColor="white")
 
     stimuli["bye_message"] = visual.TextStim(win, 
-                                    text=texts["TEXT_BYE"], 
+                                    text = texts["TEXT_BYE"], 
+                                    alignHoriz="center")
+
+    stimuli["ok_message"] = visual.TextStim(win, 
+                                    text = texts["TEXT_OK"], 
                                     alignHoriz="center")
 
     return(stimuli)

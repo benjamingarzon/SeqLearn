@@ -12,7 +12,7 @@ from __future__ import division
 from psychopy import visual, core, event, prefs
 from datetime import datetime
 from lib.utils import showStimulus, scorePerformance, startSession, \
-filter_keys, test_sequence, update_table
+filter_keys, test_sequence, update_table, wait_clock
 from generator.generator import string_to_seq, seq_to_string, seq_to_stim
 prefs.general["audioLib"] = ["pygame"]
 from psychopy import sound
@@ -46,10 +46,9 @@ def SeqLearn(opts):
 ############################ 
     
     win = visual.Window(config["SCREEN_RES"],
-                        fullscr=False, 
+                        fullscr=True, 
                         monitor="testMonitor", 
                         units="cm")    
-    
     
     stimuli = define_stimuli(win, username, config, texts, sess_num, 
                              seq_length, total_trials)
@@ -67,6 +66,8 @@ def SeqLearn(opts):
     instructions4_message = stimuli["instructions4_message"]
     instructions4_space = stimuli["instructions4_space"]
     instructionspaced1_message = stimuli["instructionspaced1_message"]    
+    instructionsfmri1_message = stimuli["instructionsfmri1_message"]
+    instructionsfmripaced1_message = stimuli["instructionsfmripaced1_message"]    
     last_label = stimuli["last_label"]
     best_label = stimuli["best_label"]
     group_best_label = stimuli["group_best_label"]
@@ -79,6 +80,10 @@ def SeqLearn(opts):
     miss_message = stimuli["miss_message"]
     fixation = stimuli["fixation"]
     bye_message = stimuli["bye_message"]
+    ok_message = stimuli["ok_message"]
+
+# clocks
+    
     trialClock = core.Clock()
 
 ############################ 
@@ -90,8 +95,8 @@ def SeqLearn(opts):
 ############################ 
 
     showStimulus(win, [intro_message])
-    core.wait(config["INTRO_TIME"])
-
+    wait_clock(config["INTRO_TIME"])
+    
     if config["PRESHOW"]==1:
         
         showStimulus(win, [instructionspre1_message, hand_sign])
@@ -119,8 +124,9 @@ def SeqLearn(opts):
 ## Free execution
 ############################ 
     
-    showStimulus(win, [instructions1_message, hand_sign])
-    event.waitKeys(keyList = ["space"]) 
+    if not config["MODE"] == "fmri": # home mode                       
+        showStimulus(win, [instructions1_message, hand_sign])
+        event.waitKeys(keyList = ["space"]) 
         
     for row in schedule.itertuples():
         sess_num, sess_type, n_trials, seq_keys =\
@@ -135,19 +141,28 @@ def SeqLearn(opts):
             
             if paced == 0:
             
-                showStimulus(win, [instructions2_message])
-                event.waitKeys(keyList = ["space"]) 
-            
-                showStimulus(win, [instructions3_message, bars_sign])
-                event.waitKeys(keyList = ["space"]) 
+                if not config["MODE"] == "fmri": # home mode                   
+                    showStimulus(win, [instructions2_message])
+                    event.waitKeys(keyList = ["space"]) 
                 
-                showStimulus(win, [instructions4_message, instructions4_space])
-                event.waitKeys(keyList = ["space"]) 
+                    showStimulus(win, [instructions3_message, bars_sign])
+                    event.waitKeys(keyList = ["space"]) 
+                
+                    showStimulus(win, [instructions4_message, \
+                                       instructions4_space])
+                    event.waitKeys(keyList = ["space"]) 
+                else: 
+                    showStimulus(win, [instructionsfmri1_message])
+                    event.waitKeys(keyList = [config["FMRI_TRIGGER"]])  
 
             else:            
-                showStimulus(win, [instructionspaced1_message, 
-                                   instructions4_space])
-                event.waitKeys(keyList = ["space"]) 
+                if not config["MODE"] == "fmri": # home mode                    
+                    showStimulus(win, [instructionspaced1_message, 
+                                       instructions4_space])
+                    event.waitKeys(keyList = ["space"]) 
+                else: # fmri
+                    showStimulus(win, [instructionsfmripaced1_message])
+                    event.waitKeys(keyList = [config["FMRI_TRIGGER"]])  
                     
         trialStimulus = []
         squareStimuli = []
@@ -180,8 +195,8 @@ def SeqLearn(opts):
             
             # present fixation
             showStimulus(win, [fixation])
-            core.wait(config["FIXATION_TIME"])     
-    
+#            wait_clock(config["FIXATION_TIME"])     
+            wait_clock(config["FIXATION_TIME"])
             # present sequence and read keypresses          
             showStimulus(win, current_stimuli)    
             
@@ -191,21 +206,24 @@ def SeqLearn(opts):
                 char_list = range(config["EXTRA_BEATS"]) + range(len(sequence))
                 label_list = config["EXTRA_BEATS"]*["WAIT: "] + \
                 len(sequence)*["PRESS: "]
+                color_list = config["EXTRA_BEATS"]*["white"] + \
+                len(sequence)*["yellow"]
                 number_list = [ visual.TextStim(win,     
-                                text=x + str(y + 1), 
+                                text = x + str(y + 1),
+                                color = z,
                                 alignHoriz="center", 
                                 pos = (0, 5)) 
-            for x, y in zip(label_list, char_list) ] 
+            for x, y, z in zip(label_list, char_list, color_list) ] 
 
                 keypresses = []
                 trialClock.reset()    
                 
                 for nbeat in range(nbeats):
                     event.clearEvents()
-                    showStimulus(win, squares + [number_list[nbeat]])
+                    showStimulus(win, current_stimuli + [number_list[nbeat]])
                     beat.play()
-                    core.wait(config["BEAT_INTERVAL"], 
-                              hogCPUperiod=config["BEAT_INTERVAL"])
+                    wait_clock(config["BEAT_INTERVAL"])
+                    
                     partial_keypresses = event.getKeys(
                             keyList = seq_keys + 
                             [config["ESCAPE_KEY"]], 
@@ -214,11 +232,10 @@ def SeqLearn(opts):
                         keypresses.extend(partial_keypresses)
 
             else:
-            
+
                 event.clearEvents()
                 trialClock.reset()    
-                core.wait(maxwait, hogCPUperiod=maxwait)
-                
+                wait_clock(maxwait)
                 keypresses = event.getKeys(keyList=seq_keys + 
                                            [config["ESCAPE_KEY"]], 
                                            timeStamped = trialClock)
@@ -229,7 +246,8 @@ def SeqLearn(opts):
                 showStimulus(win, [late_message, error_sign])
                 if config["BUZZER_ON"] == 1:
                     buzzer.play()
-                core.wait(config["ERROR_TIME"])
+                wait_clock(config["ERROR_TIME"])
+
                 misses = misses + 1
                 
                 accuracy = 0
@@ -242,7 +260,8 @@ def SeqLearn(opts):
     
                 if misses > config["MAX_MISSES"]:
                     showStimulus(win, [miss_message])
-                    core.wait(config["ERROR_TIME"])
+                    wait_clock(config["ERROR_TIME"])
+
                 if misses > config["MAX_TOTAL_MISSES"]:
                     exit()    
 
@@ -268,7 +287,8 @@ def SeqLearn(opts):
                     showStimulus(win, [error_message, error_sign])
                     if config["BUZZER_ON"] == 1:
                         buzzer.play()
-                    core.wait(config["ERROR_TIME"])        
+                    wait_clock(config["ERROR_TIME"])   
+                    
                     score = 0
                 else:
 
@@ -314,7 +334,12 @@ def SeqLearn(opts):
                                            best_label, group_best_bar, 
                                            group_best_label, bottomline])
                         
-                        core.wait(config["FEEDBACK_TIME"])
+                        wait_clock(config["FEEDBACK_TIME"])
+
+                    else:
+                        showStimulus(win, [ok_message])
+                        wait_clock(config["FEEDBACK_TIME"])
+                        
                         
             # write results to files
             key_from = ["0"]
@@ -369,7 +394,7 @@ def SeqLearn(opts):
         
             trial = trial + trialincrease
             cum_trial = cum_trial + 1    
-            core.wait(config["FIXATION_TIME"]) 
+            wait_clock(config["FIXATION_TIME"]) 
     
         if exiting:
             print "Session has been interrupted. Bye!"
@@ -435,7 +460,8 @@ def SeqLearn(opts):
 ############################ 
 ## Quit
 ############################ 
-    core.wait(config["FIXATION_TIME"])
+    wait_clock(config["FIXATION_TIME"])
+
     win.close()
     core.quit()
 

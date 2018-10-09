@@ -10,14 +10,12 @@ from __future__ import division
 import json, csv
 import numpy as np
 import pandas as pd
-from psychopy import gui
+from psychopy import gui, event, core
 from scipy.spatial.distance import pdist #, squareform
 from scipy.cluster.hierarchy import linkage, cut_tree
 from collections import defaultdict
 import glob, os
 from generator.generator import seq_to_stim, seq_to_string, string_to_seq
-from psychopy import event, core
-
 
 def get_seq_types(type_file=None):
     """ 
@@ -453,3 +451,11 @@ def update_table(engine, table_name, mytable):
         mytable = mytable[~mytable[cols].isin(myoldtable).all(1)]
         mytable.to_sql(table_name, engine, if_exists = 'append') 
 
+def wait_clock(t):
+    """ 
+    Just waits.
+    """
+
+    core.wait(t, hogCPUperiod = t)
+    
+    
