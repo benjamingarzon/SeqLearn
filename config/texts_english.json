@@ -7,7 +7,7 @@
 "TEXT_ERROR":"You made a mistake!\nTry again.",
 "TEXT_LATE":"Too slow, you need to respond faster!",
 "TEXT_MISS":"Hey! Are you here??",
-"TEXT_BYE":"Closing... bye!",
+"TEXT_BYE":"Shutting down... bye!",
 "TEXT_SPACE":"Press space when you have memorized the sequence.",
 "TEXT_SELECT":"Click on the correct keys of the sequence and press space.",
 "TEXT_INTRO":"Welcome!\nParticipant: {}\nSession: {}",
@@ -21,5 +21,5 @@
 "TEXT_SPACE4":"Press space when ready to start the task.",
 "TEXT_INSTRUCTFMRI1":"INSTRUCTIONS:\n\n\n\nNow you will have to execute the sequences you have trained previously.\n\nThe task will start automatically.",
 "TEXT_INSTRUCTFMRIPACED1":"INSTRUCTIONS:\n\n\n\nNow you will have to execute the sequences you have trained previously. You will hear a beat and you need to press the chords following it. First there will be {} beats to give you the tempo and then you need to start pressing.\n\nThe task will start automatically.",
-"TEXT_OK":"OK!"
+"TEXT_OK":"Good!"
 }

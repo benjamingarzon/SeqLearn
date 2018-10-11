@@ -119,7 +119,7 @@ def startSession(opts):
             user_json = open("./config/user.json", "r")
             json_obj = json.load(user_json)
             username = json_obj["USERNAME"]
-            sched_group = json_obj["SCHEDULE_GROUP"]
+            sched_table = json_obj["SCHEDULE_TABLE"]
             user_json.close()
         except IOError: 
             print "Error: User file is missing!"
@@ -127,16 +127,19 @@ def startSession(opts):
     else:
         myDlg = gui.Dlg(title="Sequence training.")
         myDlg.addField("Enter your username:")
+        myDlg.addField("Enter your schedule table:")
         myDlg.show()
         if myDlg.OK:  
             username = myDlg.data[0]
+            sched_table = myDlg.data[1]
         else:
             username = 'test0000'
-        sched_group = 0
+            sched_table = ''
     
     
     if opts.demo: # load demo schedule instead
-        schedule_file = "./scheduling/schedule-demo.csv"
+        schedule_file = "./scheduling/schedules/schedule-demo.csv"
+        sched_group = 0
         memofilename = "./data/memofile-demo.csv"
         keysfilename = "./data/keysfile-demo.csv"
         trialsfilename = "./data/trialsfile-demo.csv"
@@ -148,10 +151,35 @@ def startSession(opts):
     else:
 
         # get schedule
+
         if opts.schedule_file == None:
-            schedule_file = "./scheduling/schedule{}.csv".format(sched_group)
+            try:
+                schedule_table = pd.read_csv("./scheduling/tables/{}.csv".\
+                format(sched_table), sep = ";")
+                schedule_file = schedule_table.loc[ 
+                        schedule_table["SUBJECT"] == username, "SCHEDULE_FILE"].values[0]
+                sched_group = schedule_table.loc[ 
+                        schedule_table["SUBJECT"] == username, "SCHEDULE_GROUP"].values[0]
+            except IOError: 
+                print "Error: Schedule table file is missing!"
+
+    # override certain options if we are in fMRI mode
+            if opts.run_fmri :
+                config["MODE"] = "fmri"
+            
+            if config["MODE"] == "fmri":
+                config["PRESHOW"] = 0
+                config["TESTMEM"] = 0
+                schedule_file = "./scheduling/schedules/{}_fmri.csv".\
+            format(schedule_file)
+            else:
+                schedule_file = "./scheduling/schedules/{}.csv".\
+            format(schedule_file)
+                    
         else:
-            schedule_file = opts.schedule_file + "_{}.csv".format(sched_group)
+            schedule_file = opts.schedule_file
+            sched_group = 0
+            
         #print(schedule_file)    
         memofilename = "./data/memofile-{}.csv".format(username)
         keysfilename = "./data/keysfile-{}.csv".format(username)
@@ -159,6 +187,7 @@ def startSession(opts):
 
         total_trials = config["TOTAL_TRIALS"]
         seq_length = config["SEQ_LENGTH"]
+        
     try:
         schedule = pd.read_csv(schedule_file, sep = ";")
         n_sess = np.max(schedule["sess_num"])
@@ -172,7 +201,14 @@ def startSession(opts):
         keysfile = open(keysfilename, "ab")
         trialsfile = open(trialsfilename, "ab")
         trialstable = pd.read_csv(trialsfilename, sep=';')
-        sess_num = np.max(trialstable["sess_num"]) + 1
+        if opts.session:
+            sess_num = opts.session
+        else:
+            # take the next session that is in the schedule
+            next_sess_num = np.max(trialstable["sess_num"]) + 1
+            q = np.where(schedule["sess_num"] > next_sess_num)
+            sess_num = np.min(schedule["sess_num"][q]) if len(q) > 0 else 0
+            
         maxscore = defaultdict(float)
         maxgroupscore = defaultdict(float)
         for seq in np.unique(trialstable["true_sequence"]):
@@ -187,8 +223,6 @@ def startSession(opts):
                     maxscore[seq]
                     )
 
-        #print maxscore
-        #print maxgroupscore
         # connect files with a csv writer
         memowriter = csv.writer(memofile, delimiter=";")
         keyswriter = csv.writer(keysfile, delimiter=";")
@@ -199,7 +233,7 @@ def startSession(opts):
         memofile = open(memofilename, "wb")
         keysfile = open(keysfilename, "wb")
         trialsfile = open(trialsfilename, "wb")
-        sess_num = 1
+        sess_num = np.min(schedule["sess_num"])
         maxscore = defaultdict(float)
         maxgroupscore = defaultdict(lambda:config["MAXSCORE_BASELINE"], {})
 
@@ -223,6 +257,7 @@ def startSession(opts):
                 "obs_sequence", 
                 "accuracy", 
                 "RT"
+
         ])
 
         keyswriter.writerow([
@@ -244,7 +279,10 @@ def startSession(opts):
                 "keystroke",
                 "key_from",
                 "key_to", 
-                "RT"
+                "RT",
+                "clock_fixation", 
+                "clock_execution",
+                "clock_feedback"
         ])
     
         trialswriter.writerow([
@@ -264,7 +302,10 @@ def startSession(opts):
                 "accuracy", 
                 "RT",
                 "MT",
-                "score"
+                "score",
+                "clock_fixation", 
+                "clock_execution",
+                "clock_feedback"
         ])
 
     # select schedule for this session
@@ -410,28 +451,28 @@ def test_sequence(mystring, win, config, mycolor, texts, instructions_space,
 
 def SetUsername():
     """ 
-    Opens a dialogue to set the username.
+    Opens a dialogue to set the username and schedule table.
     """
 
     myDlg = gui.Dlg(title="Sequence training configuration.")
     myDlg.addField("Enter username:")
-    myDlg.addField("Enter schedule group:", 0)
+    myDlg.addField("Enter schedule table:", "kip1_schedule_table")
     
     myDlg.show()
     
     if myDlg.OK:  
         username = myDlg.data[0]
-        sched_group = int(myDlg.data[1])
+        sched_table = int(myDlg.data[1])
     else:
         username = ''
-        sched_group = 0
+        sched_table = ''
         print("Cancelled.")
         
     print("Username: {}".format(username))
-    print("Schedule group: {}".format(sched_group))
+    print("Schedule table: {}".format(sched_table))
     
     json_obj = {"USERNAME": username, 
-                "SCHEDULE_GROUP": sched_group}
+                "SCHEDULE_TABLE": sched_table}
     
     with open("./config/user.json", "w") as outfile:
         json.dump(json_obj, outfile)
@@ -451,11 +492,19 @@ def update_table(engine, table_name, mytable):
         mytable = mytable[~mytable[cols].isin(myoldtable).all(1)]
         mytable.to_sql(table_name, engine, if_exists = 'append') 
 
-def wait_clock(t):
+def wait_clock_old(t):
     """ 
     Just waits.
     """
 
     core.wait(t, hogCPUperiod = t)
     
-    
+
+def wait_clock(myclock, t):
+    """ 
+    Just waits.
+    """
+    mytime = myclock.getTime()
+    while (myclock.getTime() < mytime + t):
+        pass
+    return(mytime)

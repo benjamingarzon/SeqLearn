@@ -14,7 +14,7 @@ from generator.generator import Generator
 import pandas as pd
 import numpy as np
 import random
-from itertools import permutations, product
+from itertools import permutations
 from argparse import ArgumentParser
 
 def generate_with_predefined_sequences(opts, sched_group):
@@ -24,15 +24,10 @@ def generate_with_predefined_sequences(opts, sched_group):
     # get config
     config = get_config()
     type_data = get_seq_types(opts.type_file)
-    if opts.schedule_file:
-        schedulefilename = opts.schedule_file + "_{}.csv".format(sched_group)
-    else:    
-        schedulefilename = "./scheduling/schedule{}.csv".format(sched_group) 
      
     seq_file = \
     opts.seq_file if opts.seq_file else "./scheduling/sequences.json"
     
-    print(schedulefilename, seq_file)
     color_list = config["COLOR_LIST"]
     
     # create sequences
@@ -40,7 +35,8 @@ def generate_with_predefined_sequences(opts, sched_group):
     sess_num = 1
     for index, row in type_data.iterrows():
         seq_type, seq_length, max_chord_size, seq_keys, n_free_trials, \
-        n_paced_trials, n_seqs, n_sess, testing_sessions = row
+        n_paced_trials, n_free_trials_testing, n_paced_trials_testing, n_seqs,\
+        n_sess, testing_sessions = row
         testing_session_list = [int(x) for x in testing_sessions.split(",")]
         reorder = list(permutations(range(n_seqs)))    
         seq_list = []
@@ -68,8 +64,7 @@ def generate_with_predefined_sequences(opts, sched_group):
             for paced in range(2):
 
                 mypermutation = list(reorder[sess_num % len(reorder)])     
-                n_trials = n_free_trials if paced == 0 else n_paced_trials
-           
+                
                 for seq in range(2*n_seqs):        
         
                     instruct = 1 if seq == 0 else 0
@@ -77,13 +72,18 @@ def generate_with_predefined_sequences(opts, sched_group):
                     # create training and testing sessions    
                     if not sess+1 in testing_session_list:
                         sess_type = "training"
+                        n_trials = n_free_trials if paced == 0 else \
+                        n_paced_trials
+
                         if seq >= n_seqs:
                             continue
                         seq_index = mypermutation[seq]
                         seq_train = "trained"
-         
+           
                     else:
                         sess_type = "testing"
+                        n_trials = n_free_trials_testing if paced == 0 else \
+                        n_paced_trials_testing
      
                         if seq % 2 == 1: # interleave trained/untrained
                             # use the same permutation, 
@@ -97,21 +97,22 @@ def generate_with_predefined_sequences(opts, sched_group):
                     sequence, sequence_string = seq_list[seq_index]
                     color = seq_color[seq_index]
                         
-                    row_list.append([
-                        sess_num,
-                        sess_type,
-                        n_trials,
-                        " ".join(seq_keys),
-                        seq_type,
-#                       sequence,
-                        sequence_string, 
-                        seq_train,
-                        color,
-                        mypermutation,
-                        seq_index,
-                        paced,
-                        instruct
-                        ])
+                    if n_trials > 0 :
+                        row_list.append([
+                            sess_num,
+                            sess_type,
+                            n_trials,
+                            " ".join(seq_keys),
+                            seq_type,
+#                            sequence,
+                            sequence_string, 
+                            seq_train,
+                            color,
+                            mypermutation,
+                            seq_index,
+                            paced,
+                            instruct
+                            ])
     
             sess_num = sess_num + 1
 
@@ -133,12 +134,30 @@ def generate_with_predefined_sequences(opts, sched_group):
     )
     )
     
-    schedule.loc[schedule["sess_num"] == 0, "sess_num"] = \
-        np.max(schedule["sess_num"]) + 1
+#    schedule.loc[schedule["sess_num"] == 0, "sess_num"] = \
+#        np.max(schedule["sess_num"]) + 1
 #    schedule.sort_values(by = ["sess_num", "seq_type", "seq_train"], 
 #                         inplace = True)
-    schedule.to_csv(schedulefilename, sep =";", index=False)
 
+    if opts.schedule_file:
+        schedulefilename = opts.schedule_file + "_{}".format(sched_group)
+    else:    
+        schedulefilename = "./scheduling/schedule{}".format(sched_group) 
+
+    if opts.split:
+        schedule_training = \
+        schedule.loc[schedule["sess_type"] == "training", :]
+        schedule_testing = \
+        schedule.loc[schedule["sess_type"] == "testing", :]
+        
+        schedule_training.to_csv(schedulefilename + ".csv", 
+                                 sep =";", index=False)
+        schedule_testing.to_csv(schedulefilename + "_fmri.csv", 
+                                 sep =";", index=False)
+    else:
+        schedule.to_csv(schedulefilename + ".csv", sep =";", index=False)
+        
+        
 def generate_with_random_sequences(sched_group):
     """
     Generate schedule using random sequences.
@@ -271,14 +290,23 @@ def build_parser():
                         help = "Enter sequence type file.",
                         required = False)
 
+    parser.add_argument("--split", 
+                        dest = "split", 
+                        help = "Returns separate files for training and " + 
+                        "testing (_fMRI).",
+                        action="store_true",
+                        required = False)
+
     return(parser)
 
 def main():
   parser = build_parser()
 
+  print("Preparing schedule...")
   opts = parser.parse_args()
   generate_with_predefined_sequences(opts, sched_group = 0)
   generate_with_predefined_sequences(opts, sched_group = 1)
+  print("Done!")
   
 if __name__== "__main__":
   main()

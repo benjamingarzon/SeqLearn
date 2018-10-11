@@ -9,7 +9,7 @@ Training tool for discrete sequence production.
 """
 
 from __future__ import division
-from psychopy import visual, core, event, prefs
+from psychopy import visual, core, event, prefs, logging
 from datetime import datetime
 from lib.utils import showStimulus, scorePerformance, startSession, \
 filter_keys, test_sequence, update_table, wait_clock
@@ -45,10 +45,11 @@ def SeqLearn(opts):
 ## Define window and stimuli
 ############################ 
     
-    win = visual.Window(config["SCREEN_RES"],
-                        fullscr=True, 
-                        monitor="testMonitor", 
-                        units="cm")    
+    win = visual.Window(
+            config["SCREEN_RES"],
+            fullscr = True if config["FULL_SCREEN"] == 1 else False, 
+            monitor = "testMonitor", 
+            units = "cm")    
     
     stimuli = define_stimuli(win, username, config, texts, sess_num, 
                              seq_length, total_trials)
@@ -81,10 +82,17 @@ def SeqLearn(opts):
     fixation = stimuli["fixation"]
     bye_message = stimuli["bye_message"]
     ok_message = stimuli["ok_message"]
+    ok_sign = stimuli["ok_sign"]
 
-# clocks
+############################ 
+## Clocks and logging
+############################ 
     
     trialClock = core.Clock()
+    globalClock = core.Clock()
+        
+    logging.LogFile(f=config["LOG_FILE"], filemode='w')
+#    logging.setDefaultClock(globalClock)
 
 ############################ 
 ## Experiment Section
@@ -95,9 +103,9 @@ def SeqLearn(opts):
 ############################ 
 
     showStimulus(win, [intro_message])
-    wait_clock(config["INTRO_TIME"])
+    wait_clock(globalClock, config["INTRO_TIME"])
     
-    if config["PRESHOW"]==1:
+    if config["PRESHOW"] == 1:
         
         showStimulus(win, [instructionspre1_message, hand_sign])
         event.waitKeys(keyList = ["space"]) 
@@ -127,6 +135,8 @@ def SeqLearn(opts):
     if not config["MODE"] == "fmri": # home mode                       
         showStimulus(win, [instructions1_message, hand_sign])
         event.waitKeys(keyList = ["space"]) 
+
+    globalClock.reset()        
         
     for row in schedule.itertuples():
         sess_num, sess_type, n_trials, seq_keys =\
@@ -189,14 +199,15 @@ def SeqLearn(opts):
         misses = 0
         exiting = False
         maxwait = len(sequence)*config["MAX_WAIT_PER_KEYPRESS"]
+
         while (trial <= n_trials):
 
             current_stimuli = [trialStimulus[trial-1]] + squareStimuli[trial-1]
             
             # present fixation
             showStimulus(win, [fixation])
-#            wait_clock(config["FIXATION_TIME"])     
-            wait_clock(config["FIXATION_TIME"])
+
+            clock_fixation = wait_clock(globalClock, config["FIXATION_TIME"])
             # present sequence and read keypresses          
             showStimulus(win, current_stimuli)    
             
@@ -212,17 +223,23 @@ def SeqLearn(opts):
                                 text = x + str(y + 1),
                                 color = z,
                                 alignHoriz="center", 
-                                pos = (0, 5)) 
-            for x, y, z in zip(label_list, char_list, color_list) ] 
+                                pos = (0, 5)) for x, y, z in zip(label_list, 
+                                      char_list, 
+                                      color_list) ] 
 
                 keypresses = []
                 trialClock.reset()    
+
+                clock_execution = globalClock.getTime()
                 
                 for nbeat in range(nbeats):
                     event.clearEvents()
                     showStimulus(win, current_stimuli + [number_list[nbeat]])
                     beat.play()
-                    wait_clock(config["BEAT_INTERVAL"])
+                    #wait_clock(globalClock, config["BEAT_INTERVAL"])
+                    core.wait(config["BEAT_INTERVAL"], 
+                              hogCPUperiod=config["BEAT_INTERVAL"])
+
                     
                     partial_keypresses = event.getKeys(
                             keyList = seq_keys + 
@@ -234,8 +251,11 @@ def SeqLearn(opts):
             else:
 
                 event.clearEvents()
-                trialClock.reset()    
-                wait_clock(maxwait)
+                trialClock.reset()                
+                #clock_execution = wait_clock(globalClock, maxwait)
+                clock_execution = globalClock.getTime()
+                core.wait(maxwait, hogCPUperiod=maxwait)
+                
                 keypresses = event.getKeys(keyList=seq_keys + 
                                            [config["ESCAPE_KEY"]], 
                                            timeStamped = trialClock)
@@ -246,7 +266,7 @@ def SeqLearn(opts):
                 showStimulus(win, [late_message, error_sign])
                 if config["BUZZER_ON"] == 1:
                     buzzer.play()
-                wait_clock(config["ERROR_TIME"])
+                clock_feedback = wait_clock(globalClock, config["ERROR_TIME"])
 
                 misses = misses + 1
                 
@@ -260,7 +280,7 @@ def SeqLearn(opts):
     
                 if misses > config["MAX_MISSES"]:
                     showStimulus(win, [miss_message])
-                    wait_clock(config["ERROR_TIME"])
+                    wait_clock(globalClock, config["ERROR_TIME"])
 
                 if misses > config["MAX_TOTAL_MISSES"]:
                     exit()    
@@ -271,7 +291,6 @@ def SeqLearn(opts):
                                                   config["MAX_CHORD_INTERVAL"], 
                                                   len(sequence))
                 trial_type = "done"
-                    
                 accuracy, MT, score  = scorePerformance(keys, RTs, sequence, 
                                                         keytimes)
 
@@ -285,9 +304,10 @@ def SeqLearn(opts):
                 if accuracy < 1:
                     # wrong
                     showStimulus(win, [error_message, error_sign])
+                    clock_feedback = globalClock.getTime()
                     if config["BUZZER_ON"] == 1:
                         buzzer.play()
-                    wait_clock(config["ERROR_TIME"])   
+                    wait_clock(globalClock, config["ERROR_TIME"])   
                     
                     score = 0
                 else:
@@ -299,7 +319,6 @@ def SeqLearn(opts):
                         # feedback
                         maxscore[sequence_string] = np.maximum(score, 
                                 maxscore[sequence_string])
-            
                         max_height = \
                         maxscore[sequence_string]*config["BAR_HEIGHT"]/\
                         maxgroupscore[sequence_string]
@@ -334,12 +353,11 @@ def SeqLearn(opts):
                                            best_label, group_best_bar, 
                                            group_best_label, bottomline])
                         
-                        wait_clock(config["FEEDBACK_TIME"])
-
                     else:
-                        showStimulus(win, [ok_message])
-                        wait_clock(config["FEEDBACK_TIME"])
-                        
+                        showStimulus(win, [ok_sign, ok_message])
+                    
+                    clock_feedback = wait_clock(globalClock, 
+                                            config["FEEDBACK_TIME"])
                         
             # write results to files
             key_from = ["0"]
@@ -369,6 +387,9 @@ def SeqLearn(opts):
                     " ".join(key_from), 
                     " ".join(key_to), 
                     "{:.3f}".format(RT*1000),
+                    clock_fixation, 
+                    clock_execution,
+                    clock_feedback
                 ])
                 key_from = key_to
         
@@ -389,15 +410,18 @@ def SeqLearn(opts):
                     accuracy, 
                     "{:.3f}".format(RTs[0]*1000),
                     "{:.3f}".format(MT*1000),
-                    "{:.3f}".format(score)
+                    "{:.3f}".format(score),
+                    clock_fixation, 
+                    clock_execution,
+                    clock_feedback
             ])
         
             trial = trial + trialincrease
             cum_trial = cum_trial + 1    
-            wait_clock(config["FIXATION_TIME"]) 
+            wait_clock(globalClock, config["FIXATION_TIME"]) 
     
         if exiting:
-            print "Session has been interrupted. Bye!"
+            print("Session has been interrupted. Bye!")
             break
 
 ############################ 
@@ -413,17 +437,12 @@ def SeqLearn(opts):
     mykeys = pd.read_table(keysfile.name, sep = ";")
     mytrials = pd.read_table(trialsfile.name, sep = ";")
     
-    # update only what we did in the current session
-#    mymemo = mymemo.loc[mymemo["sess_num"] == sess_num]
-#    mykeys = mykeys.loc[mykeys["sess_num"] == sess_num]
-#    mytrials= mytrials.loc[mytrials["sess_num"] == sess_num]
-    
     if not opts.demo:
         try:
             db_config_json = open("./db/db_config.json", "r")
             db_config = json.load(db_config_json)
             db_config_json.close()
-            #print db_config
+            #print(db_config)
     
             with SSHTunnelForwarder(
                     (db_config["REMOTEHOST"], 
@@ -460,7 +479,7 @@ def SeqLearn(opts):
 ############################ 
 ## Quit
 ############################ 
-    wait_clock(config["FIXATION_TIME"])
+    wait_clock(globalClock, config["FIXATION_TIME"])
 
     win.close()
     core.quit()
@@ -473,7 +492,7 @@ def build_parser():
     parser.add_argument("--schedule_file", 
                         type = str,
                         dest = "schedule_file", 
-                        help = "Enter schedule file.",
+                        help = "Enter schedule file (with extension).",
                         required = False)
 
     parser.add_argument("--config_file", 
@@ -493,6 +512,20 @@ def build_parser():
                         help="Do a demo, no saving.",
                         action="store_true",
                         required = False)
+
+    parser.add_argument("--session", 
+                        type = int,
+                        dest = "session", 
+                        help = "Run only this session. Incompatible with " + 
+                        "--restart",
+                        required = False)
+
+    parser.add_argument("--fmri", 
+                        dest = "run_fmri", 
+                        help = "Run in fMRI mode.",
+                        action="store_true",
+                        required = False)
+
 
     return(parser)
 

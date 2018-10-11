@@ -168,7 +168,12 @@ def define_stimuli(win, username, config, texts, sess_num, seq_length,
 
     stimuli["ok_message"] = visual.TextStim(win, 
                                     text = texts["TEXT_OK"], 
-                                    alignHoriz="center")
+                                    alignHoriz="center", 
+                                    pos = (0, -3))
+
+    stimuli["ok_sign"] = visual.ImageStim(win, 
+                                  image=config["OK_FILE"],
+                                  pos = (0, 2))
 
     return(stimuli)
     

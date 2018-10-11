@@ -3,7 +3,10 @@
 set /p INSTALLPATH="Enter Installation PATH. Make sure the path does not contain spaces. (Default C:\Users\Public\SeqLearner): " || set INSTALLPATH="C:\Users\Public\SeqLearner"
 md %INSTALLPATH%
 echo Installation path: %INSTALLPATH%
-xcopy "%HOMEPATH%\Downloads\SeqLearn-master\SeqLearn-master" "%INSTALLPATH%\SeqLearn" /E
+set /p DOWNLOADPATH="Enter PATH where you unzipped the files. Make sure the path does not contain spaces. (Default %HOMEPATH%\Downloads\SeqLearn-master\SeqLearn-master): " || set DOWNLOADPATH="%HOMEPATH%\Downloads\SeqLearn-master\SeqLearn-master"
+
+echo "Select second copy option (directory)"
+xcopy "%DOWNLOADPATH%" "%INSTALLPATH%\SeqLearn" /E
 
 PowerShell -executionpolicy remotesigned -File "%INSTALLPATH%\SeqLearn\InstallAnaconda.ps1"
 echo Downloading Anaconda. This may take a while. Press a key when you have finished installing it.

@@ -11,15 +11,18 @@ python SeqLearn.py -h
 
 usage: SeqLearn.py [-h] [--schedule_file SCHEDULE_FILE]
                    [--config_file CONFIG_FILE] [--restart] [--demo]
+                   [--session SESS_NUM] [--fmri RUN_FMRI]
 
 optional arguments:
   -h, --help            show this help message and exit
   --schedule_file SCHEDULE_FILE
-                        Enter schedule file.
+                        Enter schedule file (with extension).
   --config_file CONFIG_FILE
                         Enter configuration file.
   --restart             Remove previous data and start from session 1.
   --demo                Do a demo, no saving.
+  --session SESS_NUM    Run only this session.
+  --fmri                Run in fMRI mode.
 ```
 
 
@@ -104,18 +107,9 @@ To clean unnecessary files:
 rm -r $SEQDIR/stats
 ``` 
 
-
 ## Windows
 Run the script Installation.bat and follow the instructions. 
 It will create shortcuts called SequencePractice.bat and SequencePracticeDemo.bat in your desktop directory that will run the program and a demo, respectively.  
-
-
-# Exporting the environment
-```
-conda env export -n psychopyenv > psychopyenv.yml
-conda env export -n psychopyenv --no-builds > psychopyenv_nb.yml
-
-```
 
 # Database connections
 To allow connections to the remote database, after installation save the private key inside the db directory in a file called 'db/id_rsa'.
@@ -138,7 +132,7 @@ Configure database parameters in a file 'db/db_config.json':
 
 # Configuring the database
 
-To create a database and users: 
+To create a database and users, from mysql: 
 
 ```
 CREATE DATABASE zzzdb;
@@ -156,6 +150,17 @@ echo "GRANT INSERT,SELECT,CREATE,INDEX ON zzzdb.* TO 'subject00$x'@'localhost';"
 done
 ```
 
+To check existing users and grants:
+```
+select user from mysql.user;
+show grants 'subject001'@'localhost';
+```
+
+To remove a user:
+```
+drop user 'subject001'@'localhost';
+```
+
 # Preparing a study
 
 - Create a database and users.
@@ -166,6 +171,14 @@ done
 
 - Adjust options in config/config.json.
 
+- Configure database
+
+- Install software on training devices.
+
+- In each device:
+    
+    - Copy private key to folder db/.
+    - db/db_config.json
 
 # Sequence groups
 It is possible to use several schedules, so that different subjects are required to perform different sequences. 
@@ -177,7 +190,8 @@ Use the script called SeqGen.py.
 python SeqGen.py -h
 
 usage: SeqGen.py [-h] [--sequence_file SEQ_FILE]
-                 [--schedule_file SCHEDULE_FILE]
+                 [--schedule_file SCHEDULE_FILE] [--type_file TYPE_FILE]
+                 [--split]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -187,9 +201,12 @@ optional arguments:
                         Enter schedule file.
   --type_file TYPE_FILE
                         Enter sequence type file.
+  --split               Returns separate files for training and testing
+                        (_fMRI).
 ```
 Example: 
-python SeqGen.py --sequence_file=./scheduling/sequences_001.json --schedule_file=./scheduling/schedule001 --type_file=./scheduling/seq_types.csv
+python SeqGen.py --sequence_file=./scheduling/sequences/sequences_001.json --schedule_file=./scheduling/schedules/schedule_simple --type_file=./scheduling/seq_types.csv --split
+python SeqGen.py --sequence_file=./scheduling/sequences/sequences_demo.json --schedule_file=./scheduling/schedules/schedule_simple --type_file=./scheduling/seq_types_simple.csv --split
 
 # Function modes
 ## Home training
@@ -203,4 +220,11 @@ In the config.json file, set:
 "MODE":"fmri"
 "PRESHOW":0
 "TEST_MEM":0
-In the schedule file, set only paced trials (optional)
+In the schedule file, set only paced trials (optional).
+
+# Exporting the environment
+```
+conda env export -n psychopyenv > psychopyenv.yml
+conda env export -n psychopyenv --no-builds > psychopyenv_nb.yml
+
+```
