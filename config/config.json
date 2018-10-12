@@ -1,9 +1,9 @@
 {
 "MODE":"home",
-"PRESHOW":0,
+"PRESHOW":1,
 "TEST_MEM":1,
 "LANGUAGE":"english",
-"FULL_SCREEN":0,
+"FULL_SCREEN":1,
 "LOG_FILE":"./data/log.txt",
 "FMRI_TRIGGER":"s",
 "ASK_USER":0,
