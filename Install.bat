@@ -7,7 +7,7 @@ set /p DOWNLOADPATH="Enter PATH where you unzipped the files. (Default C:%HOMEPA
 echo Download path: %DOWNLOADPATH%
 
 echo "Select second copy option (directory)"
-xcopy "%DOWNLOADPATH%" "%INSTALLPATH%\SeqLearn" /E
+xcopy ""%DOWNLOADPATH%"" ""%INSTALLPATH%\SeqLearn"" /E
 
 PowerShell -executionpolicy remotesigned -File "%INSTALLPATH%\SeqLearn\InstallAnaconda.ps1"
 echo Downloading Anaconda. This may take a while. Press a key when you have finished installing it.
