@@ -16,7 +16,9 @@ def define_stimuli(win, username, config, texts, sess_num, seq_length,
     
     stimuli["buzzer"] = sound.Sound(config["BUZZER_FILE"])
     
-    stimuli["beat"] = sound.Sound(config["BEAT_FILE"])
+    stimuli["tick"] = sound.Sound(1200, secs=0.01, sampleRate=44100)  # sample rate ignored because already set
+
+    stimuli["tock"] = sound.Sound(900, secs=0.01, sampleRate=44100)
     
     stimuli["intro_message"] = visual.TextStim(win, 
                                     text = texts["TEXT_INTRO"].format(username, 

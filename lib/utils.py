@@ -201,13 +201,14 @@ def startSession(opts):
         keysfile = open(keysfilename, "ab")
         trialsfile = open(trialsfilename, "ab")
         trialstable = pd.read_csv(trialsfilename, sep=';')
-        if opts.session:
+
+        if opts.session >= 0:
             sess_num = opts.session
         else:
             # take the next session that is in the schedule
             next_sess_num = np.max(trialstable["sess_num"]) + 1
-            q = np.where(schedule["sess_num"] > next_sess_num)
-            sess_num = np.min(schedule["sess_num"][q]) if len(q) > 0 else 0
+            q = np.where(schedule["sess_num"] >= next_sess_num)
+            sess_num = schedule["sess_num"][np.min(q)] if len(q) > 0 else 0
             
         maxscore = defaultdict(float)
         maxgroupscore = defaultdict(float)
@@ -282,7 +283,8 @@ def startSession(opts):
                 "RT",
                 "clock_fixation", 
                 "clock_execution",
-                "clock_feedback"
+                "clock_feedback",
+                "paced"
         ])
     
         trialswriter.writerow([
@@ -305,7 +307,8 @@ def startSession(opts):
                 "score",
                 "clock_fixation", 
                 "clock_execution",
-                "clock_feedback"
+                "clock_feedback",
+                "paced"
         ])
 
     # select schedule for this session
@@ -433,7 +436,7 @@ def test_sequence(mystring, win, config, mycolor, texts, instructions_space,
             core.wait(config["ERROR_TIME"])        
             showStimulus(win, squares + [instructions_space])
             event.waitKeys(keyList = ["space"])
-        
+            
         memowriter.writerow([
                     username,
                     sched_group,
@@ -448,6 +451,7 @@ def test_sequence(mystring, win, config, mycolor, texts, instructions_space,
                     timer.getTime()                    
                 ])
             
+    
 
 def SetUsername():
     """ 

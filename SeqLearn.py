@@ -55,7 +55,8 @@ def SeqLearn(opts):
                              seq_length, total_trials)
         
     buzzer = stimuli["buzzer"]
-    beat = stimuli["beat"]
+    tick = stimuli["tick"]
+    tock = stimuli["tock"]
     intro_message = stimuli["intro_message"]
     instructions_space = stimuli["instructions_space"]
     instructions_select = stimuli["instructions_select"]
@@ -101,40 +102,44 @@ def SeqLearn(opts):
 ############################ 
 ## Memorization
 ############################ 
-
-    showStimulus(win, [intro_message])
-    wait_clock(globalClock, config["INTRO_TIME"])
-    
-    if config["PRESHOW"] == 1:
+    if sess_num > 0 :
+        showStimulus(win, [intro_message])
+        wait_clock(globalClock, config["INTRO_TIME"])
         
-        showStimulus(win, [instructionspre1_message, hand_sign])
-        event.waitKeys(keyList = ["space"]) 
-
-        showStimulus(win, [instructionspre2_message])
-        event.waitKeys(keyList = ["space"]) 
-
-        for row in schedule_unique.itertuples():    
-            squares = seq_to_stim(row.sequence_string, row.seq_color, win, 
-                                  config["SQUARE_SIZE"])
+        if config["PRESHOW"] == 1:
             
-            showStimulus(win, squares + [instructions_space])
-            event.waitKeys(keyList = ["space"])        
-  
-            if config["TEST_MEM"] == 1:
-                test_sequence(row.sequence_string, win, config, row.seq_color, 
-                texts, instructions_space, instructions_select, error_message, 
-                error_sign, buzzer, memowriter, username, sched_group, 
-                sess_num, sess_date, sess_time, row.seq_train)
+            showStimulus(win, [instructionspre1_message, hand_sign])
+            event.waitKeys(keyList = ["space"]) 
+    
+            showStimulus(win, [instructionspre2_message])
+            event.waitKeys(keyList = ["space"]) 
+    
+            for row in schedule_unique.itertuples():    
+                squares = seq_to_stim(row.sequence_string, row.seq_color, win, 
+                                      config["SQUARE_SIZE"])
                 
-    memofile.close()
+                showStimulus(win, squares + [instructions_space])
+                #event.waitKeys(keyList = ["space"])        
+                mykey = event.waitKeys(keyList = ["space", config["ESCAPE_KEY"]])
+    
+                if  any(config["ESCAPE_KEY"] in s for s in mykey):
+                    break  
+                if config["TEST_MEM"] == 1:
+                    test_sequence(row.sequence_string, win, config, row.seq_color, 
+                    texts, instructions_space, instructions_select, error_message, 
+                    error_sign, buzzer, memowriter, username, sched_group, 
+                    sess_num, sess_date, sess_time, row.seq_train)
+                
 
 ############################ 
 ## Free execution
 ############################ 
     
-    if not config["MODE"] == "fmri": # home mode                       
-        showStimulus(win, [instructions1_message, hand_sign])
-        event.waitKeys(keyList = ["space"]) 
+        if not config["MODE"] == "fmri": # home mode                       
+            showStimulus(win, [instructions1_message, hand_sign])
+            event.waitKeys(keyList = ["space"]) 
+
+    memofile.close()
 
     globalClock.reset()        
         
@@ -217,13 +222,13 @@ def SeqLearn(opts):
                 char_list = range(config["EXTRA_BEATS"]) + range(len(sequence))
                 label_list = config["EXTRA_BEATS"]*["WAIT: "] + \
                 len(sequence)*["PRESS: "]
-                color_list = config["EXTRA_BEATS"]*["white"] + \
-                len(sequence)*["yellow"]
+                color_list = (config["EXTRA_BEATS"]-1)*["red"] + \
+                ["yellow"] + len(sequence)*["green"]
                 number_list = [ visual.TextStim(win,     
                                 text = x + str(y + 1),
                                 color = z,
                                 alignHoriz="center", 
-                                pos = (0, 5)) for x, y, z in zip(label_list, 
+                                pos = (0, 7)) for x, y, z in zip(label_list, 
                                       char_list, 
                                       color_list) ] 
 
@@ -232,14 +237,17 @@ def SeqLearn(opts):
 
                 clock_execution = globalClock.getTime()
                 
-                for nbeat in range(nbeats):
+                for nbeat in range(nbeats):                    
                     event.clearEvents()
                     showStimulus(win, current_stimuli + [number_list[nbeat]])
-                    beat.play()
-                    #wait_clock(globalClock, config["BEAT_INTERVAL"])
+                    if nbeat == config["EXTRA_BEATS"]-1:
+                        tick.play()
+                    else:
+                        tock.play()
+                                
+                    
                     core.wait(config["BEAT_INTERVAL"], 
                               hogCPUperiod=config["BEAT_INTERVAL"])
-
                     
                     partial_keypresses = event.getKeys(
                             keyList = seq_keys + 
@@ -317,11 +325,15 @@ def SeqLearn(opts):
                     if paced == 0:
 
                         # feedback
+                        
                         maxscore[sequence_string] = np.maximum(score, 
-                                maxscore[sequence_string])
+                                maxscore[sequence_string]) if sequence_string \
+                                in maxscore.keys() else score
                         max_height = \
                         maxscore[sequence_string]*config["BAR_HEIGHT"]/\
-                        maxgroupscore[sequence_string]
+                        maxgroupscore[sequence_string] if sequence_string \
+                        in maxgroupscore.keys() else score
+
                         
                         last_height = score*config["BAR_HEIGHT"]/\
                         maxgroupscore[sequence_string]
@@ -389,7 +401,8 @@ def SeqLearn(opts):
                     "{:.3f}".format(RT*1000),
                     clock_fixation, 
                     clock_execution,
-                    clock_feedback
+                    clock_feedback,
+                    paced
                 ])
                 key_from = key_to
         
@@ -413,7 +426,8 @@ def SeqLearn(opts):
                     "{:.3f}".format(score),
                     clock_fixation, 
                     clock_execution,
-                    clock_feedback
+                    clock_feedback,
+                    paced
             ])
         
             trial = trial + trialincrease
