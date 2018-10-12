@@ -117,10 +117,12 @@ get_transition_distribution = function(schedule, nchords){
 }
 
 
+# calculate the frequency of use of different fingers
 get_finger_distribution = function(chunk, chords){
   return(colSums(chords[chunk, ]))
 }
 
+# calculate the distance betwwen finger distributionss
 finger_distribution_distance = function(schedule, chords){
   
   finger_distribution.trained = rowSums(sapply(schedule$trained, get_finger_distribution, chords))
@@ -130,15 +132,21 @@ finger_distribution_distance = function(schedule, chords){
 
   }
 
+# calculate the number of different chords between trained and untrained
+# want it to be maximal
 chord_distance = function(schedule){
+  
   eldist = as.matrix(proxy::dist(c(schedule$trained, schedule$untrained), chunkdist))
   n = ncol(eldist)
   return(min(eldist[1:n/2, (n/2+1):n]))
   }
   
+# get schedules with x trained and y untrained sequences
 get_schedules = function(cluster, size){
   
+  # get groups 
   get_groups = function(taken, cluster, size){
+    # separate into trained and untrained
     myset = seq(length(cluster))
     new = combn(setdiff(myset, taken), size)
     schedule = list()

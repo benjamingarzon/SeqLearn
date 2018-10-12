@@ -205,7 +205,7 @@ optional arguments:
                         (_fMRI).
 ```
 Example: 
-python SeqGen.py --sequence_file=./scheduling/sequences/sequences_001.json --schedule_file=./scheduling/schedules/schedule_simple --type_file=./scheduling/seq_types.csv --split
+python SeqGen.py --sequence_file=./scheduling/sequences/sequences_001.json --schedule_file=./scheduling/schedules/kip0schedule1 --type_file=./scheduling/seq_types.csv
 python SeqGen.py --sequence_file=./scheduling/sequences/sequences_demo.json --schedule_file=./scheduling/schedules/schedule_simple --type_file=./scheduling/seq_types_simple.csv --split
 
 # Function modes
