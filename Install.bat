@@ -50,8 +50,8 @@ echo echo Starting program. This may take a few seconds... >> SequencePracticeDe
 echo python SeqLearn.py --demo ^> NUL >> SequencePracticeDemo.bat
 echo call deactivate" >> SequencePracticeDemo.bat
 
-move SequencePractice.bat %HOMEPATH%\Desktop
-move SequencePracticeDemo.bat %HOMEPATH%\Desktop
+move SequencePractice.bat "%HOMEPATH%\Desktop"
+move SequencePracticeDemo.bat "%HOMEPATH%\Desktop"
 rm stats/*
 rmdir stats
 

@@ -27,7 +27,7 @@ def get_seq_types(type_file=None):
     try:
         type_data = pd.read_csv(type_file, sep = ";")
     except IOError: 
-        print "Error: Sequence type file is missing!"
+        print("Error: Sequence type file is missing!")
 
     return(type_data)
 
@@ -44,7 +44,7 @@ def get_config(config_file=None):
         config = json.load(config_json)
         config_json.close()
     except IOError: 
-        print "Error: Configuration file is missing!"
+        print("Error: Configuration file is missing!")
     
     return(config)
     
@@ -64,7 +64,7 @@ def get_texts(language):
         texts = json.load(texts_json)
         texts_json.close()
     except IOError: 
-        print "Error: Texts file is missing!"
+        print("Error: Texts file is missing!")
     
     return(texts)
     
@@ -122,7 +122,7 @@ def startSession(opts):
             sched_table = json_obj["SCHEDULE_TABLE"]
             user_json.close()
         except IOError: 
-            print "Error: User file is missing!"
+            print("Error: User file is missing!")
         
     else:
         myDlg = gui.Dlg(title="Sequence training.")
@@ -161,7 +161,7 @@ def startSession(opts):
                 sched_group = schedule_table.loc[ 
                         schedule_table["SUBJECT"] == username, "SCHEDULE_GROUP"].values[0]
             except IOError: 
-                print "Error: Schedule table file is missing!"
+                print("Error: Schedule table file is missing!")
 
     # override certain options if we are in fMRI mode
             if opts.run_fmri :
@@ -193,7 +193,7 @@ def startSession(opts):
         n_sess = np.max(schedule["sess_num"])
 
     except IOError: 
-        print "Error: Schedule file is missing!"
+        print("Error: Schedule file is missing!")
    
     try:
         # proceed from where it was left before
@@ -466,7 +466,7 @@ def SetUsername():
     
     if myDlg.OK:  
         username = myDlg.data[0]
-        sched_table = int(myDlg.data[1])
+        sched_table = myDlg.data[1]
     else:
         username = ''
         sched_table = ''
