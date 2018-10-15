@@ -11,7 +11,7 @@ python SeqLearn.py -h
 
 usage: SeqLearn.py [-h] [--schedule_file SCHEDULE_FILE]
                    [--config_file CONFIG_FILE] [--restart] [--demo]
-                   [--session SESS_NUM] [--fmri RUN_FMRI]
+                   [--session SESSION] [--fmri]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -21,7 +21,7 @@ optional arguments:
                         Enter configuration file.
   --restart             Remove previous data and start from session 1.
   --demo                Do a demo, no saving.
-  --session SESS_NUM    Run only this session.
+  --session SESSION     Run only this session. Incompatible with --restart
   --fmri                Run in fMRI mode.
 ```
 
@@ -55,10 +55,7 @@ Now run:
 python SetUsername.py
 ```
 
-This will configure the file 'config/user.json' with the user name and the schedule group. 
-The schedule group can be 0 or 1 and allows to counterbalance sequences across subjects 
-(trained sequences for schedule group are untrained for group 1 and viceversa). 
-You can also do this manually.
+This will configure the file 'config/user.json' with the user name and the schedule table. You can also do this manually.
 
 ```
 {
@@ -171,18 +168,21 @@ drop user 'subject001'@'localhost';
 
 - Adjust options in config/config.json.
 
-- Configure database
+- Configure database.
 
 - Install software on training devices.
 
 - In each device:
     
-    - Copy private key to folder db/.
-    - db/db_config.json
+    - Copy private key to folder ./db/id_rsa
+    - Copy db_config.json file to db/
 
-# Sequence groups
+# Schedule tables and groups
 It is possible to use several schedules, so that different subjects are required to perform different sequences. 
-Use flag  --schedule_file with the prefix of the file (e.g. scheduling/schedule000 when the files for the schedule groups are scheduling/schedule000_0.csv and scheduling/schedule000_1.csv)
+Use flag  --schedule_file with the prefix of the file (e. g. scheduling/schedules/schedule000)
+The schedule table is a file that assigns very subject to a schedule file, allowing training different 
+sequences or schedules across subjects. The schedule group can be 0 or 1 and allows to counterbalance sequences across subjects 
+(trained sequences for schedule group are untrained for group 1 and viceversa). 
 
 # Generating sequences
 Use the script called SeqGen.py. 
@@ -218,6 +218,7 @@ In the config.json file, set:
 ## fMRI experiment
 In the config.json file, set:
 "MODE":"fmri"
+This will also set automatically:
 "PRESHOW":0
 "TEST_MEM":0
 In the schedule file, set only paced trials (optional).

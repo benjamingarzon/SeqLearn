@@ -6,6 +6,7 @@ echo Installation path: %INSTALLPATH%
 set /p DOWNLOADPATH="Enter PATH where you unzipped the files. (Default C:%HOMEPATH%\Downloads\SeqLearn-master\SeqLearn-master): " || set DOWNLOADPATH="C:%HOMEPATH%\Downloads\SeqLearn-master\SeqLearn-master"
 echo Download path: %DOWNLOADPATH%
 
+
 echo "Select second copy option (directory)"
 xcopy ""%DOWNLOADPATH%"" ""%INSTALLPATH%\SeqLearn"" /E
 
@@ -13,6 +14,7 @@ PowerShell -executionpolicy remotesigned -File "%INSTALLPATH%\SeqLearn\InstallAn
 echo Downloading Anaconda. This may take a while. Press a key when you have finished installing it.
 pause
 del Anaconda.exe
+echo If downloading not working, download anaconda from https://repo.anaconda.com/archive/Anaconda3-5.2.0-Windows-x86_64.exe and install it in %INSTALLPATH%\Anaconda3
 set ANACONDAPATH=%INSTALLPATH%\Anaconda3
 set PATH=%ANACONDAPATH%\Scripts;%ANACONDAPATH%\;%PATH%
 
