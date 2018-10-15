@@ -12,9 +12,9 @@ xcopy ""%DOWNLOADPATH%"" ""%INSTALLPATH%\SeqLearn"" /E
 
 PowerShell -executionpolicy remotesigned -File "%INSTALLPATH%\SeqLearn\InstallAnaconda.ps1"
 echo Downloading Anaconda. This may take a while. Press a key when you have finished installing it.
+echo If downloading not working, download anaconda from https://repo.anaconda.com/archive/Anaconda3-5.2.0-Windows-x86_64.exe and install it in %INSTALLPATH%\Anaconda3
 pause
 del Anaconda.exe
-echo If downloading not working, download anaconda from https://repo.anaconda.com/archive/Anaconda3-5.2.0-Windows-x86_64.exe and install it in %INSTALLPATH%\Anaconda3
 set ANACONDAPATH=%INSTALLPATH%\Anaconda3
 set PATH=%ANACONDAPATH%\Scripts;%ANACONDAPATH%\;%PATH%
 
