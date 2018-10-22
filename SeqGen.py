@@ -50,12 +50,19 @@ def generate_with_predefined_sequences(opts, sched_group):
             maxchordsize=max_chord_size)
 
         seq_list = mygenerator.read(seq_file, seq_type)
-
+        
         if sched_group == 1: # swap trained and untrained
             seq_list.reverse()
         
+        if opts.seq_file2:
+            seq_list2 = mygenerator.read(opts.seq_file2, seq_type)
+            myfac = 3
+            seq_list = seq_list + seq_list2
+        else: 
+            myfac = 2
+      
         # generate the sequences
-        for seq in range(2*n_seqs): # 2 times: trained and untrained       
+        for seq in range(myfac*n_seqs): # 2 times: trained and untrained       
             index = random.randint(0, len(color_list)-1)
             seq_color.append(color_list[index])
             del color_list[index]            
@@ -65,7 +72,7 @@ def generate_with_predefined_sequences(opts, sched_group):
 
                 mypermutation = list(reorder[sess_num % len(reorder)])     
                 
-                for seq in range(2*n_seqs):        
+                for seq in range(myfac*n_seqs):        
         
                     instruct = 1 if seq == 0 else 0
                     
@@ -85,14 +92,29 @@ def generate_with_predefined_sequences(opts, sched_group):
                         n_trials = n_free_trials_testing if paced == 0 else \
                         n_paced_trials_testing
      
-                        if seq % 2 == 1: # interleave trained/untrained
-                            # use the same permutation, 
-                            # although it possibly won't make a difference
-                            seq_index = mypermutation[(seq - 1)/2] + n_seqs 
-                            seq_train = "untrained"
-                        else :
-                            seq_index = mypermutation[seq/2]
-                            seq_train = "trained"
+                        if opts.seq_file2:
+                            # interleave trained/untrained/unseen
+                                                            
+                            if seq % 3 == 2: 
+                                seq_index = mypermutation[(seq - 2)/3] + \
+                                2*n_seqs 
+                                seq_train = "unseen"
+                            if seq % 3 == 1:
+                                seq_index = mypermutation[(seq - 1)/3] + n_seqs
+                                seq_train = "untrained"
+                            if seq % 3 == 0: 
+                                seq_index = mypermutation[seq/3]
+                                seq_train = "trained"
+                        
+                        else:                            
+                            if seq % 2 == 1: # interleave trained/untrained
+                                # use the same permutation, 
+                                # although it possibly won't make a difference
+                                seq_index = mypermutation[(seq - 1)/2] + n_seqs 
+                                seq_train = "untrained"
+                            else :
+                                seq_index = mypermutation[seq/2]
+                                seq_train = "trained"
     
                     sequence, sequence_string = seq_list[seq_index]
                     color = seq_color[seq_index]
@@ -111,12 +133,11 @@ def generate_with_predefined_sequences(opts, sched_group):
                             mypermutation,
                             seq_index,
                             paced,
-                            instruct
+                            instruct,
                             ])
     
             sess_num = sess_num + 1
 
-    
     schedule = pd.DataFrame(row_list, columns = (
             "sess_num",
             "sess_type",
@@ -276,6 +297,13 @@ def build_parser():
                         type = str,
                         dest = "seq_file", 
                         help = "Enter sequence file.",
+                        required = False)
+
+    parser.add_argument("--sequence_file2", 
+                        type = str,
+                        dest = "seq_file2", 
+                        help = "Enter additional sequence file. " + \
+                        "It can be used for non-memorized sequences.",
                         required = False)
 
     parser.add_argument("--schedule_file", 

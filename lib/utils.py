@@ -135,7 +135,15 @@ def startSession(opts):
         else:
             username = 'test0000'
             sched_table = ''
+
+    # override certain options if we are in fMRI mode
+    if opts.run_fmri :
+        config["MODE"] = "fmri"
     
+    if config["MODE"] == "fmri":
+        config["PRESHOW"] = 0
+        config["TESTMEM"] = 0
+        config["BREAKS"] = 0
     
     if opts.demo: # load demo schedule instead
         schedule_file = "./scheduling/schedules/schedule-demo.csv"
@@ -151,25 +159,20 @@ def startSession(opts):
     else:
 
         # get schedule
-
         if opts.schedule_file == None:
             try:
                 schedule_table = pd.read_csv("./scheduling/tables/{}.csv".\
                 format(sched_table), sep = ";")
                 schedule_file = schedule_table.loc[ 
-                        schedule_table["SUBJECT"] == username, "SCHEDULE_FILE"].values[0]
+                        schedule_table["SUBJECT"] == username, 
+                        "SCHEDULE_FILE"].values[0]
                 sched_group = schedule_table.loc[ 
-                        schedule_table["SUBJECT"] == username, "SCHEDULE_GROUP"].values[0]
+                        schedule_table["SUBJECT"] == username, 
+                        "SCHEDULE_GROUP"].values[0]
             except IOError: 
                 print("Error: Schedule table file is missing!")
-
-    # override certain options if we are in fMRI mode
-            if opts.run_fmri :
-                config["MODE"] = "fmri"
             
             if config["MODE"] == "fmri":
-                config["PRESHOW"] = 0
-                config["TESTMEM"] = 0
                 schedule_file = "./scheduling/schedules/{}_fmri.csv".\
             format(schedule_file)
             else:
@@ -208,7 +211,7 @@ def startSession(opts):
             # take the next session that is in the schedule
             next_sess_num = np.max(trialstable["sess_num"]) + 1
             q = np.where(schedule["sess_num"] >= next_sess_num)
-            sess_num = schedule["sess_num"][np.min(q)] if len(q) > 0 else 0
+            sess_num = schedule["sess_num"][np.min(q)] if q[0].size else 0
             
         maxscore = defaultdict(float)
         maxgroupscore = defaultdict(float)
@@ -313,7 +316,9 @@ def startSession(opts):
 
     # select schedule for this session
     schedule_unique = schedule[["sequence_string", 
-                                "seq_color","seq_train"]].drop_duplicates()     
+                                "seq_color","seq_train"]].drop_duplicates()
+    schedule_unique = schedule_unique.query("seq_train !='unseen'")
+     
     schedule = schedule.query('sess_num == %d'%(sess_num))
     
     return(sched_group, sess_num, username, memowriter, keyswriter, 
@@ -384,7 +389,7 @@ def test_sequence(mystring, win, config, mycolor, texts, instructions_space,
     squares = seq_to_stim(mystring, mycolor, win, 
                                     config["SQUARE_SIZE"])
 
-    attempts = 0
+    attempts = 1
     iscorrect = False
     timer = core.Clock()
 
@@ -429,11 +434,10 @@ def test_sequence(mystring, win, config, mycolor, texts, instructions_space,
             iscorrect = True
             
         else:
-            attempts = attempts + 1
             showStimulus(win, [error_message, error_sign])
             if config["BUZZER_ON"] == 1:
                 buzzer.play()
-            core.wait(config["ERROR_TIME"])        
+            core.wait(config["FEEDBACK_TIME"])        
             showStimulus(win, squares + [instructions_space])
             event.waitKeys(keyList = ["space"])
             
@@ -444,13 +448,15 @@ def test_sequence(mystring, win, config, mycolor, texts, instructions_space,
                     sess_date,    
                     sess_time,
                     seq_train,
-                    attempts + 1,
+                    attempts,
                     mystring,
                     mypressedstring, 
                     1.0 if iscorrect else 0.0, # just check if correct
                     timer.getTime()                    
                 ])
             
+        attempts = attempts + 1
+
     
 
 def SetUsername():
@@ -504,11 +510,16 @@ def wait_clock_old(t):
     core.wait(t, hogCPUperiod = t)
     
 
-def wait_clock(myclock, t):
+def wait_clock(myclock, t, rel = True):
     """ 
     Just waits.
     """
-    mytime = myclock.getTime()
-    while (myclock.getTime() < mytime + t):
-        pass
+    if rel:  # wait for a time t 
+        mytime = myclock.getTime()
+        while (myclock.getTime() < mytime + t):
+            pass
+    else: # wait until clock is t      
+        while (myclock.getTime() < t):
+            pass
+        mytime = myclock.getTime()
     return(mytime)

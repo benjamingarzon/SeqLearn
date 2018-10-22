@@ -105,6 +105,13 @@ def define_stimuli(win, username, config, texts, sess_num, seq_length,
                                            alignHoriz="center", 
                                            pos = (0, 1))
 
+    stimuli["instructionsbreak_message"] = visual.TextStim(win, 
+                                           text = texts["TEXT_BREAK"], 
+                                           height = config["TEXT_HEIGHT"], 
+                                           alignHoriz="center", 
+                                           pos = (0, 1))
+
+
     stimuli["last_label"] = visual.TextStim(win, 
                                     text = texts["LAST_LABEL"], 
                                     height = config["TEXT_HEIGHT"], 
@@ -176,6 +183,15 @@ def define_stimuli(win, username, config, texts, sess_num, seq_length,
     stimuli["ok_sign"] = visual.ImageStim(win, 
                                   image=config["OK_FILE"],
                                   pos = (0, 2))
+
+#    stimuli["thumbsup_sign"] = visual.ImageStim(win, 
+#                                  image=config["THUMBSUP_FILE"],
+#                                  pos = (0, -6))
+
+#    stimuli["thumbsdown_sign"] = visual.ImageStim(win, 
+#                                  image=config["THUMBSDOWN_FILE"],
+#                                  pos = (0, -6))
+
 
     return(stimuli)
     

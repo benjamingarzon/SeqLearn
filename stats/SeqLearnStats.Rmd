@@ -20,17 +20,19 @@ library(boot)
 library(rstan)
 
 options(mc.cores = parallel::detectCores())
-username = 'benji2'
-keysfile = paste0('../data/archive/keysfile-', username, '.csv')
-trialsfile = paste0('../data/archive/trialsfile-', username, '.csv')
+suffix = '20181022_1751-KIpilot0db'
+keysfile = paste0('../data/archive/keys_table-', suffix, '.csv')
+trialsfile = paste0('../data/archive/trials_table-', suffix, '.csv')
+memofile = paste0('../data/archive/memo_table-', suffix, '.csv')
 
-keys.table = read.table(keysfile, sep =';', header = T)
-trials.table = read.table(trialsfile, sep =';', header = T)
+keys.table = read.table(keysfile, sep =';', header = T, quote = "")
+trials.table = read.table(trialsfile, sep =';', header = T,quote = "")
+memo.table = read.table(memofile, sep =';', header = T,quote = "")
 #keys.melt = melt(keys.table, id.vars = c("cumulative_trial","trial","keystroke","response") )
 #trials.melt = melt(keys.table, id.vars = c("cumulative_trial","trial","keystroke","response") )
 
 ```
-Analyze keys
+Analyze chords
 
 ```{r}
 keys.table = subset(keys.table, keystroke > 0) # only after movement started 
@@ -50,388 +52,66 @@ print(plot.keystrokepairs)
 
 ```
 
+Analyze memo
+
+```{r}
+
+# check missed as well
+ok_memo = subset(memo.table, accuracy == 1)
+
+plot.RT = ggplot(ok_memo, aes(x = sess_num, y = RT, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ .) + theme(legend.position="right")
+
+plot.attempts = ggplot(memo.table, aes(x = true_sequence, fill = as.factor(seq_train))) + geom_bar() + facet_grid( username ~ sess_num) + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+plot.totalRT = ggplot(memo.table %>% group_by(username, sess_num, true_sequence, seq_train) %>% summarise(totalRT = sum(RT)), aes(x = sess_num, y = totalRT, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_point() + geom_line(lwd=1) + facet_grid( username ~ .) + theme(legend.position="right") 
+
+
+print(plot.RT)
+print(plot.attempts)
+print(plot.totalRT)
+```
+
+
+
 Analyze trials
 ```{r}
 
-#trials.table = subset(trials.table, accuracy == 1)
+
+ok_trials = subset(trials.table, accuracy == 1)
+unpaced_trials = subset(trials.table, paced == 0)
+paced_trials = subset(trials.table, paced == 1 & accuracy == 1)
                       
-plot.RT = ggplot(subset(trials.table, accuracy == 1), aes(x = trial, y = RT, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( . ~ sess_num) + theme(legend.position="none")
-plot.MT = ggplot(subset(trials.table, accuracy == 1), aes(x = trial, y = MT, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( . ~ sess_num) + theme(legend.position="none")
-plot.acc = ggplot(trials.table, aes(x = trial, y = accuracy, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( . ~ sess_num) + theme(legend.position="none")
+plot.RT = ggplot(ok_trials, aes(x = trial, y = RT, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ sess_num + paced) + theme(legend.position="none")
+plot.MT = ggplot(ok_trials, aes(x = trial, y = MT, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ sess_num + paced) + theme(legend.position="none")
+plot.acc = ggplot(unpaced_trials, aes(x = trial, y = accuracy, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ sess_num) + theme(legend.position="none")
 
 print(plot.RT)
 print(plot.MT)
 print(plot.acc)
 
 ```
+
+
+
+Analyze clocks
+
 ```{r}
-# fit LBA model
 
-trials.table = read.table(trialsfile, sep =';', header = T)
-rawdata = subset(trials.table, seq_train == "train") 
-rawdata[] <- lapply(rawdata, function(x) if(is.factor(x)) factor(x) else x) # drop factor levels
-rawdata = rawdata %>% mutate(choice = as.numeric(obs_sequence), condition = as.numeric(true_sequence), MT_sec = MT/1000)
+trialsfile = paste0('../data/archive/trialsfile-kip0s001.csv')
+trials.table = read.table(trialsfile, sep =';', header = T, quote = "")
+paced_trials = subset(trials.table, paced == 1 & sess_num >2  & accuracy == 1)
+                      
+plot.fixation = ggplot(paced_trials, aes(x = trial, y = clock_fixation, group = sess_num, col = sess_num, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ true_sequence ) + theme(legend.position="none")
 
-# prepare data
-
-choice_labels = levels(rawdata$obs_sequence)
-condition_labels = levels(rawdata$true_sequence)
-
-choices = sort(unique(rawdata$choice))
-conditions = sort(unique(rawdata$condition))
-num_choices <- length(choices)
-num_cond <- length(conditions)
-
-# To store number of trials/condition for given subject
-n_tr_cond <- array(NA, dim = c(num_cond))
-
-# Loop through conditions
-for (j in 1:num_cond) {
-  n_tr_cond[j] <- sum(rawdata$condition == j)
-}
-# Max trials across conditions
-max_tr <- max(n_tr_cond)
-
-# Array for storing RT + choice data
-choicedata <- array(-1, dim = c(num_cond, 2, max_tr))
-
-# Reaction time + choice matrix
-for (cond in 1:num_cond) {
-  for (choice in 1:num_choices) {
-    # Subset current data
-    tmp <- subset(rawdata, rawdata$condition == cond & rawdata$choice == choice)
-    # trials for current subject/condition pair
-    tmp_trials <- n_tr_cond[cond]
-    # Store reaction time + choice
-    choicedata[cond, 1, 1:tmp_trials] <- tmp$MT_sec # time in sec
-    choicedata[cond, 2, 1:tmp_trials] <- tmp$choice
-  }
-}
-
-dataList <- list(
-  N_tr_cond   = n_tr_cond,
-  N_choices   = num_choices,
-  N_cond      = num_cond,
-  ChoiceData  = choicedata,
-  Max_tr      = max_tr
-)
-
-POI     <- c("k", "A", "v", "tau", 
-             "log_lik")
-genInitList <- "random"
-
-modelPath <- "./model/Lba_single.stan"
-m = rstan::stan_model(modelPath)
-
-fit = rstan::vb(m,
-                   data   = dataList,
-                   pars   = POI,
-                   init   = genInitList)
-
-niter          = 3000 
-nwarmup        = 1000 
-nchain         = 4
-nthin          = 1
-inits          = "random" 
-adapt_delta    = 0.95
-stepsize       = 1
-max_treedepth  = 10
-
-if (F) fit = rstan::sampling(m,
-                        data   = dataList,
-                        pars   = POI,
-                        warmup = nwarmup,
-                        init   = genInitList,
-                        iter   = niter,
-                        chains = nchain,
-                        thin   = nthin,
-                        control = list(adapt_delta   = adapt_delta,
-                                       max_treedepth = max_treedepth,
-                                       stepsize      = stepsize) )
-
-traceplot(fit, par = c("k","A","tau"))
-print(fit)
-
-parVals <- rstan::extract(fit, permuted=T)
-
-k.samples   <- parVals$k
-A.samples   <- parVals$A
-v.samples   <- parVals$v
-tau.samples <- parVals$tau
-
-k = mean(k.samples)
-A = mean(A.samples)
-v = apply(v.samples, c(2,3), mean)
-colnames(v) = choice_labels
-rownames(v) = condition_labels
-tau = mean(tau.samples)
+print(plot.fixation)
 
 ```
 
-
-Explore results
-
 ```{r}
+paced_trials$diff.exec_fix = paced_trials$clock_execution  - paced_trials$clock_fixation
+paced_trials$diff.feed_exec = paced_trials$clock_feedback  - paced_trials$clock_execution 
 
-plot.v = ggplot(melt(v) %>% mutate(choice = Var1, condition = Var2, v = value), aes(x = choice, y = condition, fill = v)) + geom_tile() + theme_classic() + theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 8), axis.text.y = element_text(size = 8))
-print(plot.v)
-```
-
-
-```{r}
-# fit RL model
-rawdata$outcome = ifelse(rawdata$accuracy == 1, rawdata$score, -1)
-conditionxchoice = sapply(conditions, function(x) which(condition_labels[x]==choice_labels) )
-datetime = paste(rawdata$sess_date, rawdata$sess_time)
-rawdata$timediff = as.numeric(difftime(datetime, datetime[1], units = "hours"))
-
-dataList <- list(
-  N_choices   = num_choices,
-  N_cond      = num_cond,
-  N_tr = nrow(rawdata),
-  condition = rawdata$condition,
-  choice = rawdata$choice,
-  outcome = rawdata$outcome, 
-  conditionxchoice = conditionxchoice,
-  sess_time = rawdata$timediff
-)
-
-
-POI     <- c("alpha", "logit_alpha0", "logit_alpha1", "beta_reward", "beta_punishment", "Q0", "Q0_on", "Q0_off", "f", "forget")
-genInitList <- "random"
-
-modelPath <- "./model/RL_single.stan"
-m = rstan::stan_model(modelPath)
-
- fit = rstan::vb(m,  output_samples = 100,
-                     data   = dataList,
-                     #   = POI,
-                     init   = genInitList)
-
-niter          = 3000 
-nwarmup        = 1000 
-nchain         = 4
-nthin          = 1
-inits          = "random" 
-adapt_delta    = 0.95
-stepsize       = 1
-max_treedepth  = 10
-
-if (F) fit = rstan::sampling(m,
-                        data   = dataList,
-                        pars   = POI,
-                        warmup = nwarmup,
-                        init   = genInitList,
-                        iter   = niter,
-                        chains = nchain,
-                        thin   = nthin,
-                        control = list(adapt_delta   = adapt_delta,
-                                       max_treedepth = max_treedepth,
-                                       stepsize      = stepsize) )
-
-traceplot(fit, par = c("logit_alpha0", "logit_alpha1", "beta_reward","beta_punishment","f"))
-print(fit)
-
-parVals <- rstan::extract(fit, permuted=T)
-
-alpha.samples <- parVals$alpha
-alpha0.samples <- inv.logit(parVals$logit_alpha0)
-logit_alpha1.samples <- parVals$logit_alpha1
-f.samples <- parVals$f 
-forget.samples <- parVals$forget 
-
-beta_reward.samples   <- parVals$beta_reward
-beta_punishment.samples   <- parVals$beta_punishment
-Q0_on.samples <- parVals$Q0_on
-Q0_off.samples <- parVals$Q0_off
-Q0.samples <- parVals$Q0
-Qt.samples <- parVals$Qt
-PEt.samples <- parVals$PEt
-
-alpha = apply(alpha.samples, 2, median)
-alpha0 = median(alpha0.samples)
-logit_alpha1 = median(logit_alpha1.samples)
-
-beta_reward = median(beta_reward.samples)
-beta_punishment = median(beta_punishment.samples)
-Q0_on = apply(Q0_on.samples, 2, median)
-Q0_off = apply(Q0_off.samples, 2, median)
-Qt = apply(Qt.samples, c(2,3), median)
-PEt = apply(PEt.samples, 2, median)
-forget = apply(forget.samples, 2, median)
-f = median(f.samples)
-Q0 = apply(Q0.samples, c(2,3), median)
-colnames(Q0) = choice_labels
-rownames(Q0) = condition_labels
-
-#View(cbind(rawdata$sess_num[rawdata$condition==1], rawdata$cumulative_trial[rawdata$condition==1], ff[rawdata$condition==1], rawdata$choice[rawdata$condition==1], rawdata$outcome[rawdata$condition==1], PEt[rawdata$condition==1], Qt[rawdata$condition==1, 1:5]))
-```
-
-
-Explore results
-
-```{r}
-plot.Q0 = ggplot(melt(Q0) %>% mutate(choice = Var1, condition = Var2, Q0 = value), aes(x = choice, y = condition, fill = Q0)) + geom_tile() + scale_fill_gradient2(midpoint=0, low="blue", mid="white", high="red") + theme_classic() + theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 8), axis.text.y = element_text(size = 8)) 
-print(plot.Q0)
-
-
-plot.Qt = ggplot(melt(Qt) %>% mutate(trial = Var1, condition = Var2, Qt = value), aes(x = trial, y = condition, fill = Qt)) + geom_tile() + scale_fill_gradient2(midpoint=0, low="blue", mid="white", high="red") + theme_classic() + theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 8), axis.text.y = element_text(size = 8)) 
-print(plot.Qt)
-```
-
-
-```{r}
-# RL + LBA
-
-
-dataList <- list(
-  N_choices        = num_choices,
-  N_cond           = num_cond,
-  N_tr             = nrow(rawdata),
-  N_sess           = max(rawdata$sess_num),
-  condition        = rawdata$condition,
-  choice           = rawdata$choice,
-  time             = rawdata$MT_sec, # in seconds!
-  outcome          = rawdata$outcome, 
-  conditionxchoice = conditionxchoice,
-  sess_time        = rawdata$timediff,
-  seq_trial        = rawdata$cumulative_trial,
-  sess_num         = rawdata$sess_num
-)
-
-
-POI     <- c("alpha", "beta_reward", "beta_punishment", "Q0", "k", "A", "tau", "gamma", "forget", "Qt", "PEt", "time_rng", "choice_rng", "vt")
-genInitList <- "random"
-
-modelPath <- "./model/RL_lba_single.stan"
-m = rstan::stan_model(modelPath)
-
- fit = rstan::vb(m,  output_samples = 1000,
-                     data   = dataList,
-                     #   = POI,
-                     init   = genInitList)
-
-niter          = 3000 
-nwarmup        = 1000 
-nchain         = 4
-nthin          = 1
-inits          = "random" 
-adapt_delta    = 0.95
-stepsize       = 1
-max_treedepth  = 10
-
-if (T) fit = rstan::sampling(m,
-                        data   = dataList,
-                        pars   = POI,
-                        warmup = nwarmup,
-                        init   = genInitList,
-                        iter   = niter,
-                        chains = nchain,
-                        thin   = nthin,
-                        control = list(adapt_delta   = adapt_delta,
-                                       max_treedepth = max_treedepth,
-                                       stepsize      = stepsize) )
-
-traceplot(fit, par = c("alpha", "beta_reward","beta_punishment", "tau","gamma","k","A"))
-#print(fit)
-```
-```{r}
-
-Mode <- function(x) {
-  ux <- unique(x)
-  ux[which.max(tabulate(match(x, ux)))]
-}
-
-parVals <- rstan::extract(fit, permuted=T)
-
-alpha.samples <- parVals$alpha
-#alpha0.samples <- inv.logit(parVals$logit_alpha0)
-#logit_alpha1.samples <- parVals$logit_alpha1
-#f0.samples <- parVals$f0 
-#f1.samples <- parVals$f1 
-forget.samples <- parVals$forget 
-
-beta_reward.samples   <- parVals$beta_reward
-beta_punishment.samples   <- parVals$beta_punishment
-#Q0_on.samples <- parVals$Q0_on
-#Q0_off.samples <- parVals$Q0_off
-Q0.samples <- parVals$Q0
-Qt.samples <- parVals$Qt
-PEt.samples <- parVals$PEt
-vt.samples <- parVals$vt
-
-k.samples   <- parVals$k
-A.samples   <- parVals$A
-tau.samples <- parVals$tau
-gamma.samples <- parVals$gamma
-choice_rng.samples <- parVals$choice_rng
-time_rng.samples <- parVals$time_rng
-
-# get median values
-#alpha = apply(alpha.samples, 2, median)
-alpha = median(alpha.samples)
-
-#alpha0 = median(alpha0.samples)
-#logit_alpha1 = median(logit_alpha1.samples)
-
-beta_reward = median(beta_reward.samples)
-beta_punishment = median(beta_punishment.samples)
-#Q0_on = apply(Q0_on.samples, 2, median)
-#Q0_off = apply(Q0_off.samples, 2, median)
-vt = apply(vt.samples, c(2,3), median)
-#forget = apply(forget.samples, 2, median)
-forget = median(forget.samples)
-#f0 = median(f0.samples)
-#f1 = median(f1.samples)
-Q0 = apply(Q0.samples, c(2,3), median)
-#colnames(Q0) = choice_labels
-#rownames(Q0) = condition_labels
-Qt = apply(Qt.samples, c(2,3), median)
-PEt = apply(PEt.samples, 2, median)
-k = median(k.samples)
-A = median(A.samples)
-tau = median(tau.samples)
-gamma = median(gamma.samples)
-choice_rng <- apply(choice_rng.samples, 2, Mode)
-time_rng <- apply(time_rng.samples, 2, median)
-
-
-```
-
-
-Explore results
-
-```{r}
-plot.Q0 = ggplot(melt(Q0) %>% mutate(choice = Var1, condition = Var2, Q0 = value), aes(x = choice, y = condition, fill = Q0)) + geom_tile() + scale_fill_gradient2(midpoint=0, low="blue", mid="white", high="red") + theme_classic() + theme(axis.text.x = element_text(angle = 90, hjust = 1, size = 8), axis.text.y = element_text(size = 8))
-print(plot.Q0)
-
-
-plot.Qt = ggplot(melt(Qt) %>% mutate(trial = Var1, condition = Var2, Qt = value), aes(x = trial, y = condition, fill = Qt)) + geom_tile() + scale_fill_gradient2(midpoint=0, low="blue", mid="white", high="red") + theme_classic() + theme(axis.text.x = element_text(size = 8), axis.text.y = element_text(size = 8)) 
-print(plot.Qt)
-
-rawdata$PEt = PEt
-rawdata$choice_rng = choice_rng
-rawdata$time_rng = time_rng
-rawdata$correct = 1*(choice_rng == conditionxchoice[rawdata$condition])
-#rawdata$forget = forget
-
-print(ggplot(rawdata, aes(x = cumulative_trial, y = choice_rng, col = as.factor(correct))) + geom_point() + facet_grid(true_sequence ~ sess_num) + theme(legend.position = "bottom"))
-print(ggplot(rawdata, aes(x = cumulative_trial, y = PEt)) + geom_line() + facet_grid(true_sequence ~ sess_num))
-#print(ggplot(rawdata, aes(x = cumulative_trial, y = forget)) + geom_line() + facet_grid(true_sequence ~ sess_num))
-
-print(ggplot(rawdata, aes(x = cumulative_trial, y = time_rng)) + geom_line() + facet_grid(true_sequence ~ sess_num))
-
-print(ggplot(rawdata, aes(x = time_rng)) + geom_density() + facet_grid(true_sequence ~ sess_num))
-print(ggplot(rawdata, aes(x = MT_sec)) + geom_density() + facet_grid(true_sequence ~ sess_num))
-
-
-myQt = data.frame(Qt[, conditionxchoice])
-myQt$sess_num = rawdata$sess_num
-myQt$cumulative_trial = rawdata$cumulative_trial
-myQt$condition = rawdata$condition
-Qt.melt = melt(myQt, id.vars = c("cumulative_trial", "sess_num", "condition"))
-
-print(ggplot(Qt.melt, aes(x = cumulative_trial, y = value, group = condition, col = as.factor(condition))) + geom_line() + facet_grid(variable ~ sess_num)+ theme(legend.position = "bottom"))
-
+hist(paced_trials$diff.exec_fix, 50)
+hist(paced_trials$diff.feed_exec, 50)
 
 ```

@@ -15,14 +15,16 @@ from lib.utils import showStimulus, scorePerformance, startSession, \
 filter_keys, test_sequence, update_table, wait_clock
 from generator.generator import string_to_seq, seq_to_string, seq_to_stim
 prefs.general["audioLib"] = ["pygame"]
-from psychopy import sound
 import numpy as np
 import pandas as pd
 import os, glob, json
 from argparse import ArgumentParser
 from sqlalchemy import create_engine, exc
-from sshtunnel import SSHTunnelForwarder
+import sshtunnel
 from stimuli.stimuli import define_stimuli
+
+sshtunnel.SSH_TIMEOUT = 5.0
+sshtunnel.TUNNEL_TIMEOUT = 5.0
 
 def SeqLearn(opts):
 
@@ -70,6 +72,7 @@ def SeqLearn(opts):
     instructionspaced1_message = stimuli["instructionspaced1_message"]    
     instructionsfmri1_message = stimuli["instructionsfmri1_message"]
     instructionsfmripaced1_message = stimuli["instructionsfmripaced1_message"]    
+    instructionsbreak_message = stimuli["instructionsbreak_message"]
     last_label = stimuli["last_label"]
     best_label = stimuli["best_label"]
     group_best_label = stimuli["group_best_label"]
@@ -94,7 +97,11 @@ def SeqLearn(opts):
         
     logging.LogFile(f=config["LOG_FILE"], filemode='w')
 #    logging.setDefaultClock(globalClock)
-
+    np.random.seed(config["RND_SEED"])
+    ITI = list(np.random.uniform(config["ITIMEAN"] + config["ITIRANGE"], 
+                           config["ITIMEAN"] - config["ITIRANGE"], 
+                           size=100000))
+    
 ############################ 
 ## Experiment Section
 ############################ 
@@ -140,10 +147,8 @@ def SeqLearn(opts):
             event.waitKeys(keyList = ["space"]) 
 
     memofile.close()
-
-    globalClock.reset()        
         
-    for row in schedule.itertuples():
+    for rowindex, row in  enumerate(schedule.itertuples()):
         sess_num, sess_type, n_trials, seq_keys =\
         row.sess_num, row.sess_type, row.n_trials, row.seq_keys.split(" ") 
         
@@ -178,7 +183,18 @@ def SeqLearn(opts):
                 else: # fmri
                     showStimulus(win, [instructionsfmripaced1_message])
                     event.waitKeys(keyList = [config["FMRI_TRIGGER"]])  
-                    
+
+                # assume there will always be some instructions first
+                globalClock.reset()        
+
+        else:
+            # ask for a break
+            if config["BREAKS"] == 1: 
+                showStimulus(win, [instructionsbreak_message])
+                event.waitKeys(keyList = ["space"])  
+
+        target_time = globalClock.getTime() + config["START_TIME"]
+                     
         trialStimulus = []
         squareStimuli = []
         
@@ -205,46 +221,50 @@ def SeqLearn(opts):
         exiting = False
         maxwait = len(sequence)*config["MAX_WAIT_PER_KEYPRESS"]
 
+        nbeats = len(sequence) + config["EXTRA_BEATS"]
+        char_list = range(config["EXTRA_BEATS"]) + range(len(sequence))
+        label_list = config["EXTRA_BEATS"]*["WAIT: "] + \
+        len(sequence)*["PRESS: "]
+        color_list = (config["EXTRA_BEATS"]-1)*["red"] + \
+        ["yellow"] + len(sequence)*["green"]
+        number_list = [ visual.TextStim(win,     
+                        text = x + str(y + 1),
+                        color = z,
+                        alignHoriz="center", 
+                        pos = (0, 7)) for x, y, z in zip(label_list, 
+                              char_list, 
+                              color_list) ] 
+
+        execution_duration = config["BEAT_INTERVAL"]*nbeats + \
+        config["BUFFER_TIME"] 
+
         while (trial <= n_trials):
 
+            # prepare stimuli
             current_stimuli = [trialStimulus[trial-1]] + squareStimuli[trial-1]
-            
+                       
             # present fixation
+            clock_fixation = wait_clock(globalClock, target_time, rel = False)
             showStimulus(win, [fixation])
-
-            clock_fixation = wait_clock(globalClock, config["FIXATION_TIME"])
+            target_time = target_time + config["FIXATION_TIME"]                  
+                       
             # present sequence and read keypresses          
+            clock_execution = wait_clock(globalClock, target_time, rel = False)
             showStimulus(win, current_stimuli)    
             
             if paced == 1:
-
-                nbeats = len(sequence) + config["EXTRA_BEATS"]
-                char_list = range(config["EXTRA_BEATS"]) + range(len(sequence))
-                label_list = config["EXTRA_BEATS"]*["WAIT: "] + \
-                len(sequence)*["PRESS: "]
-                color_list = (config["EXTRA_BEATS"]-1)*["red"] + \
-                ["yellow"] + len(sequence)*["green"]
-                number_list = [ visual.TextStim(win,     
-                                text = x + str(y + 1),
-                                color = z,
-                                alignHoriz="center", 
-                                pos = (0, 7)) for x, y, z in zip(label_list, 
-                                      char_list, 
-                                      color_list) ] 
-
+                target_time = target_time + execution_duration                  
+             
                 keypresses = []
                 trialClock.reset()    
-
-                clock_execution = globalClock.getTime()
-                
+    
                 for nbeat in range(nbeats):                    
                     event.clearEvents()
                     showStimulus(win, current_stimuli + [number_list[nbeat]])
                     if nbeat == config["EXTRA_BEATS"]-1:
                         tick.play()
                     else:
-                        tock.play()
-                                
+                        tock.play()                                
                     
                     core.wait(config["BEAT_INTERVAL"], 
                               hogCPUperiod=config["BEAT_INTERVAL"])
@@ -253,15 +273,14 @@ def SeqLearn(opts):
                             keyList = seq_keys + 
                             [config["ESCAPE_KEY"]], 
                             timeStamped = trialClock)
+
                     if nbeat >= config["EXTRA_BEATS"]:   
                         keypresses.extend(partial_keypresses)
 
-            else:
-
+            else: # unpaced
                 event.clearEvents()
                 trialClock.reset()                
-                #clock_execution = wait_clock(globalClock, maxwait)
-                clock_execution = globalClock.getTime()
+
                 core.wait(maxwait, hogCPUperiod=maxwait)
                 
                 keypresses = event.getKeys(keyList=seq_keys + 
@@ -271,11 +290,15 @@ def SeqLearn(opts):
             trialincrease = 0
 
             if len(keypresses) <= 1:
+                clock_feedback = wait_clock(globalClock, 
+                                            target_time, 
+                                            rel = False) if paced == 1 \
+                                            else globalClock.getTime()
+                    
                 showStimulus(win, [late_message, error_sign])
                 if config["BUZZER_ON"] == 1:
                     buzzer.play()
-                clock_feedback = wait_clock(globalClock, config["ERROR_TIME"])
-
+                
                 misses = misses + 1
                 
                 accuracy = 0
@@ -285,10 +308,11 @@ def SeqLearn(opts):
                 keytimes = [0]
                 RTs = [maxwait]
                 trial_type = "missed"
-    
+
+                # may break the target time                    
                 if misses > config["MAX_MISSES"]:
                     showStimulus(win, [miss_message])
-                    wait_clock(globalClock, config["ERROR_TIME"])
+                    wait_clock(globalClock, config["FEEDBACK_TIME"])
 
                 if misses > config["MAX_TOTAL_MISSES"]:
                     exit()    
@@ -311,30 +335,39 @@ def SeqLearn(opts):
                 
                 if accuracy < 1:
                     # wrong
+                    clock_feedback = wait_clock(globalClock, 
+                                                target_time, 
+                                                rel = False) if paced == 1 \
+                                                else globalClock.getTime()
+
                     showStimulus(win, [error_message, error_sign])
-                    clock_feedback = globalClock.getTime()
+
                     if config["BUZZER_ON"] == 1:
                         buzzer.play()
-                    wait_clock(globalClock, config["ERROR_TIME"])   
-                    
+                
                     score = 0
+                    
                 else:
 
                     trialincrease = 1
                     
-                    if paced == 0:
-
+                    if paced == 1:
+                        clock_feedback = wait_clock(globalClock, target_time, 
+                                                    rel = False)
+                        showStimulus(win, [ok_sign, ok_message])
+                        
+                    else:    
                         # feedback
-                        
-                        maxscore[sequence_string] = np.maximum(score, 
-                                maxscore[sequence_string]) if sequence_string \
-                                in maxscore.keys() else score
+                        pastmaxscore = maxscore[sequence_string] \
+                        if sequence_string in maxscore.keys() else score                    
+                                
                         max_height = \
-                        maxscore[sequence_string]*config["BAR_HEIGHT"]/\
-                        maxgroupscore[sequence_string] if sequence_string \
-                        in maxgroupscore.keys() else score
+                        pastmaxscore*config["BAR_HEIGHT"]/\
+                        maxgroupscore[sequence_string]
 
-                        
+                        maxscore[sequence_string] = np.maximum(score, 
+                                pastmaxscore)
+                       
                         last_height = score*config["BAR_HEIGHT"]/\
                         maxgroupscore[sequence_string]
                         
@@ -361,15 +394,15 @@ def SeqLearn(opts):
                                     pos=(3*config["BAR_WIDTH"],
                                     0.5*config["BAR_HEIGHT"] - 3))
                         
+                        clock_feedback = globalClock.getTime()                                                                    
                         showStimulus(win, [last_bar, last_label, best_bar, 
                                            best_label, group_best_bar, 
                                            group_best_label, bottomline])
-                        
-                    else:
-                        showStimulus(win, [ok_sign, ok_message])
                     
-                    clock_feedback = wait_clock(globalClock, 
-                                            config["FEEDBACK_TIME"])
+            wait_clock(globalClock, config["FEEDBACK_TIME"])
+                    
+            target_time = target_time + config["FEEDBACK_TIME"] + \
+    config["FIXATION_TIME"] + ITI.pop()
                         
             # write results to files
             key_from = ["0"]
@@ -451,14 +484,14 @@ def SeqLearn(opts):
     mykeys = pd.read_table(keysfile.name, sep = ";")
     mytrials = pd.read_table(trialsfile.name, sep = ";")
     
-    if not opts.demo:
+    if not opts.demo and not opts.no_upload:
         try:
             db_config_json = open("./db/db_config.json", "r")
             db_config = json.load(db_config_json)
             db_config_json.close()
             #print(db_config)
     
-            with SSHTunnelForwarder(
+            with sshtunnel.SSHTunnelForwarder(
                     (db_config["REMOTEHOST"], 
                     int(db_config["REMOTEPORT"])),
                     ssh_username = db_config["SSH_USER"],
@@ -540,6 +573,11 @@ def build_parser():
                         action="store_true",
                         required = False)
 
+    parser.add_argument("--no_upload", 
+                        dest = "no_upload", 
+                        help = "Do not upload the data to the database.",
+                        action="store_true",
+                        required = False)
 
     return(parser)
 

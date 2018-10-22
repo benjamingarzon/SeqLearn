@@ -1,8 +1,9 @@
 from sqlalchemy import create_engine, exc
-from sshtunnel import SSHTunnelForwarder
+import sshtunnel
 import os, json, datetime
 from argparse import ArgumentParser
-
+sshtunnel.SSH_TIMEOUT = 5.0
+sshtunnel.TUNNEL_TIMEOUT = 5.0
 #import logging
 import pandas as pd
 
@@ -16,7 +17,7 @@ def connect(opts):
     db_config = json.load(db_config_json)
     db_config_json.close()
 #    print db_config
-    with SSHTunnelForwarder(
+    with sshtunnel.SSHTunnelForwarder(
             (db_config['REMOTEHOST'], 
             int(db_config['REMOTEPORT'])),
             ssh_username = username,
@@ -49,18 +50,21 @@ def connect(opts):
                     if engine.dialect.has_table(engine, 'memo_table'):
                         mymemo = pd.read_sql_table('memo_table', engine)
                         mymemo.to_csv(now.strftime(
-                                "./data/memo_table-%Y%m%d_%H%M.csv"), 
+                                "./data/memo_table-%Y%m%d_%H%M-" + 
+                                db_config['DATABASE'] + ".csv"), 
                                 sep =";", index=False)
                         
                     if engine.dialect.has_table(engine, 'keys_table'):
                         mykeys = pd.read_sql_table('keys_table', engine)
                         mykeys.to_csv(now.strftime(
-                                "./data/keys_table-%Y%m%d_%H%M.csv"), 
+                                "./data/keys_table-%Y%m%d_%H%M-" + 
+                                db_config['DATABASE'] + ".csv"), 
                                 sep =";", index=False)
                     if engine.dialect.has_table(engine, 'trials_table'):
                         mytrials = pd.read_sql_table('trials_table', engine)
                         mytrials.to_csv(now.strftime(
-                                "./data/trials_table-%Y%m%d_%H%M.csv"), 
+                                "./data/trials_table-%Y%m%d_%H%M-" + 
+                                db_config['DATABASE'] + ".csv"), 
                                 sep =";", index=False)
                         
                     print('Downloaded the data!')
