@@ -40,7 +40,7 @@ def SeqLearn(opts):
     sess_time = str(datetime.now().time())
     sched_group, sess_num, username, memowriter, keyswriter, trialswriter, \
     memofile, keysfile, trialsfile, maxscore, maxgroupscore, config, texts, \
-    schedule, schedule_unique, total_trials, seq_length = \
+    schedule, schedule_unique = \
     startSession(opts)
 
 ############################ 
@@ -53,8 +53,7 @@ def SeqLearn(opts):
             monitor = "testMonitor", 
             units = "cm")    
     
-    stimuli = define_stimuli(win, username, config, texts, sess_num, 
-                             seq_length, total_trials)
+    stimuli = define_stimuli(win, username, config, texts, sess_num)
         
     buzzer = stimuli["buzzer"]
     tick = stimuli["tick"]
@@ -64,8 +63,7 @@ def SeqLearn(opts):
     instructions_select = stimuli["instructions_select"]
     instructionspre1_message = stimuli["instructionspre1_message"]
     instructionspre2_message = stimuli["instructionspre2_message"]
-    instructions1_message = stimuli["instructions1_message"]    
-    instructions2_message = stimuli["instructions2_message"]
+    instructions1_message = stimuli["instructions1_message"]   
     instructions3_message = stimuli["instructions3_message"]
     instructions4_message = stimuli["instructions4_message"]
     instructions4_space = stimuli["instructions4_space"]
@@ -94,6 +92,7 @@ def SeqLearn(opts):
     
     trialClock = core.Clock()
     globalClock = core.Clock()
+    globalClock.reset()
         
     logging.LogFile(f=config["LOG_FILE"], filemode='w')
 #    logging.setDefaultClock(globalClock)
@@ -127,15 +126,17 @@ def SeqLearn(opts):
                 
                 showStimulus(win, squares + [instructions_space])
                 #event.waitKeys(keyList = ["space"])        
-                mykey = event.waitKeys(keyList = ["space", config["ESCAPE_KEY"]])
+                mykey = event.waitKeys(keyList = ["space", 
+                                                  config["ESCAPE_KEY"]])
     
                 if  any(config["ESCAPE_KEY"] in s for s in mykey):
                     break  
                 if config["TEST_MEM"] == 1:
-                    test_sequence(row.sequence_string, win, config, row.seq_color, 
-                    texts, instructions_space, instructions_select, error_message, 
-                    error_sign, buzzer, memowriter, username, sched_group, 
-                    sess_num, sess_date, sess_time, row.seq_train)
+                    test_sequence(row.sequence_string, win, config, 
+                    row.seq_color, texts, instructions_space, 
+                    instructions_select, error_message, error_sign, buzzer, 
+                    memowriter, username, sched_group, sess_num, sess_date, 
+                    sess_time, row.seq_train, globalClock)
                 
 
 ############################ 
@@ -156,12 +157,24 @@ def SeqLearn(opts):
         row.sequence_string, row.seq_train, row.seq_color, row.seq_type, \
         row.paced, row.instruct         
 
+        sequence = string_to_seq(sequence_string)
+
         # add instructions if required
         if instruct == 1:
             
             if paced == 0:
             
-                if not config["MODE"] == "fmri": # home mode                   
+                if not config["MODE"] == "fmri": # home mode  
+                    
+                    instructions2_message = visual.TextStim(win, 
+                                    text = texts["TEXT_INSTRUCT2"].format(
+                                    len(sequence)*\
+                                    config["MAX_WAIT_PER_KEYPRESS"], 
+                                    n_trials), 
+                                    height = config["TEXT_HEIGHT"], 
+                                    alignHoriz="center") 
+
+                    
                     showStimulus(win, [instructions2_message])
                     event.waitKeys(keyList = ["space"]) 
                 
@@ -184,8 +197,8 @@ def SeqLearn(opts):
                     showStimulus(win, [instructionsfmripaced1_message])
                     event.waitKeys(keyList = [config["FMRI_TRIGGER"]])  
 
-                # assume there will always be some instructions first
-                globalClock.reset()        
+            # assume there will always be some instructions first
+            start_time = globalClock.getTime()
 
         else:
             # ask for a break
@@ -193,12 +206,11 @@ def SeqLearn(opts):
                 showStimulus(win, [instructionsbreak_message])
                 event.waitKeys(keyList = ["space"])  
 
-        target_time = globalClock.getTime() + config["START_TIME"]
+        target_time = start_time + config["START_TIME"]
                      
         trialStimulus = []
         squareStimuli = []
         
-        sequence = string_to_seq(sequence_string)
         squares = seq_to_stim(sequence_string, 
                               seq_color, 
                               win, 
@@ -320,7 +332,6 @@ def SeqLearn(opts):
             else:
                 misses = 0
                 keys, keytimes, RTs = filter_keys(keypresses, 
-                                                  config["MAX_CHORD_INTERVAL"], 
                                                   len(sequence))
                 trial_type = "done"
                 accuracy, MT, score  = scorePerformance(keys, RTs, sequence, 
@@ -432,9 +443,10 @@ def SeqLearn(opts):
                     " ".join(key_from), 
                     " ".join(key_to), 
                     "{:.3f}".format(RT*1000),
-                    clock_fixation, 
-                    clock_execution,
-                    clock_feedback,
+                    clock_fixation - start_time, 
+                    clock_execution - start_time,
+                    clock_feedback - start_time,
+                    globalClock.getTime(), 
                     paced
                 ])
                 key_from = key_to
@@ -457,9 +469,10 @@ def SeqLearn(opts):
                     "{:.3f}".format(RTs[0]*1000),
                     "{:.3f}".format(MT*1000),
                     "{:.3f}".format(score),
-                    clock_fixation, 
-                    clock_execution,
-                    clock_feedback,
+                    clock_fixation - start_time, 
+                    clock_execution - start_time,
+                    clock_feedback - start_time,
+                    globalClock.getTime(), 
                     paced
             ])
         
@@ -513,7 +526,7 @@ def SeqLearn(opts):
                             update_table(engine, "memo_table", mymemo) 
                         update_table(engine, "keys_table", mykeys) 
                         update_table(engine, "trials_table", mytrials)
-                        
+                        engine.dispose()
                         print("Synced with database.")
                     except exc.SQLAlchemyError as e:
                         print("Error:", e)
@@ -580,7 +593,6 @@ def build_parser():
                         required = False)
 
     return(parser)
-
 
 def main():
 

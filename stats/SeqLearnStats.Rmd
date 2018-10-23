@@ -20,7 +20,7 @@ library(boot)
 library(rstan)
 
 options(mc.cores = parallel::detectCores())
-suffix = '20181022_1751-KIpilot0db'
+suffix = '20181023_1033-KIpilot0db'
 keysfile = paste0('../data/archive/keys_table-', suffix, '.csv')
 trialsfile = paste0('../data/archive/trials_table-', suffix, '.csv')
 memofile = paste0('../data/archive/memo_table-', suffix, '.csv')
@@ -66,9 +66,11 @@ plot.attempts = ggplot(memo.table, aes(x = true_sequence, fill = as.factor(seq_t
 plot.totalRT = ggplot(memo.table %>% group_by(username, sess_num, true_sequence, seq_train) %>% summarise(totalRT = sum(RT)), aes(x = sess_num, y = totalRT, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_point() + geom_line(lwd=1) + facet_grid( username ~ .) + theme(legend.position="right") 
 
 
+
 print(plot.RT)
 print(plot.attempts)
 print(plot.totalRT)
+
 ```
 
 
@@ -93,6 +95,27 @@ print(plot.acc)
 
 
 
+
+
+```{r}
+paced_trials$diff.exec_fix = paced_trials$clock_execution  - paced_trials$clock_fixation
+paced_trials$diff.feed_exec = paced_trials$clock_feedback  - paced_trials$clock_execution 
+
+hist(paced_trials$diff.exec_fix, 50)
+hist(paced_trials$diff.feed_exec, 50)
+
+```
+
+Analyze duration
+
+
+```{r}
+plot.duration = ggplot(trials.table, aes(x = sess_num, y = clock_feedback, col = username, group = username)) + stat_summary(fun.y = max, geom = "point") + geom_line(lwd=1) + ylab("Session duration")
+
+print(plot.duration)
+
+```
+
 Analyze clocks
 
 ```{r}
@@ -104,14 +127,5 @@ paced_trials = subset(trials.table, paced == 1 & sess_num >2  & accuracy == 1)
 plot.fixation = ggplot(paced_trials, aes(x = trial, y = clock_fixation, group = sess_num, col = sess_num, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ true_sequence ) + theme(legend.position="none")
 
 print(plot.fixation)
-
-```
-
-```{r}
-paced_trials$diff.exec_fix = paced_trials$clock_execution  - paced_trials$clock_fixation
-paced_trials$diff.feed_exec = paced_trials$clock_feedback  - paced_trials$clock_execution 
-
-hist(paced_trials$diff.exec_fix, 50)
-hist(paced_trials$diff.feed_exec, 50)
 
 ```

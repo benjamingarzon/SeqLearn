@@ -3,3 +3,11 @@ sess_num;sess_type;n_trials;seq_keys;seq_type;sequence_string;seq_train;seq_colo
 1;training;3;1 2 3 4;type1;2 - 2 3 - 1 2 3;trained;#46f0f0;[0, 1];1;0;0
 1;training;3;1 2 3 4;type1;2 3 4 - 2 3 - 1 2;trained;#911eb4;[0, 1];0;1;1
 1;training;3;1 2 3 4;type1;2 - 2 3 - 1 2 3;trained;#46f0f0;[0, 1];1;1;0
+2;training;3;1 2 3 4;type1;2 3 4 - 2 3 - 1 2;trained;#911eb4;[0, 1];0;0;1
+2;training;3;1 2 3 4;type1;2 - 2 3 - 1 2 3;trained;#46f0f0;[0, 1];1;0;0
+2;training;3;1 2 3 4;type1;2 3 4 - 2 3 - 1 2;trained;#911eb4;[0, 1];0;1;1
+2;training;3;1 2 3 4;type1;2 - 2 3 - 1 2 3;trained;#46f0f0;[0, 1];1;1;0
+3;training;3;1 2 3 4;type1;2 3 4 - 2 3 - 1 2;trained;#911eb4;[0, 1];0;0;1
+3;training;3;1 2 3 4;type1;2 - 2 3 - 1 2 3;trained;#46f0f0;[0, 1];1;0;0
+3;training;3;1 2 3 4;type1;2 3 4 - 2 3 - 1 2;trained;#911eb4;[0, 1];0;1;1
+3;training;3;1 2 3 4;type1;2 - 2 3 - 1 2 3;trained;#46f0f0;[0, 1];1;1;0

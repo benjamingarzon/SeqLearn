@@ -9,8 +9,7 @@ File with all the stimuli.
 from psychopy import sound
 from psychopy import visual
 
-def define_stimuli(win, username, config, texts, sess_num, seq_length, 
-                   total_trials):
+def define_stimuli(win, username, config, texts, sess_num):
 
     stimuli = {}
     
@@ -57,15 +56,7 @@ def define_stimuli(win, username, config, texts, sess_num, seq_length,
                                            alignHoriz="center",
                                            pos = (-5, 0), 
                                            wrapWidth = 11) 
-    
-    stimuli["instructions2_message"] = visual.TextStim(win, 
-                                        text = texts["TEXT_INSTRUCT2"].format(
-                                        seq_length*\
-                                        config["MAX_WAIT_PER_KEYPRESS"], 
-                                        total_trials), 
-                                        height = config["TEXT_HEIGHT"], 
-                                        alignHoriz="center") 
-    
+
     stimuli["instructions3_message"] = visual.TextStim(win, 
                                            text = texts["TEXT_INSTRUCT3"], 
                                            height = config["TEXT_HEIGHT"], 

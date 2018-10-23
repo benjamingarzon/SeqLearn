@@ -153,9 +153,7 @@ def startSession(opts):
         trialsfilename = "./data/trialsfile-demo.csv"
         # remove previous demo files
         for fl in glob.glob("./data/*-demo.csv"):
-            os.remove(fl)    
-        total_trials = config["TOTAL_TRIALS_DEMO"]
-        seq_length = config["SEQ_LENGTH_DEMO"]
+            os.remove(fl) 
     else:
 
         # get schedule
@@ -183,18 +181,14 @@ def startSession(opts):
             schedule_file = opts.schedule_file
             sched_group = 0
             
-        #print(schedule_file)    
+        
         memofilename = "./data/memofile-{}.csv".format(username)
         keysfilename = "./data/keysfile-{}.csv".format(username)
         trialsfilename = "./data/trialsfile-{}.csv".format(username) 
-
-        total_trials = config["TOTAL_TRIALS"]
-        seq_length = config["SEQ_LENGTH"]
         
     try:
         schedule = pd.read_csv(schedule_file, sep = ";")
         n_sess = np.max(schedule["sess_num"])
-
     except IOError: 
         print("Error: Schedule file is missing!")
    
@@ -252,16 +246,14 @@ def startSession(opts):
                 "sched_group",
                 "sess_num",
                 "sess_date",    
-                "sess_time",    
-        #        "seq_type",
-        #        "sess_type",
+                "sess_time",
                 "seq_train",
                 "trial", 
                 "true_sequence", 
                 "obs_sequence", 
                 "accuracy", 
-                "RT"
-
+                "RT",
+                "global_clock"
         ])
 
         keyswriter.writerow([
@@ -287,6 +279,7 @@ def startSession(opts):
                 "clock_fixation", 
                 "clock_execution",
                 "clock_feedback",
+                "global_clock",
                 "paced"
         ])
     
@@ -311,6 +304,7 @@ def startSession(opts):
                 "clock_fixation", 
                 "clock_execution",
                 "clock_feedback",
+                "global_clock",
                 "paced"
         ])
 
@@ -324,10 +318,10 @@ def startSession(opts):
     return(sched_group, sess_num, username, memowriter, keyswriter, 
            trialswriter, memofile, keysfile, trialsfile, maxscore, 
            maxgroupscore, config, texts, schedule, 
-           schedule_unique, total_trials, seq_length)
+           schedule_unique)
 
 
-def filter_keys(keypresses, max_chord_interval, n_chords):#, keys, keytimes):
+def filter_keys(keypresses, n_chords):
     """ 
     Aggregate keypresses when they are close together (chords)
     """
@@ -338,7 +332,6 @@ def filter_keys(keypresses, max_chord_interval, n_chords):#, keys, keytimes):
     d = pdist(np.reshape(allkeytimes, (-1, 1))) # can be done faster 
     Z = linkage(d, 'complete')
     clusters = np.array([ x[0] for x in cut_tree(Z, n_clusters = n_chords)])
-# clusters = np.array([ x[0] for x in cut_tree(Z, height= max_chord_interval)])
 
     keys = []
     keytimes = []
@@ -376,7 +369,7 @@ def filter_keys(keypresses, max_chord_interval, n_chords):#, keys, keytimes):
 def test_sequence(mystring, win, config, mycolor, texts, instructions_space,
                   instructions_select, error_message, error_sign, buzzer, 
                   memowriter, username, sched_group, sess_num, sess_date, 
-                  sess_time, seq_train):
+                  sess_time, seq_train, globalClock):
     """ 
     Test that the subject has memorized the sequence.
     """
@@ -452,7 +445,8 @@ def test_sequence(mystring, win, config, mycolor, texts, instructions_space,
                     mystring,
                     mypressedstring, 
                     1.0 if iscorrect else 0.0, # just check if correct
-                    timer.getTime()                    
+                    timer.getTime(),
+                    globalClock.getTime()                    
                 ])
             
         attempts = attempts + 1

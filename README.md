@@ -158,6 +158,11 @@ To remove a user:
 drop user 'subject001'@'localhost';
 ```
 
+To add a column:
+```
+alter table keys_table add column global_clock double after clock_feedback;
+```
+
 # Preparing a study
 
 - Create a database and users.
@@ -211,6 +216,7 @@ python SeqGen.py --sequence_file=./scheduling/sequences/sequences_demo.json --sc
 python SeqGen.py --sequence_file=./scheduling/sequences/sequences_001.json --sequence_file2=./scheduling/sequences/sequences_002.json --schedule_file=./scheduling/schedules/kip0schedule1 --type_file=./scheduling/seq_types.csv
 python SeqGen.py --sequence_file=./scheduling/sequences/sequences_001.json --sequence_file2=./scheduling/sequences/sequences_002.json --schedule_file=./scheduling/schedules/kip1schedule1 --type_file=./scheduling/seq_types.csv
 python SeqGen.py --sequence_file=./scheduling/sequences/sequences_002.json --sequence_file2=./scheduling/sequences/sequences_001.json --schedule_file=./scheduling/schedules/kip1schedule2 --type_file=./scheduling/seq_types.csv
+
 
 # Function modes
 ## Home training

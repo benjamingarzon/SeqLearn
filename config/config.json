@@ -47,6 +47,5 @@
 "MAXSCORE_FACTOR":0.6,
 "COLOR_LIST":["#e6194b","#3cb44b","#ffe119","#0082c8","#f58231","#911eb4","#46f0f0","#f032e6", "#111111"],
 "THUMBSUP_FILE":"./pics/thumbsup.JPG",
-"THUMBSDOWN_FILE":"./pics/thumbsdown.JPG",
-"MAX_CHORD_INTERVAL":0.0005
+"THUMBSDOWN_FILE":"./pics/thumbsdown.JPG"
 }

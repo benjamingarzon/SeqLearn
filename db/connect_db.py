@@ -68,6 +68,8 @@ def connect(opts):
                                 sep =";", index=False)
                         
                     print('Downloaded the data!')
+                    
+                engine.dispose()
 
             except exc.SQLAlchemyError as e:
                 print('Error:', e)
