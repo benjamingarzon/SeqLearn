@@ -1,11 +1,14 @@
 from sqlalchemy import create_engine, exc
 import sshtunnel
-import os, json, datetime
+import os, json, datetime, sys
 from argparse import ArgumentParser
-sshtunnel.SSH_TIMEOUT = 5.0
-sshtunnel.TUNNEL_TIMEOUT = 5.0
-#import logging
 import pandas as pd
+sys.path.append(os.path.join( os.path.dirname( __file__ ), '..' ))
+from lib.utils import update_table
+#import logging
+
+sshtunnel.SSH_TIMEOUT = 10.0
+sshtunnel.TUNNEL_TIMEOUT = 10.0
 
 def connect(opts):
     """ Connect to MySQL database and delete tables."""
@@ -16,6 +19,13 @@ def connect(opts):
     db_config_json = open("./db/db_config.json", "r")
     db_config = json.load(db_config_json)
     db_config_json.close()
+    database = opts.database if opts.database else db_config['DATABASE'] 
+    
+    sql_name = 'root'
+    if opts.upload:
+        mypath, mysuffix = opts.upload.split(",")
+        sql_name = mysuffix
+        
 #    print db_config
     with sshtunnel.SSHTunnelForwarder(
             (db_config['REMOTEHOST'], 
@@ -28,11 +38,11 @@ def connect(opts):
         ) as server:
             port = server.local_bind_port
             try:
-                engine_string = 'mysql://%s:%s@%s:%d/%s'%('root', 
+                engine_string = 'mysql://%s:%s@%s:%d/%s'%(sql_name, 
                                                password, 
                                                db_config['LOCALHOST'],
                                                port,
-                                               db_config['DATABASE'])
+                                               database)
 
                 engine = create_engine(engine_string)
                 
@@ -42,29 +52,46 @@ def connect(opts):
                     engine.execute("drop table memo_table;")                    
                     print('Deleted all database tables!')
 
+                if opts.upload:
+                    
+                    mymemo = pd.read_table(os.path.join(
+                            mypath, 
+                            "memofile-" + mysuffix + ".csv"), sep = ";")
+                    mykeys = pd.read_table(os.path.join(
+                            mypath, 
+                            "keysfile-" + mysuffix + ".csv"), sep = ";")
+                    mytrials = pd.read_table(os.path.join(
+                            mypath, 
+                            "trialsfile-" + mysuffix + ".csv"), sep = ";")
+
+                    update_table(engine, "memo_table", mymemo, sql_name) 
+                    update_table(engine, "trials_table", mytrials, sql_name)
+                    update_table(engine, "keys_table", mykeys, sql_name) 
+                 
+                    print('Uploaded the data!')
+                    
                 if opts.download:
                     
-                    now = datetime.datetime.now()
-
-    
+                    now = datetime.datetime.now()    
+                    print(now.strftime("Time stamp: %Y%m%d_%H%M")) 
                     if engine.dialect.has_table(engine, 'memo_table'):
                         mymemo = pd.read_sql_table('memo_table', engine)
                         mymemo.to_csv(now.strftime(
                                 "./data/memo_table-%Y%m%d_%H%M-" + 
-                                db_config['DATABASE'] + ".csv"), 
+                                database + ".csv"), 
                                 sep =";", index=False)
                         
                     if engine.dialect.has_table(engine, 'keys_table'):
                         mykeys = pd.read_sql_table('keys_table', engine)
                         mykeys.to_csv(now.strftime(
                                 "./data/keys_table-%Y%m%d_%H%M-" + 
-                                db_config['DATABASE'] + ".csv"), 
+                                database + ".csv"), 
                                 sep =";", index=False)
                     if engine.dialect.has_table(engine, 'trials_table'):
                         mytrials = pd.read_sql_table('trials_table', engine)
                         mytrials.to_csv(now.strftime(
                                 "./data/trials_table-%Y%m%d_%H%M-" + 
-                                db_config['DATABASE'] + ".csv"), 
+                                database + ".csv"), 
                                 sep =";", index=False)
                         
                     print('Downloaded the data!')
@@ -90,6 +117,14 @@ def build_parser():
                         action="store_true",
                         required = False)
 
+
+    parser.add_argument("--upload", 
+                        type = str, 
+                        dest = "upload", 
+                        help = "Upload subject files to database. " + 
+                        "UPLOAD = <Path, participant>",
+                        required = False)
+
     parser.add_argument("--u", 
                         type = str, 
                         dest = "username", 
@@ -101,6 +136,13 @@ def build_parser():
                         dest = "password", 
                         help = "Password.",
                         required = True)
+
+    parser.add_argument("--database", 
+                        type = str, 
+                        dest = "database", 
+                        help = "Database.",
+                        required = True)
+
 
     return(parser)
 

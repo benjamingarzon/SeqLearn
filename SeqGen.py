@@ -37,7 +37,8 @@ def generate_with_predefined_sequences(opts, sched_group):
         seq_type, seq_length, max_chord_size, seq_keys, n_free_trials, \
         n_paced_trials, n_free_trials_testing, n_paced_trials_testing, n_seqs,\
         n_sess, testing_sessions = row
-        testing_session_list = [int(x) for x in testing_sessions.split(",")]
+        testing_session_list = \
+        [int(x) for x in str(testing_sessions).split(",")]
         reorder = list(permutations(range(n_seqs)))    
         seq_list = []
         seq_color = []

@@ -482,19 +482,28 @@ def SetUsername():
         json.dump(json_obj, outfile)
         
 
-def update_table(engine, table_name, mytable):
+def update_table(engine, table_name, mytable, username):
     """ 
     Insert in the database only new rows.
     """
-    cols = list(set(mytable.columns) - set(["MT", "accuracy", "RT", "score"]))
+    cols = list(set(mytable.columns) - set(["MT", "accuracy", "RT", 
+                "score", "index", "global_clock", "clock_fixation", 
+                "clock_execution", "clock_feedback"]))
     
     if not engine.dialect.has_table(engine, table_name):
         mytable.to_sql(table_name, engine, 
                       if_exists = 'fail')
     else:        
-        myoldtable = pd.read_sql_table(table_name, engine)[cols]
-        mytable = mytable[~mytable[cols].isin(myoldtable).all(1)]
-        mytable.to_sql(table_name, engine, if_exists = 'append') 
+        query = "select {} from {} where username = '{}'".format(
+                ", ".join(cols),
+                table_name, 
+                username)
+#        myoldtable = pd.read_sql_table(table_name, engine)[cols]  
+        myoldtable = pd.read_sql_query(query, engine)[cols]
+        mynewtable = mytable[~mytable[cols].isin(myoldtable).all(1)]
+        mynewtable.to_sql(table_name, engine, if_exists = 'append', 
+                          index = False) 
+
 
 def wait_clock_old(t):
     """ 

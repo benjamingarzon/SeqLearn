@@ -6,7 +6,18 @@ output:
   html_notebook: default
   pdf_document: default
 ---
+Questions: 
+how does savings relate to learning
 
+look at baseline and learning
+analyze the number of errors
+
+Conclusions
+- use new untrained sequences every time
+- considerable transfer
+- some train twice the same day or skip several days. Make it clear that we will catch them 
+- longer from and to chords are more difficult: maximize 2 - 3  and 3 - 2 chords, and 2 - 3 over 3 - 2 
+- unseen and untrained take the  same time: memorization does not make a difference
 
 
 ```{r}
@@ -17,46 +28,113 @@ library(dplyr)
 library(GGally)
 library(network)
 library(boot)
-library(rstan)
+setwd("~/projects/SeqLearn/stats")
 
-options(mc.cores = parallel::detectCores())
-suffix = '20181023_1033-KIpilot0db'
+suffix = '20181128_1606-KIpilot1db'
 keysfile = paste0('../data/archive/keys_table-', suffix, '.csv')
 trialsfile = paste0('../data/archive/trials_table-', suffix, '.csv')
 memofile = paste0('../data/archive/memo_table-', suffix, '.csv')
 
-keys.table = read.table(keysfile, sep =';', header = T, quote = "")
-trials.table = read.table(trialsfile, sep =';', header = T,quote = "")
-memo.table = read.table(memofile, sep =';', header = T,quote = "")
+suffix0 = '20181126_2119-KIpilot0db'
+keysfile0 = paste0('../data/archive/keys_table-', suffix0, '.csv')
+trialsfile0 = paste0('../data/archive/trials_table-', suffix0, '.csv')
+memofile0 = paste0('../data/archive/memo_table-', suffix0, '.csv')
+
+keys.table1 = unique(read.table(keysfile, sep =';', header = T, quote = "")[-1])
+keys.table1 = subset(keys.table1, !(username == 'kip1s006' & sess_num == 15))
+trials.table1 = unique(read.table(trialsfile, sep =';', header = T,quote = "")[-1])
+trials.table1 = subset(trials.table1, !(username == 'kip1s006' & sess_num == 15))
+memo.table1 = unique(read.table(memofile, sep =';', header = T,quote = "")[-1])
+memo.table1 = subset(memo.table1, !(username == 'kip1s006' & sess_num == 15))
+
+# remove some data 
+
+trials.table0 = unique(read.table(trialsfile0, sep =';', header = T,quote = "")[-1])
+trials.table0 = subset(trials.table0, username != 'kip0s001')
+trials.table = rbind(trials.table1, trials.table0)
+
+keys.table0 = unique(read.table(keysfile0, sep =';', header = T,quote = "")[-1])
+keys.table0 = subset(keys.table0, username != 'kip0s001')
+keys.table = rbind(keys.table1, keys.table0)
+
+memo.table0 = unique(read.table(memofile0, sep =';', header = T,quote = "")[-1])
+memo.table0 = subset(memo.table0, username != 'kip0s001')
+memo.table = rbind(memo.table1, memo.table0)
 #keys.melt = melt(keys.table, id.vars = c("cumulative_trial","trial","keystroke","response") )
 #trials.melt = melt(keys.table, id.vars = c("cumulative_trial","trial","keystroke","response") )
 
 ```
 Analyze chords
 
-```{r}
-keys.table = subset(keys.table, keystroke > 0) # only after movement started 
-keys.table = subset(keys.table, accuracy == 1)
+```{r fig.width=12, fig.asp=0.8}
 
-plot.keystroke = ggplot(keys.table, aes(x = key_to, y = RT)) + geom_point() 
+hasx = function(string, x){grep(, x)}
 
-keys.table.median = keys.table %>% group_by(key_from, key_to) %>% summarise(RT = median(RT))
+ok_keys = subset(keys.table, paced == 0 & trial_type != "missing" & accuracy == 1 & keystroke > 0) %>%
+  mutate(size_from = nchar(gsub(" ", "", key_from)), 
+         size_to = nchar(gsub(" ", "", key_to)))
 
-plot.keystrokepairs = ggplot(keys.table.median, aes(x = key_from, y = key_to, fill = RT)) + geom_tile() + theme_classic()
+# baseline
+ok_keys_baseline = subset(ok_keys, sess_num == 1 & trial < 5 )
+keys.table.median = ok_keys_baseline %>% group_by(username, key_from, key_to, size_from, size_to) %>% summarise(medianRT = median(RT), sdRT = sd(RT))
+keys.table.median = keys.table.median %>% arrange(username, medianRT) %>% group_by(username) %>% mutate(rankRT = percent_rank(medianRT), transition= paste(key_from, key_to, sep = ' - '), size_trans = size_from + size_to)
 
-#keys.table.mat = as.matrix(acast(keys.table.median, key_from ~ key_to, value.var="RT"), margins = T, drop = F)
-#net = network(keys.table.mat, directed = TRUE, na.omit = T, matrix.type = "adjacency")
+# rank within each subject
+plot.median = ggplot(keys.table.median, aes(x = key_from, y = medianRT)) + 
+    geom_errorbar(aes(ymin=medianRT-sdRT, ymax=medianRT+sdRT), width=.1) +
+    geom_line() + 
+    geom_point() + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + facet_grid( . ~ username)
+print(plot.median)
 
-print(plot.keystroke)
-print(plot.keystrokepairs)
+keys.table.rank = keys.table.median %>% group_by(key_from, key_to, size_from, size_to, transition, size_trans) %>% summarise(meanrank = mean(rankRT), medianrank = median(rankRT), count = n(), minrank = min(rankRT), maxrank = max(rankRT)) %>% arrange(meanrank)
+
+keys.table.rank = keys.table.rank %>% mutate(
+         to1 = length(grep("1", key_to)),
+         to2 = length(grep("2", key_to)),
+         to3 = length(grep("3", key_to)),
+         to4 = length(grep("4", key_to))
+)
+
+keys.table.rank = subset(keys.table.rank, count > 1)
+plot.rank = ggplot(keys.table.median, aes(x = transition, y = rankRT, col = username)) + 
+    geom_point() + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+#print(plot.rank)
+keys.table.rank$logmedianrank = logit(keys.table.rank$medianrank + 0.0001)
+model.rank = lm(logmedianrank ~ size_from + size_to, data = keys.table.rank)
+summary(model.rank)
+model.rank = lm(logmedianrank ~ to1 + to2 + to3 + to4, data = keys.table.rank)
+summary(model.rank)
+
+plot(keys.table.rank$medianrank, lwd = 2, type = "l")
+lines(keys.table.rank$minrank, lty = 2)
+lines(keys.table.rank$maxrank, lty = 2)
+
+par(mfrow = c(1, 3))
+boxplot(keys.table.rank$medianrank ~ keys.table.rank$size_trans, main = "transition")
+boxplot(keys.table.rank$medianrank ~ keys.table.rank$size_from, main = "from")
+boxplot(keys.table.rank$medianrank ~ keys.table.rank$size_to, main = "to")
+
+boxplot(keys.table.rank$medianrank ~ keys.table.rank$to1, main = "to_1")
+
+# plot.keystrokepairs = ggplot(keys.table.rank, aes(x = key_from, y = key_to, fill = medianRT)) + geom_tile() + theme_classic()
+# print(plot.keystrokepairs)
 
 ```
 
+```{r}
+trials.table = trials.table1
+memo.table = memo.table1
+keys.table = keys.table1
+```
+
+
 Analyze memo
 
-```{r}
+```{r fig.width=12, fig.asp=0.8}
 
 # check missed as well
+# plot total mistakes
+
 ok_memo = subset(memo.table, accuracy == 1)
 
 plot.RT = ggplot(ok_memo, aes(x = sess_num, y = RT, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ .) + theme(legend.position="right")
@@ -75,21 +153,85 @@ print(plot.totalRT)
 
 
 
-Analyze trials
-```{r}
+Analyze trial times
+```{r fig.width=12, fig.asp=0.8}
 
-
+maxy = 4500 
+miny = 500  
 ok_trials = subset(trials.table, accuracy == 1)
-unpaced_trials = subset(trials.table, paced == 0)
-paced_trials = subset(trials.table, paced == 1 & accuracy == 1)
+unpaced_trials = subset(trials.table, paced == 0 & trial_type != "missing")
+paced_trials = subset(trials.table, paced == 1 & trial_type != "missing")
+ok_unpaced_trials = subset(unpaced_trials, accuracy == 1)
+ok_paced_trials = subset(paced_trials, accuracy == 1)
                       
-plot.RT = ggplot(ok_trials, aes(x = trial, y = RT, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ sess_num + paced) + theme(legend.position="none")
-plot.MT = ggplot(ok_trials, aes(x = trial, y = MT, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ sess_num + paced) + theme(legend.position="none")
-plot.acc = ggplot(unpaced_trials, aes(x = trial, y = accuracy, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ sess_num) + theme(legend.position="none")
+plot.RT = ggplot(ok_unpaced_trials, aes(x = trial, y = RT, col = as.factor(seq_train), group = true_sequence)) + geom_line(lwd=1) + geom_point() + ylim(miny, maxy) + facet_grid( username ~ sess_num) + theme(legend.position="none")
+plot.MT = ggplot(ok_unpaced_trials, aes(x = trial, y = MT, col = as.factor(seq_train), group = true_sequence)) + geom_line(lwd=1) + geom_point() + ylim(miny, maxy) + facet_grid( username ~ sess_num) + theme(legend.position="bottom")
+
+plot.RT.paced = ggplot(ok_paced_trials, aes(x = trial, y = RT, col = as.factor(seq_train), group = true_sequence)) + geom_line(lwd=1) + geom_point() + ylim(miny, maxy) + facet_grid( username ~ sess_num) + theme(legend.position="none")
+plot.MT.paced = ggplot(ok_paced_trials, aes(x = trial, y = MT, col = as.factor(seq_train), group = true_sequence)) + geom_line(lwd=1) + geom_point() + ylim(miny, maxy) + facet_grid( username ~ sess_num) + theme(legend.position="none")
 
 print(plot.RT)
 print(plot.MT)
-print(plot.acc)
+#print(plot.RT.paced)
+print(plot.MT.paced)
+
+
+```
+
+
+
+Mean and variance
+```{r fig.width=12, fig.asp=0.8}
+
+last_trials = subset(unpaced_trials, trial > 5 & trial < 11) %>% group_by(username, sess_num, true_sequence, seq_train) %>% summarise(meanMT = mean(MT), sdMT = sd(MT))
+
+plot.meanMT = ggplot(last_trials, aes(x = sess_num, y = meanMT, group = true_sequence, col = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid(. ~ username ) + theme(legend.position="none")
+
+plot.sdMT = ggplot(last_trials, aes(x = sess_num, y = sdMT, group = true_sequence, col = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid(. ~ username ) + theme(legend.position="none")
+
+print(plot.meanMT)
+print(plot.sdMT)
+
+
+# aggregate within user
+
+last_trials.user = last_trials %>% group_by(username, sess_num, seq_train) %>% summarise(meanMT = mean(meanMT), sdMT = mean(sdMT))
+
+plot.meanMT.user = ggplot(last_trials.user, aes(x = sess_num, y = meanMT, col = username, lty = as.factor(seq_train), shape = as.factor(seq_train))) + geom_line(lwd=1) + geom_point(size = 3)
+
+plot.sdMT.user = ggplot(last_trials.user, aes(x = sess_num, y = sdMT, col = username, lty = as.factor(seq_train), shape = as.factor(seq_train))) + geom_line(lwd=1) + geom_point(size = 3)
+print(plot.meanMT.user)
+print(plot.sdMT.user)
+
+
+
+```
+
+Wrong trials 
+
+CONTROL FOR MISSING
+
+```{r fig.width=12, fig.asp=0.8}
+
+unpaced_trials.wrong = unpaced_trials %>% group_by(username, sess_num, true_sequence, seq_train) %>% summarise(wrong = sum(accuracy < 1))
+paced_trials.wrong = paced_trials %>% group_by(username, sess_num, true_sequence, seq_train) %>% summarise(wrong = sum(accuracy < 1))
+
+plot.unpaced.wrong = ggplot(unpaced_trials.wrong, aes(x = sess_num, y = wrong, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ .) + theme(legend.position="none")
+plot.paced.wrong = ggplot(paced_trials.wrong, aes(x = sess_num, y = wrong, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ .) + theme(legend.position="none")
+
+print(plot.unpaced.wrong)
+print(plot.paced.wrong)
+
+```
+
+
+```{r fig.width=12, fig.asp=0.8}
+# plot also group aggregate per sequence and trained versus untrained
+ok_unpaced_trials.group = ok_unpaced_trials %>% group_by(trial, sess_num, seq_train) %>% summarise(MT = mean(MT))
+
+plot.MT.group = ggplot(ok_unpaced_trials.group, aes(x = trial, y = MT, col = as.factor(seq_train), group =  as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( . ~ sess_num) + theme(legend.position="bottom")
+
+print(plot.MT.group)
 
 ```
 
@@ -98,34 +240,79 @@ print(plot.acc)
 
 
 ```{r}
-paced_trials$diff.exec_fix = paced_trials$clock_execution  - paced_trials$clock_fixation
-paced_trials$diff.feed_exec = paced_trials$clock_feedback  - paced_trials$clock_execution 
-
-hist(paced_trials$diff.exec_fix, 50)
-hist(paced_trials$diff.feed_exec, 50)
+# paced_trials$diff.exec_fix = paced_trials$clock_execution  - paced_trials$clock_fixation
+# paced_trials$diff.feed_exec = paced_trials$clock_feedback  - paced_trials$clock_execution 
+# 
+# hist(paced_trials$diff.exec_fix, 50)
+# hist(paced_trials$diff.feed_exec, 50)
 
 ```
 
 Analyze duration
 
 
-```{r}
-plot.duration = ggplot(trials.table, aes(x = sess_num, y = clock_feedback, col = username, group = username)) + stat_summary(fun.y = max, geom = "point") + geom_line(lwd=1) + ylab("Session duration")
+```{r fig.width=12, fig.asp=0.8}
+plot.duration = ggplot(trials.table, aes(x = sess_num, y = global_clock/60, col = username, group = username)) + 
+  stat_summary(fun.y = max, geom = "line", lwd = 1) +  stat_summary(fun.y = max, geom = "point") + ylab("Session duration")
 
 print(plot.duration)
 
 ```
 
+
+Analyze dates and times
+
+
+```{r fig.width=12, fig.asp=0.8}
+
+trials.times = trials.table %>% mutate(sess_date = as.Date(sess_date), sess_time = as.POSIXct(sess_time, format="%H:%M:%S")) %>% group_by(username, sess_num, sess_date, sess_time, sess_type) %>% sample_n(1) 
+kip1 = grep('kip1', trials.times$username)
+
+trials.times =trials.times[kip1, ]
+plot.dates = ggplot(trials.times, aes(x = sess_num, y = sess_date, col = username, group = username)) + geom_line() + geom_point() + xlab("Session number") + ylab("Session date") + scale_y_date()
+
+print(plot.dates)
+
+table(trials.times$username)
+
+plot.times = ggplot(trials.times, aes(x = sess_num, y = sess_time)) + geom_line() + geom_point() + xlab("Session number") + ylab("Session time") + facet_grid( . ~ username)
+print(plot.times)
+
+```
+
+
+
+
 Analyze clocks
 
 ```{r}
 
-trialsfile = paste0('../data/archive/trialsfile-kip0s001.csv')
-trials.table = read.table(trialsfile, sep =';', header = T, quote = "")
+#trialsfile = paste0('../data/archive/trialsfile-kip1s006.csv')
+#trials.table = read.table(trialsfile, sep =';', header = T, quote = "")
 paced_trials = subset(trials.table, paced == 1 & sess_num >2  & accuracy == 1)
                       
 plot.fixation = ggplot(paced_trials, aes(x = trial, y = clock_fixation, group = sess_num, col = sess_num, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ true_sequence ) + theme(legend.position="none")
 
 print(plot.fixation)
+
+```
+
+
+
+
+
+```{r fig.width=12, fig.asp=0.8}
+
+ok_trials = subset(trials.table, accuracy == 1 &  paced == 0)
+unpaced_trials = subset(trials.table, paced == 0)
+paced_trials = subset(trials.table, paced == 1 & accuracy == 1)
+                      
+plot.RT = ggplot(ok_trials, aes(x = trial, y = RT, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ sess_num + paced) + theme(legend.position="none")
+plot.MT = ggplot(ok_trials, aes(x = trial, y = MT, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ sess_num ) + theme(legend.position="none")
+plot.acc = ggplot(unpaced_trials, aes(x = trial, y = accuracy, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ sess_num) + theme(legend.position="none")
+
+print(plot.RT)
+print(plot.MT)
+print(plot.acc)
 
 ```

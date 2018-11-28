@@ -23,8 +23,8 @@ from sqlalchemy import create_engine, exc
 import sshtunnel
 from stimuli.stimuli import define_stimuli
 
-sshtunnel.SSH_TIMEOUT = 5.0
-sshtunnel.TUNNEL_TIMEOUT = 5.0
+sshtunnel.SSH_TIMEOUT = 10.0
+sshtunnel.TUNNEL_TIMEOUT = 10.0
 
 def SeqLearn(opts):
 
@@ -49,6 +49,7 @@ def SeqLearn(opts):
     
     win = visual.Window(
             config["SCREEN_RES"],
+            winType = "pyglet", 
             fullscr = True if config["FULL_SCREEN"] == 1 else False, 
             monitor = "testMonitor", 
             units = "cm")    
@@ -523,9 +524,12 @@ def SeqLearn(opts):
         
                         engine = create_engine(engine_string)
                         if config["TEST_MEM"] == 1 and config["PRESHOW"] == 1:
-                            update_table(engine, "memo_table", mymemo) 
-                        update_table(engine, "keys_table", mykeys) 
-                        update_table(engine, "trials_table", mytrials)
+                            update_table(engine, "memo_table", mymemo, 
+                                         username) 
+                        update_table(engine, "keys_table", mykeys, 
+                                     username) 
+                        update_table(engine, "trials_table", mytrials, 
+                                     username)
                         engine.dispose()
                         print("Synced with database.")
                     except exc.SQLAlchemyError as e:

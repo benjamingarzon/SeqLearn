@@ -150,7 +150,7 @@ done
 To check existing users and grants:
 ```
 select user from mysql.user;
-show grants 'subject001'@'localhost';
+show grants for 'subject001'@'localhost';
 ```
 
 To remove a user:
@@ -210,13 +210,22 @@ optional arguments:
                         (_fMRI).
 ```
 Example: 
+
+```
 python SeqGen.py --sequence_file=./scheduling/sequences/sequences_001.json --schedule_file=./scheduling/schedules/kip0schedule1 --type_file=./scheduling/seq_types.csv
 python SeqGen.py --sequence_file=./scheduling/sequences/sequences_demo.json --schedule_file=./scheduling/schedules/schedule_simple --type_file=./scheduling/seq_types_simple.csv --split
+```
 
+Add a second type of sequences (unseen)
+```
 python SeqGen.py --sequence_file=./scheduling/sequences/sequences_001.json --sequence_file2=./scheduling/sequences/sequences_002.json --schedule_file=./scheduling/schedules/kip0schedule1 --type_file=./scheduling/seq_types.csv
 python SeqGen.py --sequence_file=./scheduling/sequences/sequences_001.json --sequence_file2=./scheduling/sequences/sequences_002.json --schedule_file=./scheduling/schedules/kip1schedule1 --type_file=./scheduling/seq_types.csv
 python SeqGen.py --sequence_file=./scheduling/sequences/sequences_002.json --sequence_file2=./scheduling/sequences/sequences_001.json --schedule_file=./scheduling/schedules/kip1schedule2 --type_file=./scheduling/seq_types.csv
+```
 
+```
+python SeqGen.py --sequence_file=./scheduling/sequences/sequences_001.json --schedule_file=./scheduling/schedules/lup0schedule1 --type_file=./scheduling/seq_types_lu0.csv
+```
 
 # Function modes
 ## Home training
