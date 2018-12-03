@@ -30,7 +30,7 @@ library(network)
 library(boot)
 setwd("~/projects/SeqLearn/stats")
 
-suffix = '20181128_1606-KIpilot1db'
+suffix = '20181203_1718-KIpilot1db'
 keysfile = paste0('../data/archive/keys_table-', suffix, '.csv')
 trialsfile = paste0('../data/archive/trials_table-', suffix, '.csv')
 memofile = paste0('../data/archive/memo_table-', suffix, '.csv')
@@ -40,6 +40,10 @@ keysfile0 = paste0('../data/archive/keys_table-', suffix0, '.csv')
 trialsfile0 = paste0('../data/archive/trials_table-', suffix0, '.csv')
 memofile0 = paste0('../data/archive/memo_table-', suffix0, '.csv')
 
+suffix2 = '20181202_2200-LundfMRIpilot0db'
+keysfile2 = paste0('../data/archive/keys_table-', suffix2, '.csv')
+trialsfile2 = paste0('../data/archive/trials_table-', suffix2, '.csv')
+
 keys.table1 = unique(read.table(keysfile, sep =';', header = T, quote = "")[-1])
 keys.table1 = subset(keys.table1, !(username == 'kip1s006' & sess_num == 15))
 trials.table1 = unique(read.table(trialsfile, sep =';', header = T,quote = "")[-1])
@@ -47,15 +51,18 @@ trials.table1 = subset(trials.table1, !(username == 'kip1s006' & sess_num == 15)
 memo.table1 = unique(read.table(memofile, sep =';', header = T,quote = "")[-1])
 memo.table1 = subset(memo.table1, !(username == 'kip1s006' & sess_num == 15))
 
+keys.table2 = unique(read.table(keysfile2, sep =';', header = T, quote = "")[-1])
+trials.table2 = unique(read.table(trialsfile2, sep =';', header = T,quote = "")[-1])
+
 # remove some data 
 
 trials.table0 = unique(read.table(trialsfile0, sep =';', header = T,quote = "")[-1])
 trials.table0 = subset(trials.table0, username != 'kip0s001')
-trials.table = rbind(trials.table1, trials.table0)
+trials.table = rbind(trials.table1, trials.table0, trials.table2)
 
 keys.table0 = unique(read.table(keysfile0, sep =';', header = T,quote = "")[-1])
 keys.table0 = subset(keys.table0, username != 'kip0s001')
-keys.table = rbind(keys.table1, keys.table0)
+keys.table = rbind(keys.table1, keys.table0, keys.table2)
 
 memo.table0 = unique(read.table(memofile0, sep =';', header = T,quote = "")[-1])
 memo.table0 = subset(memo.table0, username != 'kip0s001')
@@ -77,7 +84,7 @@ ok_keys = subset(keys.table, paced == 0 & trial_type != "missing" & accuracy == 
 # baseline
 ok_keys_baseline = subset(ok_keys, sess_num == 1 & trial < 5 )
 keys.table.median = ok_keys_baseline %>% group_by(username, key_from, key_to, size_from, size_to) %>% summarise(medianRT = median(RT), sdRT = sd(RT))
-keys.table.median = keys.table.median %>% arrange(username, medianRT) %>% group_by(username) %>% mutate(rankRT = percent_rank(medianRT), transition= paste(key_from, key_to, sep = ' - '), size_trans = size_from + size_to)
+keys.table.median = keys.table.median %>% arrange(username, medianRT) %>% group_by(username) %>% mutate(rankRT = percent_rank(medianRT), transition= paste(key_from, key_to, sep = ' - '), size_trans = size_from + size_to, devRT = scale(medianRT, scale = F, center = T))
 
 # rank within each subject
 plot.median = ggplot(keys.table.median, aes(x = key_from, y = medianRT)) + 
@@ -86,7 +93,7 @@ plot.median = ggplot(keys.table.median, aes(x = key_from, y = medianRT)) +
     geom_point() + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + facet_grid( . ~ username)
 print(plot.median)
 
-keys.table.rank = keys.table.median %>% group_by(key_from, key_to, size_from, size_to, transition, size_trans) %>% summarise(meanrank = mean(rankRT), medianrank = median(rankRT), count = n(), minrank = min(rankRT), maxrank = max(rankRT)) %>% arrange(meanrank)
+keys.table.rank = keys.table.median %>% group_by(key_from, key_to, size_from, size_to, transition, size_trans) %>% summarise(meandev = mean(devRT), meanrank = mean(rankRT), medianrank = median(rankRT), count = n(), minrank = min(rankRT), maxrank = max(rankRT)) %>% arrange(meanrank)
 
 keys.table.rank = keys.table.rank %>% mutate(
          to1 = length(grep("1", key_to)),
@@ -122,9 +129,9 @@ boxplot(keys.table.rank$medianrank ~ keys.table.rank$to1, main = "to_1")
 ```
 
 ```{r}
-trials.table = trials.table1
+trials.table = rbind(trials.table1, trials.table2)
 memo.table = memo.table1
-keys.table = keys.table1
+keys.table = rbind(keys.table1, keys.table2)
 ```
 
 
@@ -227,9 +234,16 @@ print(plot.paced.wrong)
 
 ```{r fig.width=12, fig.asp=0.8}
 # plot also group aggregate per sequence and trained versus untrained
-ok_unpaced_trials.group = ok_unpaced_trials %>% group_by(trial, sess_num, seq_train) %>% summarise(MT = mean(MT))
+finishers = c("kip1s002", "kip1s003", "kip1s004", "kip1s005")
+ok_unpaced_trials.group = subset(ok_unpaced_trials, username %in% finishers) %>% group_by(trial, sess_num, seq_train) %>% summarise(MT = mean(MT))
 
 plot.MT.group = ggplot(ok_unpaced_trials.group, aes(x = trial, y = MT, col = as.factor(seq_train), group =  as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( . ~ sess_num) + theme(legend.position="bottom")
+
+print(plot.MT.group)
+
+ok_unpaced_trials.group = subset(ok_unpaced_trials, username %in% finishers & trial > 5 & trial < 11 ) %>% group_by(sess_num, seq_train) %>% summarise(MT = mean(MT))
+
+plot.MT.group = ggplot(ok_unpaced_trials.group, aes(x = sess_num, y = MT, col = as.factor(seq_train), group =  as.factor(seq_train))) + geom_line(lwd=1) + geom_point(size = 2)
 
 print(plot.MT.group)
 
@@ -266,9 +280,8 @@ Analyze dates and times
 ```{r fig.width=12, fig.asp=0.8}
 
 trials.times = trials.table %>% mutate(sess_date = as.Date(sess_date), sess_time = as.POSIXct(sess_time, format="%H:%M:%S")) %>% group_by(username, sess_num, sess_date, sess_time, sess_type) %>% sample_n(1) 
-kip1 = grep('kip1', trials.times$username)
-
-trials.times =trials.times[kip1, ]
+#kip1 = grep('kip1', trials.times$username)
+#trials.times =trials.times[kip1, ]
 plot.dates = ggplot(trials.times, aes(x = sess_num, y = sess_date, col = username, group = username)) + geom_line() + geom_point() + xlab("Session number") + ylab("Session date") + scale_y_date()
 
 print(plot.dates)

@@ -7,8 +7,8 @@ sys.path.append(os.path.join( os.path.dirname( __file__ ), '..' ))
 from lib.utils import update_table
 #import logging
 
-sshtunnel.SSH_TIMEOUT = 10.0
-sshtunnel.TUNNEL_TIMEOUT = 10.0
+sshtunnel.SSH_TIMEOUT = 20.0
+sshtunnel.TUNNEL_TIMEOUT = 20.0
 
 def connect(opts):
     """ Connect to MySQL database and delete tables."""

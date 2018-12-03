@@ -23,8 +23,8 @@ from sqlalchemy import create_engine, exc
 import sshtunnel
 from stimuli.stimuli import define_stimuli
 
-sshtunnel.SSH_TIMEOUT = 10.0
-sshtunnel.TUNNEL_TIMEOUT = 10.0
+sshtunnel.SSH_TIMEOUT = 20.0
+sshtunnel.TUNNEL_TIMEOUT = 20.0
 
 def SeqLearn(opts):
 
@@ -112,11 +112,11 @@ def SeqLearn(opts):
     if sess_num > 0 :
         showStimulus(win, [intro_message])
         wait_clock(globalClock, config["INTRO_TIME"])
+
+        showStimulus(win, [instructionspre1_message, hand_sign])
+        event.waitKeys(keyList = ["space"]) 
         
-        if config["PRESHOW"] == 1:
-            
-            showStimulus(win, [instructionspre1_message, hand_sign])
-            event.waitKeys(keyList = ["space"]) 
+        if config["PRESHOW"] == 1:           
     
             showStimulus(win, [instructionspre2_message])
             event.waitKeys(keyList = ["space"]) 
@@ -149,17 +149,28 @@ def SeqLearn(opts):
             event.waitKeys(keyList = ["space"]) 
 
     memofile.close()
-        
+    mystart = 0
+    
     for rowindex, row in  enumerate(schedule.itertuples()):
         sess_num, sess_type, n_trials, seq_keys =\
         row.sess_num, row.sess_type, row.n_trials, row.seq_keys.split(" ") 
         
         sequence_string, seq_train, seq_color, seq_type, paced, instruct =\
         row.sequence_string, row.seq_train, row.seq_color, row.seq_type, \
-        row.paced, row.instruct         
+        row.paced, row.instruct
 
         sequence = string_to_seq(sequence_string)
 
+        if config["USE_BUTTONBOX"]: 
+            # when using the button box translate if necessary
+            key_code = {key: value for (key, value) in zip(
+                    config["BUTTONBOX_KEYS"], seq_keys
+                    )}
+            seq_keys = config["BUTTONBOX_KEYS"]
+        else:        
+            key_code = {key: value for (key, value) in zip(seq_keys, 
+                             seq_keys)}
+            
         # add instructions if required
         if instruct == 1:
             
@@ -174,7 +185,6 @@ def SeqLearn(opts):
                                     n_trials), 
                                     height = config["TEXT_HEIGHT"], 
                                     alignHoriz="center") 
-
                     
                     showStimulus(win, [instructions2_message])
                     event.waitKeys(keyList = ["space"]) 
@@ -197,18 +207,20 @@ def SeqLearn(opts):
                 else: # fmri
                     showStimulus(win, [instructionsfmripaced1_message])
                     event.waitKeys(keyList = [config["FMRI_TRIGGER"]])  
-
-            # assume there will always be some instructions first
-            start_time = globalClock.getTime()
-
-        else:
+            mystart = mystart + 1
+            
+        else: # no instructions
             # ask for a break
             if config["BREAKS"] == 1: 
                 showStimulus(win, [instructionsbreak_message])
                 event.waitKeys(keyList = ["space"])  
 
-        target_time = start_time + config["START_TIME"]
-                     
+        if mystart == 1: # only first time we pass
+            start_time = globalClock.getTime()
+            target_time = start_time + config["START_TIME"]
+        else:
+            target_time = globalClock.getTime() + config["START_TIME"]
+             
         trialStimulus = []
         squareStimuli = []
         
@@ -259,9 +271,9 @@ def SeqLearn(opts):
             # present fixation
             clock_fixation = wait_clock(globalClock, target_time, rel = False)
             showStimulus(win, [fixation])
-            target_time = target_time + config["FIXATION_TIME"]                  
+            target_time = target_time + config["FIXATION_TIME"]   
                        
-            # present sequence and read keypresses          
+            # present sequence and read keypresses             
             clock_execution = wait_clock(globalClock, target_time, rel = False)
             showStimulus(win, current_stimuli)    
             
@@ -291,6 +303,8 @@ def SeqLearn(opts):
                         keypresses.extend(partial_keypresses)
 
             else: # unpaced
+                target_time = target_time + maxwait + config["BUFFER_TIME"]                  
+
                 event.clearEvents()
                 trialClock.reset()                
 
@@ -299,7 +313,6 @@ def SeqLearn(opts):
                 keypresses = event.getKeys(keyList=seq_keys + 
                                            [config["ESCAPE_KEY"]], 
                                            timeStamped = trialClock)
-
             trialincrease = 0
 
             if len(keypresses) <= 1:
@@ -322,10 +335,11 @@ def SeqLearn(opts):
                 RTs = [maxwait]
                 trial_type = "missed"
 
-                # may break the target time                    
+                # OBS!: may break the target time                    
                 if misses > config["MAX_MISSES"]:
                     showStimulus(win, [miss_message])
                     wait_clock(globalClock, config["FEEDBACK_TIME"])
+                    target_time = target_time + config["FEEDBACK_TIME"]
 
                 if misses > config["MAX_TOTAL_MISSES"]:
                     exit()    
@@ -333,7 +347,8 @@ def SeqLearn(opts):
             else:
                 misses = 0
                 keys, keytimes, RTs = filter_keys(keypresses, 
-                                                  len(sequence))
+                                                  len(sequence),
+                                                  key_code)
                 trial_type = "done"
                 accuracy, MT, score  = scorePerformance(keys, RTs, sequence, 
                                                         keytimes)
@@ -411,11 +426,10 @@ def SeqLearn(opts):
                                            best_label, group_best_bar, 
                                            group_best_label, bottomline])
                     
-            wait_clock(globalClock, config["FEEDBACK_TIME"])
-                    
-            target_time = target_time + config["FEEDBACK_TIME"] + \
-    config["FIXATION_TIME"] + ITI.pop()
-                        
+            wait_clock(globalClock, config["FEEDBACK_TIME"] + ITI.pop())
+                                            
+            #target_time = target_time + config["FEEDBACK_TIME"] + \
+            #ITI.pop() 
             # write results to files
             key_from = ["0"]
             
@@ -480,6 +494,11 @@ def SeqLearn(opts):
             trial = trial + trialincrease
             cum_trial = cum_trial + 1    
             wait_clock(globalClock, config["FIXATION_TIME"]) 
+            
+            if config["BREAKS"] == 1 and config["MODE"] != "fmri" and \
+            cum_trial%config["BREAK_TRIALS"] == 1: 
+                showStimulus(win, [instructionsbreak_message])
+                event.waitKeys(keyList = ["space"]) 
     
         if exiting:
             print("Session has been interrupted. Bye!")

@@ -321,11 +321,11 @@ def startSession(opts):
            schedule_unique)
 
 
-def filter_keys(keypresses, n_chords):
+def filter_keys(keypresses, n_chords, key_code):
     """ 
     Aggregate keypresses when they are close together (chords)
     """
-    allkeys = [x[0] for x in keypresses]
+    allkeys = [key_code[x[0]] for x in keypresses]
     allkeytimes = np.array([x[1] for x in keypresses])
     
     # cluster the sequence in chords
