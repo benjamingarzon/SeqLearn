@@ -40,7 +40,7 @@ keysfile0 = paste0('../data/archive/keys_table-', suffix0, '.csv')
 trialsfile0 = paste0('../data/archive/trials_table-', suffix0, '.csv')
 memofile0 = paste0('../data/archive/memo_table-', suffix0, '.csv')
 
-suffix2 = '20181202_2200-LundfMRIpilot0db'
+suffix2 = '20181203_2238-LundfMRIpilot0db'
 keysfile2 = paste0('../data/archive/keys_table-', suffix2, '.csv')
 trialsfile2 = paste0('../data/archive/trials_table-', suffix2, '.csv')
 
