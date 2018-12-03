@@ -72,6 +72,7 @@ def SeqLearn(opts):
     instructionsfmri1_message = stimuli["instructionsfmri1_message"]
     instructionsfmripaced1_message = stimuli["instructionsfmripaced1_message"]    
     instructionsbreak_message = stimuli["instructionsbreak_message"]
+    instructionsbreakseq_message = stimuli["instructionsbreaksequence_message"]
     last_label = stimuli["last_label"]
     best_label = stimuli["best_label"]
     group_best_label = stimuli["group_best_label"]
@@ -212,7 +213,7 @@ def SeqLearn(opts):
         else: # no instructions
             # ask for a break
             if config["BREAKS"] == 1: 
-                showStimulus(win, [instructionsbreak_message])
+                showStimulus(win, [instructionsbreakseq_message])
                 event.waitKeys(keyList = ["space"])  
 
         if mystart == 1: # only first time we pass
@@ -428,8 +429,6 @@ def SeqLearn(opts):
                     
             wait_clock(globalClock, config["FEEDBACK_TIME"] + ITI.pop())
                                             
-            #target_time = target_time + config["FEEDBACK_TIME"] + \
-            #ITI.pop() 
             # write results to files
             key_from = ["0"]
             
@@ -493,13 +492,18 @@ def SeqLearn(opts):
         
             trial = trial + trialincrease
             cum_trial = cum_trial + 1    
-            wait_clock(globalClock, config["FIXATION_TIME"]) 
+            #wait_clock(globalClock, config["FIXATION_TIME"]) 
             
             if config["BREAKS"] == 1 and config["MODE"] != "fmri" and \
             cum_trial%config["BREAK_TRIALS"] == 1: 
                 showStimulus(win, [instructionsbreak_message])
                 event.waitKeys(keyList = ["space"]) 
-    
+                target_time = globalClock.getTime() + config["BUFFER_TIME"]                  
+
+            else: 
+                target_time = target_time + config["FEEDBACK_TIME"] + \
+            ITI.pop() + config["BUFFER_TIME"]
+
         if exiting:
             print("Session has been interrupted. Bye!")
             break

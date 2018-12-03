@@ -102,6 +102,11 @@ def define_stimuli(win, username, config, texts, sess_num):
                                            alignHoriz="center", 
                                            pos = (0, 1))
 
+    stimuli["instructionsbreaksequence_message"] = visual.TextStim(win, 
+                                           text = texts["TEXT_BREAK_SEQUENCE"], 
+                                           height = config["TEXT_HEIGHT"], 
+                                           alignHoriz="center", 
+                                           pos = (0, 1))
 
     stimuli["last_label"] = visual.TextStim(win, 
                                     text = texts["LAST_LABEL"], 

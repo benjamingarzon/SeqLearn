@@ -21,6 +21,7 @@
 "TEXT_SPACE4":"Press space when ready to start the task.",
 "TEXT_INSTRUCTFMRI1":"INSTRUCTIONS:\n\n\n\nNow you will have to execute the sequences you have trained previously.\n\nThe task will start automatically.",
 "TEXT_INSTRUCTFMRIPACED1":"INSTRUCTIONS:\n\n\n\nNow you will have to execute the sequences you have trained previously. You will hear a beat and you need to press the chords following it. First there will be {} beats to give you the tempo and then you need to start pressing.\n\nThe task will start automatically.",
-"TEXT_BREAK":"You may take a break now.\n\nPress space to continue to the next sequence.",
+"TEXT_BREAK_SEQUENCE":"Press space to continue to the next sequence.",
+"TEXT_BREAK":"You may take a break now.\n\nPress space to continue.",
 "TEXT_OK":"Good!"
 }

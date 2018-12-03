@@ -3,7 +3,7 @@
 "PRESHOW":0,
 "TEST_MEM":0,
 "BREAKS":1,
-"BREAK_TRIALS":2,
+"BREAK_TRIALS":10,
 "LANGUAGE":"english",
 "FULL_SCREEN":0,
 "LOG_FILE":"./data/log.txt",
