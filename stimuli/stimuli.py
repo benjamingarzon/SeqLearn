@@ -167,6 +167,12 @@ def define_stimuli(win, username, config, texts, sess_num):
         closeShape=False,
         lineColor="white")
 
+    stimuli["fixation_black"] = visual.ShapeStim(win, 
+        vertices=((0, -0.5), (0, 0.5), (0,0), (-0.5,0), (0.5, 0)),
+        lineWidth=5,
+        closeShape=False,
+        lineColor="black")
+
     stimuli["bye_message"] = visual.TextStim(win, 
                                     text = texts["TEXT_BYE"], 
                                     alignHoriz="center")

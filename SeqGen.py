@@ -33,10 +33,13 @@ def generate_with_predefined_sequences(opts, sched_group):
     # create sequences
     row_list = []
     sess_num = 1
+    perm_num = 1
+ 
     for index, row in type_data.iterrows():
         seq_type, seq_length, max_chord_size, seq_keys, n_free_trials, \
-        n_paced_trials, n_free_trials_testing, n_paced_trials_testing, n_seqs,\
-        n_sess, testing_sessions = row
+        n_paced_trials, n_free_trials_testing, n_paced_trials_testing, \
+        trials_per_run, n_seqs,\
+        n_sess, testing_sessions, n_runs = row
         testing_session_list = \
         [int(x) for x in str(testing_sessions).split(",")]
         reorder = list(permutations(range(n_seqs)))    
@@ -54,89 +57,129 @@ def generate_with_predefined_sequences(opts, sched_group):
         
         if sched_group == 1: # swap trained and untrained
             seq_list.reverse()
+
+        myfac = 2
         
-        if opts.seq_file2:
+        if opts.seq_file2: 
             seq_list2 = mygenerator.read(opts.seq_file2, seq_type)
-            myfac = 3
-            seq_list = seq_list + seq_list2
-        else: 
-            myfac = 2
-      
+            untrained = seq_list[n_seqs:] + seq_list2
+
+            if opts.unseen:
+                myfac = 3
+                seq_list = seq_list + seq_list2
+
         # generate the sequences
         for seq in range(myfac*n_seqs): # 2 times: trained and untrained       
             index = random.randint(0, len(color_list)-1)
             seq_color.append(color_list[index])
             del color_list[index]            
-                 
+
+        untrained_index = 0                 
+
         for sess in range(n_sess):
+            if opts.seq_file2 and sess+1 in testing_session_list:
+                # just replace the untrained sequences
+                #print(sess+1, untrained_index)
+
+                seq_list[n_seqs:] = \
+                untrained[untrained_index:untrained_index + n_seqs]
+                untrained_index = untrained_index + n_seqs
+                if untrained_index == len(untrained):
+                    untrained_index = 0
+            
             for paced in range(2):
 
-                mypermutation = list(reorder[sess_num % len(reorder)])     
-                
-                for seq in range(myfac*n_seqs):        
-        
-                    instruct = 1 if seq == 0 else 0
-                    
-                    # create training and testing sessions    
-                    if not sess+1 in testing_session_list:
-                        sess_type = "training"
-                        n_trials = n_free_trials if paced == 0 else \
-                        n_paced_trials
+                myruns = n_runs if paced and sess+1 in testing_session_list else 1
+                for run in range(myruns):
+                    mypermutation = list(reorder[perm_num % len(reorder)])     
+                    perm_num = perm_num + 1
 
-                        if seq >= n_seqs:
-                            continue
-                        seq_index = mypermutation[seq]
-                        seq_train = "trained"
-           
-                    else:
-                        sess_type = "testing"
-                        n_trials = n_free_trials_testing if paced == 0 else \
-                        n_paced_trials_testing
-     
-                        if opts.seq_file2:
-                            # interleave trained/untrained/unseen
-                                                            
-                            if seq % 3 == 2: 
-                                seq_index = mypermutation[(seq - 2)/3] + \
-                                2*n_seqs 
-                                seq_train = "unseen"
-                            if seq % 3 == 1:
-                                seq_index = mypermutation[(seq - 1)/3] + n_seqs
-                                seq_train = "untrained"
-                            if seq % 3 == 0: 
-                                seq_index = mypermutation[seq/3]
-                                seq_train = "trained"
+                    for seq in range(myfac*n_seqs):        
+            
+                        instruct = 1 if seq == 0 else 0
                         
-                        else:                            
-                            if seq % 2 == 1: # interleave trained/untrained
-                                # use the same permutation, 
-                                # although it possibly won't make a difference
-                                seq_index = mypermutation[(seq - 1)/2] + n_seqs 
-                                seq_train = "untrained"
-                            else :
-                                seq_index = mypermutation[seq/2]
-                                seq_train = "trained"
+                        # create training and testing sessions    
+                        if not sess+1 in testing_session_list:
+                            sess_type = "training"
+                            n_trials = n_free_trials if paced == 0 else \
+                            n_paced_trials
     
-                    sequence, sequence_string = seq_list[seq_index]
-                    color = seq_color[seq_index]
-                        
-                    if n_trials > 0 :
-                        row_list.append([
-                            sess_num,
-                            sess_type,
-                            n_trials,
-                            " ".join(seq_keys),
-                            seq_type,
-#                            sequence,
-                            sequence_string, 
-                            seq_train,
-                            color,
-                            mypermutation,
-                            seq_index,
-                            paced,
-                            instruct,
-                            ])
+                            if seq >= n_seqs:
+                                continue
+                            seq_index = mypermutation[seq]
+                            seq_train = "trained"
+               
+                        else:
+                            sess_type = "fmri" if paced else "testing"
+                            n_trials = n_free_trials_testing if paced == 0 else \
+                            trials_per_run
+                            
+                            nbeats = config["MAX_CHORD_SIZE"] + \
+                            config["EXTRA_BEATS"]
+                            trial_duration = config["BEAT_INTERVAL"]*nbeats + \
+                            config["BUFFER_TIME"] + config["FIXATION_TIME"] + \
+                            config["ITIMEAN_FMRI"] 
+                            run_duration = trial_duration*n_trials*len(seq_list) + config["START_TIME_FMRI"]
+                            total_duration = run_duration*n_runs 
+                            total_trials = n_runs*n_trials
+                            
+                            if sess_type == "fmri": 
+                                print("Trial duration: %f s; "%(trial_duration) +
+                                      "Run duration: %.2f m; "%(run_duration/60) +
+                                      "Total duration: %.2f m; "%(total_duration/60) + 
+                                      "Total trials per sequence: %d"%(total_trials)
+                                      )
+
+        
+                            if opts.unseen:
+                                # interleave trained/untrained/unseen
+                                                                
+                                if seq % 3 == 2: 
+                                    seq_index = mypermutation[(seq - 2)/3] + \
+                                    2*n_seqs 
+                                    seq_train = "unseen"
+                                if seq % 3 == 1:
+                                    seq_index = mypermutation[(seq - 1)/3] + n_seqs
+                                    seq_train = "untrained"
+                                if seq % 3 == 0: 
+                                    seq_index = mypermutation[seq/3]
+                                    seq_train = "trained"
+                            
+                            else:                                    
+                                   
+                                if seq % 2 == 1: # interleave trained/untrained
+                                    # use the same permutation, 
+                                    # although it possibly won't make a difference
+                                    seq_index = mypermutation[(seq - 1)/2] + \
+                                    n_seqs 
+                                    seq_train = "untrained"
+                                    
+                                else :
+                                    seq_index = mypermutation[seq/2]
+                                    seq_train = "trained"
     
+                            
+                        sequence, sequence_string = seq_list[seq_index]
+                        color = seq_color[seq_index]
+                            
+                        if n_trials > 0 :
+                            row_list.append([
+                                sess_num,
+                                sess_type,
+                                n_trials,
+                                " ".join(seq_keys),
+                                seq_type,
+    #                            sequence,
+                                sequence_string, 
+                                seq_train,
+                                color,
+                                mypermutation,
+                                seq_index,
+                                paced,
+                                instruct,
+                                run + 1
+                                ])
+                    
             sess_num = sess_num + 1
 
     schedule = pd.DataFrame(row_list, columns = (
@@ -152,7 +195,8 @@ def generate_with_predefined_sequences(opts, sched_group):
             "seq_permutation",
             "seq_order",
             "paced",
-            "instruct"
+            "instruct",
+            "run"
     )
     )
     
@@ -167,17 +211,21 @@ def generate_with_predefined_sequences(opts, sched_group):
         schedulefilename = "./scheduling/schedule{}".format(sched_group) 
 
     if opts.split:
-        schedule_training = \
-        schedule.loc[schedule["sess_type"] == "training", :]
-        schedule_testing = \
-        schedule.loc[schedule["sess_type"] == "testing", :]
+        schedule_home = \
+        schedule.loc[schedule["sess_type"] != "fmri", :]
+#        schedule.loc[schedule["sess_type"] != "training", :]
+        schedule_fmri = \
+        schedule.loc[schedule["sess_type"] == "fmri", :]
         
-        schedule_training.to_csv(schedulefilename + ".csv", 
+        schedule_home.to_csv(schedulefilename + ".csv", 
                                  sep =";", index=False)
-        schedule_testing.to_csv(schedulefilename + "_fmri.csv", 
+        schedule_fmri.to_csv(schedulefilename + "_fmri.csv", 
                                  sep =";", index=False)
     else:
         schedule.to_csv(schedulefilename + ".csv", sep =";", index=False)
+
+    
+
         
         
 def generate_with_random_sequences(sched_group):
@@ -304,8 +352,15 @@ def build_parser():
                         type = str,
                         dest = "seq_file2", 
                         help = "Enter additional sequence file. " + \
-                        "It can be used for non-memorized sequences.",
+                        "It can be used for non-memorized sequences " + \
+                        "or to vary untrained sequences.",
                         required = False)
+
+    parser.add_argument("--unseen", 
+                        dest = "unseen", 
+                        help = "Add non-memorized sequences to test.",
+                        required = False)
+
 
     parser.add_argument("--schedule_file", 
                         type = str,

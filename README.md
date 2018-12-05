@@ -161,6 +161,12 @@ drop user 'subject001'@'localhost';
 To add a column:
 ```
 alter table keys_table add column global_clock double after clock_feedback;
+
+
+alter table memo_table add column run int after "global_clock";
+alter table trials_table add column run int after paced;
+alter table keys_table add column run int after paced;
+
 ```
 
 # Preparing a study
@@ -217,6 +223,9 @@ python SeqGen.py --sequence_file=./scheduling/sequences/sequences_demo.json --sc
 
 python SeqGen.py --sequence_file=./scheduling/sequences/sequences_001.json --schedule_file=./scheduling/schedules/kip1schedule1 --type_file=./scheduling/seq_types_ki1.csv
 python SeqGen.py --sequence_file=./scheduling/sequences/sequences_002.json --schedule_file=./scheduling/schedules/kip1schedule2 --type_file=./scheduling/seq_types_ki1.csv
+
+python SeqGen.py --sequence_file=./scheduling/sequences/sequences_001.json --sequence_file2=./scheduling/sequences/sequences_002.json --schedule_file=./scheduling/schedules/kip1schedule1 --type_file=./scheduling/seq_types_ki1.csv
+python SeqGen.py --sequence_file=./scheduling/sequences/sequences_002.json --sequence_file2=./scheduling/sequences/sequences_001.json --schedule_file=./scheduling/schedules/kip1schedule2 --type_file=./scheduling/seq_types_ki1.csv
 
 ```
 

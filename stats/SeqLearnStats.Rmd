@@ -30,7 +30,7 @@ library(network)
 library(boot)
 setwd("~/projects/SeqLearn/stats")
 
-suffix = '20181203_1718-KIpilot1db'
+suffix = '20181205_1940-KIpilot1db'
 keysfile = paste0('../data/archive/keys_table-', suffix, '.csv')
 trialsfile = paste0('../data/archive/trials_table-', suffix, '.csv')
 memofile = paste0('../data/archive/memo_table-', suffix, '.csv')
@@ -40,7 +40,7 @@ keysfile0 = paste0('../data/archive/keys_table-', suffix0, '.csv')
 trialsfile0 = paste0('../data/archive/trials_table-', suffix0, '.csv')
 memofile0 = paste0('../data/archive/memo_table-', suffix0, '.csv')
 
-suffix2 = '20181203_2238-LundfMRIpilot0db'
+suffix2 = '20181205_2002-LundfMRIpilot0db'
 keysfile2 = paste0('../data/archive/keys_table-', suffix2, '.csv')
 trialsfile2 = paste0('../data/archive/trials_table-', suffix2, '.csv')
 
@@ -192,7 +192,7 @@ Mean and variance
 
 last_trials = subset(unpaced_trials, trial > 5 & trial < 11) %>% group_by(username, sess_num, true_sequence, seq_train) %>% summarise(meanMT = mean(MT), sdMT = sd(MT))
 
-plot.meanMT = ggplot(last_trials, aes(x = sess_num, y = meanMT, group = true_sequence, col = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid(. ~ username ) + theme(legend.position="none")
+plot.meanMT = ggplot(last_trials, aes(x = sess_num, y = meanMT, group = true_sequence, col = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid(username ~ . ) + theme(legend.position="none")
 
 plot.sdMT = ggplot(last_trials, aes(x = sess_num, y = sdMT, group = true_sequence, col = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid(. ~ username ) + theme(legend.position="none")
 
@@ -234,7 +234,7 @@ print(plot.paced.wrong)
 
 ```{r fig.width=12, fig.asp=0.8}
 # plot also group aggregate per sequence and trained versus untrained
-finishers = c("kip1s002", "kip1s003", "kip1s004", "kip1s005")
+finishers = c("kip1s002", "kip1s003", "kip1s004", "kip1s005", "kip1s008")
 ok_unpaced_trials.group = subset(ok_unpaced_trials, username %in% finishers) %>% group_by(trial, sess_num, seq_train) %>% summarise(MT = mean(MT))
 
 plot.MT.group = ggplot(ok_unpaced_trials.group, aes(x = trial, y = MT, col = as.factor(seq_train), group =  as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( . ~ sess_num) + theme(legend.position="bottom")
@@ -300,13 +300,17 @@ Analyze clocks
 
 ```{r}
 
-#trialsfile = paste0('../data/archive/trialsfile-kip1s006.csv')
-#trials.table = read.table(trialsfile, sep =';', header = T, quote = "")
-paced_trials = subset(trials.table, paced == 1 & sess_num >2  & accuracy == 1)
-                      
-plot.fixation = ggplot(paced_trials, aes(x = trial, y = clock_fixation, group = sess_num, col = sess_num, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ true_sequence ) + theme(legend.position="none")
+trialsfile = paste0('../data/trialsfile-lup0s001_fmri.csv')
+trials.table = read.table(trialsfile, sep =';', header = T, quote = "")
+paced_trials = subset(trials.table, paced == 1)
+           
+diff.1 = apply(paced_trials[c("clock_fixation", "clock_execution", "clock_feedback")], 2, diff)           
+diff.2 = apply(paced_trials[c("clock_fixation", "clock_execution", "clock_feedback")], 1, diff) 
+print(diff.1)
+print(diff.2)
+#plot.fixation = ggplot(paced_trials, aes(x = trial, y = clock_fixation, group = sess_num, col = sess_num, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ true_sequence ) + theme(legend.position="none")
 
-print(plot.fixation)
+#print(plot.fixation)
 
 ```
 

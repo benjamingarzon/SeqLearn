@@ -144,6 +144,8 @@ def startSession(opts):
         config["PRESHOW"] = 0
         config["TESTMEM"] = 0
         config["BREAKS"] = 0
+        config["BUTTONBOX_KEYS"] = config["BUTTONBOX_KEYS_FMRI"]
+        config["START_TIME"] = config["START_TIME_FMRI"]
     
     if opts.demo: # load demo schedule instead
         schedule_file = "./scheduling/schedules/schedule-demo.csv"
@@ -181,10 +183,14 @@ def startSession(opts):
             schedule_file = opts.schedule_file
             sched_group = 0
             
-        
-        memofilename = "./data/memofile-{}.csv".format(username)
-        keysfilename = "./data/keysfile-{}.csv".format(username)
-        trialsfilename = "./data/trialsfile-{}.csv".format(username) 
+        if config["MODE"] == "fmri": 
+            memofilename = "./data/memofile-{}_fmri.csv".format(username)
+            keysfilename = "./data/keysfile-{}_fmri.csv".format(username)
+            trialsfilename = "./data/trialsfile-{}_fmri.csv".format(username) 
+        else: 
+            memofilename = "./data/memofile-{}.csv".format(username)
+            keysfilename = "./data/keysfile-{}.csv".format(username)
+            trialsfilename = "./data/trialsfile-{}.csv".format(username) 
         
     try:
         schedule = pd.read_csv(schedule_file, sep = ";")
@@ -199,6 +205,11 @@ def startSession(opts):
         trialsfile = open(trialsfilename, "ab")
         trialstable = pd.read_csv(trialsfilename, sep=';')
 
+        if opts.run:
+            run = opts.run
+        else:
+            run = 1
+
         if opts.session >= 0:
             sess_num = opts.session
         else:
@@ -206,6 +217,9 @@ def startSession(opts):
             next_sess_num = np.max(trialstable["sess_num"]) + 1
             q = np.where(schedule["sess_num"] >= next_sess_num)
             sess_num = schedule["sess_num"][np.min(q)] if q[0].size else 0
+            #trialstable.loc[schedule["sess_type"] == "fmri", :]
+            #run = np.max(trialstable[, "run"]) + 1
+            
             
         maxscore = defaultdict(float)
         maxgroupscore = defaultdict(float)
@@ -227,6 +241,8 @@ def startSession(opts):
         trialswriter = csv.writer(trialsfile, delimiter=";")
 
     except pd.errors.EmptyDataError: 
+        
+        run = 1
         # create new session
         memofile = open(memofilename, "wb")
         keysfile = open(keysfilename, "wb")
@@ -234,7 +250,7 @@ def startSession(opts):
         sess_num = np.min(schedule["sess_num"])
         maxscore = defaultdict(float)
         maxgroupscore = defaultdict(lambda:config["MAXSCORE_BASELINE"], {})
-
+        
         # connect files with a csv writer
         memowriter = csv.writer(memofile, delimiter=";")
         keyswriter = csv.writer(keysfile, delimiter=";")
@@ -253,7 +269,8 @@ def startSession(opts):
                 "obs_sequence", 
                 "accuracy", 
                 "RT",
-                "global_clock"
+                "global_clock",
+                "run"
         ])
 
         keyswriter.writerow([
@@ -279,8 +296,11 @@ def startSession(opts):
                 "clock_fixation", 
                 "clock_execution",
                 "clock_feedback",
+#                "clock_finished",
                 "global_clock",
-                "paced"
+                "paced",
+                "run"
+
         ])
     
         trialswriter.writerow([
@@ -304,8 +324,10 @@ def startSession(opts):
                 "clock_fixation", 
                 "clock_execution",
                 "clock_feedback",
+#                "clock_finished",
                 "global_clock",
-                "paced"
+                "paced",
+                "run"
         ])
 
     # select schedule for this session
@@ -313,12 +335,14 @@ def startSession(opts):
                                 "seq_color","seq_train"]].drop_duplicates()
     schedule_unique = schedule_unique.query("seq_train !='unseen'")
      
-    schedule = schedule.query('sess_num == %d'%(sess_num))
-    
+    schedule = schedule.query('sess_num == %d and run == %d'%(sess_num, run))
+    if config["MODE"] == "fmri":
+        print("Session %d run %d"%(sess_num, run))
+        
     return(sched_group, sess_num, username, memowriter, keyswriter, 
            trialswriter, memofile, keysfile, trialsfile, maxscore, 
            maxgroupscore, config, texts, schedule, 
-           schedule_unique)
+           schedule_unique, run)
 
 
 def filter_keys(keypresses, n_chords, key_code):
@@ -369,7 +393,7 @@ def filter_keys(keypresses, n_chords, key_code):
 def test_sequence(mystring, win, config, mycolor, texts, instructions_space,
                   instructions_select, error_message, error_sign, buzzer, 
                   memowriter, username, sched_group, sess_num, sess_date, 
-                  sess_time, seq_train, globalClock):
+                  sess_time, seq_train, globalClock, run):
     """ 
     Test that the subject has memorized the sequence.
     """
@@ -446,7 +470,8 @@ def test_sequence(mystring, win, config, mycolor, texts, instructions_space,
                     mypressedstring, 
                     1.0 if iscorrect else 0.0, # just check if correct
                     timer.getTime(),
-                    globalClock.getTime()                    
+                    globalClock.getTime(), 
+                    run                    
                 ])
             
         attempts = attempts + 1
