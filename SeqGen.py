@@ -124,7 +124,7 @@ def generate_with_predefined_sequences(opts, sched_group):
                             total_trials = n_runs*n_trials
                             
                             if sess_type == "fmri": 
-                                print("Trial duration: %f s; "%(trial_duration) +
+                                print("Trial duration: %.2f s; "%(trial_duration) +
                                       "Run duration: %.2f m; "%(run_duration/60) +
                                       "Total duration: %.2f m; "%(total_duration/60) + 
                                       "Total trials per sequence: %d"%(total_trials)
@@ -147,7 +147,7 @@ def generate_with_predefined_sequences(opts, sched_group):
                             
                             else:                                    
                                    
-                                if seq % 2 == 1: # interleave trained/untrained
+                                if seq % 2 == ((run + 1) % 2): # interleave trained/untrained differently on each run
                                     # use the same permutation, 
                                     # although it possibly won't make a difference
                                     seq_index = mypermutation[(seq - 1)/2] + \

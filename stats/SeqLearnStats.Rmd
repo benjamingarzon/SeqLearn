@@ -40,7 +40,7 @@ keysfile0 = paste0('../data/archive/keys_table-', suffix0, '.csv')
 trialsfile0 = paste0('../data/archive/trials_table-', suffix0, '.csv')
 memofile0 = paste0('../data/archive/memo_table-', suffix0, '.csv')
 
-suffix2 = '20181205_2002-LundfMRIpilot0db'
+suffix2 = '20181206_0820-LundfMRIpilot0db'
 keysfile2 = paste0('../data/archive/keys_table-', suffix2, '.csv')
 trialsfile2 = paste0('../data/archive/trials_table-', suffix2, '.csv')
 
@@ -73,7 +73,7 @@ memo.table = rbind(memo.table1, memo.table0)
 ```
 Analyze chords
 
-```{r fig.width=12, fig.asp=0.8}
+```{r fig.width=11, fig.asp=0.8}
 
 hasx = function(string, x){grep(, x)}
 
@@ -137,7 +137,7 @@ keys.table = rbind(keys.table1, keys.table2)
 
 Analyze memo
 
-```{r fig.width=12, fig.asp=0.8}
+```{r fig.width=11, fig.asp=0.8}
 
 # check missed as well
 # plot total mistakes
@@ -161,7 +161,7 @@ print(plot.totalRT)
 
 
 Analyze trial times
-```{r fig.width=12, fig.asp=0.8}
+```{r fig.width=11, fig.asp=0.8}
 
 maxy = 4500 
 miny = 500  
@@ -188,7 +188,7 @@ print(plot.MT.paced)
 
 
 Mean and variance
-```{r fig.width=12, fig.asp=0.8}
+```{r fig.width=11, fig.asp=0.8}
 
 last_trials = subset(unpaced_trials, trial > 5 & trial < 11) %>% group_by(username, sess_num, true_sequence, seq_train) %>% summarise(meanMT = mean(MT), sdMT = sd(MT))
 
@@ -218,7 +218,7 @@ Wrong trials
 
 CONTROL FOR MISSING
 
-```{r fig.width=12, fig.asp=0.8}
+```{r fig.width=11, fig.asp=0.8}
 
 unpaced_trials.wrong = unpaced_trials %>% group_by(username, sess_num, true_sequence, seq_train) %>% summarise(wrong = sum(accuracy < 1))
 paced_trials.wrong = paced_trials %>% group_by(username, sess_num, true_sequence, seq_train) %>% summarise(wrong = sum(accuracy < 1))
@@ -232,7 +232,7 @@ print(plot.paced.wrong)
 ```
 
 
-```{r fig.width=12, fig.asp=0.8}
+```{r fig.width=11, fig.asp=0.8}
 # plot also group aggregate per sequence and trained versus untrained
 finishers = c("kip1s002", "kip1s003", "kip1s004", "kip1s005", "kip1s008")
 ok_unpaced_trials.group = subset(ok_unpaced_trials, username %in% finishers) %>% group_by(trial, sess_num, seq_train) %>% summarise(MT = mean(MT))
@@ -265,7 +265,7 @@ print(plot.MT.group)
 Analyze duration
 
 
-```{r fig.width=12, fig.asp=0.8}
+```{r fig.width=11, fig.asp=0.8}
 plot.duration = ggplot(trials.table, aes(x = sess_num, y = global_clock/60, col = username, group = username)) + 
   stat_summary(fun.y = max, geom = "line", lwd = 1) +  stat_summary(fun.y = max, geom = "point") + ylab("Session duration")
 
@@ -277,7 +277,7 @@ print(plot.duration)
 Analyze dates and times
 
 
-```{r fig.width=12, fig.asp=0.8}
+```{r fig.width=11, fig.asp=0.8}
 
 trials.times = trials.table %>% mutate(sess_date = as.Date(sess_date), sess_time = as.POSIXct(sess_time, format="%H:%M:%S")) %>% group_by(username, sess_num, sess_date, sess_time, sess_type) %>% sample_n(1) 
 #kip1 = grep('kip1', trials.times$username)
@@ -300,12 +300,12 @@ Analyze clocks
 
 ```{r}
 
-trialsfile = paste0('../data/trialsfile-lup0s001_fmri.csv')
+trialsfile = paste0('../data/trialsfile-lup0s002_fmri.csv')
 trials.table = read.table(trialsfile, sep =';', header = T, quote = "")
 paced_trials = subset(trials.table, paced == 1)
            
-diff.1 = apply(paced_trials[c("clock_fixation", "clock_execution", "clock_feedback")], 2, diff)           
-diff.2 = apply(paced_trials[c("clock_fixation", "clock_execution", "clock_feedback")], 1, diff) 
+diff.1 = apply(paced_trials[c("clock_fixation", "clock_execution", "clock_feedback", "clock_finished")], 2, diff)           
+diff.2 = apply(paced_trials[c("clock_fixation", "clock_execution", "clock_feedback", "clock_finished")], 1, diff) 
 print(diff.1)
 print(diff.2)
 #plot.fixation = ggplot(paced_trials, aes(x = trial, y = clock_fixation, group = sess_num, col = sess_num, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ true_sequence ) + theme(legend.position="none")
@@ -316,9 +316,15 @@ print(diff.2)
 
 
 
+Lund pilot
+```{r fig.width=11, fig.asp=0.8}
+plot.MT = ggplot(subset(ok_unpaced_trials, username == "lup0s002"), aes(x = trial, y = MT, col = as.factor(true_sequence), group = true_sequence)) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ sess_num) + theme(legend.position="bottom")
 
+print(plot.MT)
 
-```{r fig.width=12, fig.asp=0.8}
+```
+
+```{r fig.width=11, fig.asp=0.8}
 
 ok_trials = subset(trials.table, accuracy == 1 &  paced == 0)
 unpaced_trials = subset(trials.table, paced == 0)

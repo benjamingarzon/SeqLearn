@@ -242,7 +242,11 @@ def startSession(opts):
 
     except pd.errors.EmptyDataError: 
         
-        run = 1
+        if opts.run:
+            run = opts.run
+        else:
+            run = 1
+
         # create new session
         memofile = open(memofilename, "wb")
         keysfile = open(keysfilename, "wb")
@@ -296,7 +300,7 @@ def startSession(opts):
                 "clock_fixation", 
                 "clock_execution",
                 "clock_feedback",
-#                "clock_finished",
+                "clock_finished",
                 "global_clock",
                 "paced",
                 "run"
@@ -324,7 +328,7 @@ def startSession(opts):
                 "clock_fixation", 
                 "clock_execution",
                 "clock_feedback",
-#                "clock_finished",
+                "clock_finished",
                 "global_clock",
                 "paced",
                 "run"

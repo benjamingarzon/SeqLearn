@@ -1,0 +1,17 @@
+sess_num;sess_type;n_trials;seq_keys;seq_type;sequence_string;seq_train;seq_color;seq_permutation;seq_order;paced;instruct;run
+6;fmri;6;1 2 3 4;type1;1 2 3 - 3 4 - 1 - 2 4 - 1 3 4;trained;#46f0f0;[0, 1];0;1;1;1
+6;fmri;6;1 2 3 4;type1;1 3 4 - 2 3 - 4 - 1 2 - 3;untrained;#911eb4;[0, 1];2;1;0;1
+6;fmri;6;1 2 3 4;type1;1 2 3 - 2 4 - 1 - 3 4 - 1 2 4;trained;#0082c8;[0, 1];1;1;0;1
+6;fmri;6;1 2 3 4;type1;2 3 4 - 1 4 - 3 - 1 2 - 1 3 4;untrained;#e6194b;[0, 1];3;1;0;1
+6;fmri;6;1 2 3 4;type1;1 3 4 - 2 3 - 4 - 1 2 - 3;untrained;#911eb4;[1, 0];2;1;1;2
+6;fmri;6;1 2 3 4;type1;1 2 3 - 2 4 - 1 - 3 4 - 1 2 4;trained;#0082c8;[1, 0];1;1;0;2
+6;fmri;6;1 2 3 4;type1;2 3 4 - 1 4 - 3 - 1 2 - 1 3 4;untrained;#e6194b;[1, 0];3;1;0;2
+6;fmri;6;1 2 3 4;type1;1 2 3 - 3 4 - 1 - 2 4 - 1 3 4;trained;#46f0f0;[1, 0];0;1;0;2
+6;fmri;6;1 2 3 4;type1;1 2 3 - 3 4 - 1 - 2 4 - 1 3 4;trained;#46f0f0;[0, 1];0;1;1;3
+6;fmri;6;1 2 3 4;type1;1 3 4 - 2 3 - 4 - 1 2 - 3;untrained;#911eb4;[0, 1];2;1;0;3
+6;fmri;6;1 2 3 4;type1;1 2 3 - 2 4 - 1 - 3 4 - 1 2 4;trained;#0082c8;[0, 1];1;1;0;3
+6;fmri;6;1 2 3 4;type1;2 3 4 - 1 4 - 3 - 1 2 - 1 3 4;untrained;#e6194b;[0, 1];3;1;0;3
+6;fmri;6;1 2 3 4;type1;1 3 4 - 2 3 - 4 - 1 2 - 3;untrained;#911eb4;[1, 0];2;1;1;4
+6;fmri;6;1 2 3 4;type1;1 2 3 - 2 4 - 1 - 3 4 - 1 2 4;trained;#0082c8;[1, 0];1;1;0;4
+6;fmri;6;1 2 3 4;type1;2 3 4 - 1 4 - 3 - 1 2 - 1 3 4;untrained;#e6194b;[1, 0];3;1;0;4
+6;fmri;6;1 2 3 4;type1;1 2 3 - 3 4 - 1 - 2 4 - 1 3 4;trained;#46f0f0;[1, 0];0;1;0;4
