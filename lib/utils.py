@@ -146,6 +146,9 @@ def startSession(opts):
         config["BREAKS"] = 0
         config["BUTTONBOX_KEYS"] = config["BUTTONBOX_KEYS_FMRI"]
         config["START_TIME"] = config["START_TIME_FMRI"]
+        # larger letters in fMRI mode
+        config["HEADING_TEXT_HEIGHT"] = 1.4*config["HEADING_TEXT_HEIGHT"]
+        config["TEXT_HEIGHT"] = 1.4*config["TEXT_HEIGHT"]
     
     if opts.demo: # load demo schedule instead
         schedule_file = "./scheduling/schedules/schedule-demo.csv"
@@ -205,21 +208,30 @@ def startSession(opts):
         trialsfile = open(trialsfilename, "ab")
         trialstable = pd.read_csv(trialsfilename, sep=';')
 
-        if opts.run:
-            run = opts.run
+        next_sess_num = np.max(trialstable["sess_num"]) + 1
+        q = np.where(schedule["sess_num"] >= next_sess_num)
+        # sess_num is zero if there are no more sessions left
+        sess_num = schedule["sess_num"][np.min(q)] if q[0].size else 0
+        #trialstable.loc[schedule["sess_type"] == "fmri", :]
+        #run = np.max(trialstable[, "run"]) + 1
+
+        if config["MODE"] == "fmri": 
+            run = np.max(trialstable["run"]) + 1
+
+            if run > config["N_RUNS"]: # we did the last run, move to next
+                run = 1
+            else:    
+                sess_num = np.max(trialstable["sess_num"]) 
+                
         else:
             run = 1
 
+        # override previous options
+        if opts.run:
+            run = opts.run
         if opts.session >= 0:
             sess_num = opts.session
-        else:
-            # take the next session that is in the schedule
-            next_sess_num = np.max(trialstable["sess_num"]) + 1
-            q = np.where(schedule["sess_num"] >= next_sess_num)
-            sess_num = schedule["sess_num"][np.min(q)] if q[0].size else 0
-            #trialstable.loc[schedule["sess_type"] == "fmri", :]
-            #run = np.max(trialstable[, "run"]) + 1
-            
+
             
         maxscore = defaultdict(float)
         maxgroupscore = defaultdict(float)
@@ -274,7 +286,8 @@ def startSession(opts):
                 "accuracy", 
                 "RT",
                 "global_clock",
-                "run"
+                "run",
+                "block"
         ])
 
         keyswriter.writerow([
@@ -303,7 +316,8 @@ def startSession(opts):
                 "clock_finished",
                 "global_clock",
                 "paced",
-                "run"
+                "run",
+                "block"
 
         ])
     
@@ -331,7 +345,8 @@ def startSession(opts):
                 "clock_finished",
                 "global_clock",
                 "paced",
-                "run"
+                "run",
+                "block"
         ])
 
     # select schedule for this session
@@ -341,7 +356,7 @@ def startSession(opts):
      
     schedule = schedule.query('sess_num == %d and run == %d'%(sess_num, run))
     if config["MODE"] == "fmri":
-        print("Session %d run %d"%(sess_num, run))
+        print("Username %s, session %d, run %d"%(username, sess_num, run))
         
     return(sched_group, sess_num, username, memowriter, keyswriter, 
            trialswriter, memofile, keysfile, trialsfile, maxscore, 

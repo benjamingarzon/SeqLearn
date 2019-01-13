@@ -22,15 +22,25 @@ Conclusions
 
 ```{r}
 rm(list=ls())
+
+#if (!require("pacman")) install.packages("pacman")
+
+#pacman::p_load(ggplot2, reshape2, dplyr, stringr)
+
 library(ggplot2)
 library(reshape2)
 library(dplyr)
-library(GGally)
-library(network)
+library(stringr)
 library(boot)
+library(lmPerm)
+#library(GGally)
+#library(network)
+library(rstan)
+Sys.setenv(LOCAL_CPPFLAGS = '-march=native')
+options(mc.cores = parallel::detectCores())
 setwd("~/projects/SeqLearn/stats")
 
-suffix = '20181205_1940-KIpilot1db'
+suffix = '20190113_1631-KIpilot1db'
 keysfile = paste0('../data/archive/keys_table-', suffix, '.csv')
 trialsfile = paste0('../data/archive/trials_table-', suffix, '.csv')
 memofile = paste0('../data/archive/memo_table-', suffix, '.csv')
@@ -40,7 +50,7 @@ keysfile0 = paste0('../data/archive/keys_table-', suffix0, '.csv')
 trialsfile0 = paste0('../data/archive/trials_table-', suffix0, '.csv')
 memofile0 = paste0('../data/archive/memo_table-', suffix0, '.csv')
 
-suffix2 = '20181206_0820-LundfMRIpilot0db'
+suffix2 = '20181210_0918-LundfMRIpilot0db'
 keysfile2 = paste0('../data/archive/keys_table-', suffix2, '.csv')
 trialsfile2 = paste0('../data/archive/trials_table-', suffix2, '.csv')
 
@@ -75,15 +85,15 @@ Analyze chords
 
 ```{r fig.width=11, fig.asp=0.8}
 
-hasx = function(string, x){grep(, x)}
-
 ok_keys = subset(keys.table, paced == 0 & trial_type != "missing" & accuracy == 1 & keystroke > 0) %>%
   mutate(size_from = nchar(gsub(" ", "", key_from)), 
          size_to = nchar(gsub(" ", "", key_to)))
 
 # baseline
 ok_keys_baseline = subset(ok_keys, sess_num == 1 & trial < 5 )
-keys.table.median = ok_keys_baseline %>% group_by(username, key_from, key_to, size_from, size_to) %>% summarise(medianRT = median(RT), sdRT = sd(RT))
+
+  keys.table.median = ok_keys_baseline %>% group_by(username, key_from, key_to, size_from, size_to) %>% summarise(medianRT = median(RT), sdRT = sd(RT))
+
 keys.table.median = keys.table.median %>% arrange(username, medianRT) %>% group_by(username) %>% mutate(rankRT = percent_rank(medianRT), transition= paste(key_from, key_to, sep = ' - '), size_trans = size_from + size_to, devRT = scale(medianRT, scale = F, center = T))
 
 # rank within each subject
@@ -99,7 +109,11 @@ keys.table.rank = keys.table.rank %>% mutate(
          to1 = length(grep("1", key_to)),
          to2 = length(grep("2", key_to)),
          to3 = length(grep("3", key_to)),
-         to4 = length(grep("4", key_to))
+         to4 = length(grep("4", key_to)),
+         from1 = length(grep("1", key_from)),
+         from2 = length(grep("2", key_from)),
+         from3 = length(grep("3", key_from)),
+         from4 = length(grep("4", key_from))
 )
 
 keys.table.rank = subset(keys.table.rank, count > 1)
@@ -109,24 +123,252 @@ plot.rank = ggplot(keys.table.median, aes(x = transition, y = rankRT, col = user
 keys.table.rank$logmedianrank = logit(keys.table.rank$medianrank + 0.0001)
 model.rank = lm(logmedianrank ~ size_from + size_to, data = keys.table.rank)
 summary(model.rank)
-model.rank = lm(logmedianrank ~ to1 + to2 + to3 + to4, data = keys.table.rank)
+model.rank = lm(logmedianrank ~ to1*to2 + to1*to3 + to1*to4 + to2*to3 + to2*to4 + to3*to4, data = keys.table.rank)
+summary(model.rank)
+model.rank = lm(logmedianrank ~ from1 + from2 + from3 + from4, data = keys.table.rank)
 summary(model.rank)
 
 plot(keys.table.rank$medianrank, lwd = 2, type = "l")
 lines(keys.table.rank$minrank, lty = 2)
 lines(keys.table.rank$maxrank, lty = 2)
 
-par(mfrow = c(1, 3))
-boxplot(keys.table.rank$medianrank ~ keys.table.rank$size_trans, main = "transition")
-boxplot(keys.table.rank$medianrank ~ keys.table.rank$size_from, main = "from")
-boxplot(keys.table.rank$medianrank ~ keys.table.rank$size_to, main = "to")
-
-boxplot(keys.table.rank$medianrank ~ keys.table.rank$to1, main = "to_1")
+#par(mfrow = c(1, 3))
+# boxplot(keys.table.rank$medianrank ~ keys.table.rank$size_trans, main = "transition")
+# boxplot(keys.table.rank$medianrank ~ keys.table.rank$size_from, main = "from")
+# boxplot(keys.table.rank$medianrank ~ keys.table.rank$size_to, main = "to")
+# 
+# boxplot(keys.table.rank$medianrank ~ keys.table.rank$to1, main = "to_1")
 
 # plot.keystrokepairs = ggplot(keys.table.rank, aes(x = key_from, y = key_to, fill = medianRT)) + geom_tile() + theme_classic()
 # print(plot.keystrokepairs)
 
+
 ```
+```{r}
+
+learners = c("kip1s002", "kip1s003", "kip1s004", "kip1s005", "kip1s006", "kip1s008", "kip1s009", "lup0s002")
+
+# learning
+# subjects with 
+ok_keys_learning = subset(ok_keys, trial > 5 & trial < 11 & username %in% learners )
+
+
+learning_rate = function(y, plotit = F){ 
+  x = seq(length(y)) - 1 
+  m = lm(log(y) ~ x)   
+#  print(coef(m))
+  
+  alpha = exp(coef(m)[1])
+  beta = -coef(m)[2]
+
+  if(plotit){
+   print(length(y))   
+   plot(x, y)
+   lines(x, alpha*exp(-beta*x), col = 'red')
+  }
+  
+  return(beta)
+  }
+
+
+keys.table.median = ok_keys_learning %>% group_by(username, key_from, key_to, size_from, size_to) %>% 
+  summarise(medianRT = median(RT), sdRT = sd(RT), rateRT = learning_rate(RT))
+
+keys.table.median = keys.table.median %>% arrange(username, medianRT) %>% group_by(username) %>% mutate(rankRT = percent_rank(rateRT), transition= paste(key_from, key_to, sep = ' - '), size_trans = size_from + size_to, devRT = scale(medianRT, scale = F, center = T))
+
+# rank within each subject
+plot.median = ggplot(keys.table.median, aes(x = key_from, y = medianRT)) + 
+    geom_errorbar(aes(ymin=medianRT-sdRT, ymax=medianRT+sdRT), width=.1) +
+    geom_line() + 
+    geom_point() + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + facet_grid( . ~ username)
+print(plot.median)
+
+keys.table.rank = keys.table.median %>% group_by(key_from, key_to, size_from, size_to, transition, size_trans) %>% summarise(meandev = mean(devRT), meanrank = mean(rankRT), medianrank = median(rankRT), count = n(), minrank = min(rankRT), maxrank = max(rankRT)) %>% arrange(meanrank)
+
+keys.table.median = keys.table.median %>% mutate(
+         to1 = length(grep("1", key_to)),
+         to2 = length(grep("2", key_to)),
+         to3 = length(grep("3", key_to)),
+         to4 = length(grep("4", key_to)),
+         from1 = length(grep("1", key_from)),
+         from2 = length(grep("2", key_from)),
+         from3 = length(grep("3", key_from)),
+         from4 = length(grep("4", key_from))
+)
+
+keys.table.rank = subset(keys.table.rank, count > 1)
+plot.rank = ggplot(keys.table.median, aes(x = transition, y = rankRT, col = username)) + 
+    geom_point() + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+#print(plot.rank)
+keys.table.median$logmedianrank = logit((keys.table.median$rankRT + 0.1)*0.9)
+
+
+keys.table.extremes = subset(keys.table.median, size_to != 2 )
+
+model.rank = lmp(rankRT ~ size_to, data = keys.table.extremes, perm = 'Exact')
+summary(model.rank)
+plot( jitter(rankRT) ~ jitter(size_to), keys.table.extremes)
+
+model.rank = lm(rankRT ~ to1*to2 + to1*to3 + to1*to4 + to2*to3 + to2*to4 + to3*to4, data = keys.table.median)
+summary(model.rank)
+model.rank = lm(logmedianrank ~ from1 + from2 + from3 + from4, data = keys.table.median)
+summary(model.rank)
+
+plot(keys.table.rank$medianrank, lwd = 2, type = "l")
+lines(keys.table.rank$minrank, lty = 2)
+lines(keys.table.rank$maxrank, lty = 2)
+
+# par(mfrow = c(1, 3))
+# boxplot(keys.table.rank$medianrank ~ keys.table.rank$size_trans, main = "transition")
+# boxplot(keys.table.rank$medianrank ~ keys.table.rank$size_from, main = "from")
+# boxplot(keys.table.rank$medianrank ~ keys.table.rank$size_to, main = "to")
+# 
+# boxplot(keys.table.rank$medianrank ~ keys.table.rank$to1, main = "to_1")
+# 
+# plot.keystrokepairs = ggplot(keys.table.rank, aes(x = key_from, y = key_to, fill = medianRT)) + geom_tile() + theme_classic()
+# print(plot.keystrokepairs)
+
+```
+
+
+Same but for sequences
+
+Baseline
+```{r}
+
+
+ok_trials = subset(trials.table, paced == 0 & trial_type != "missing" & accuracy == 1)                                              
+# baseline
+ok_trials_baseline = subset(ok_trials, sess_num == 1 & trial < 5 )
+ok_trials_learning = subset(ok_trials, trial > 5 & trial < 11 & username %in% learners )
+
+trials.table.median = ok_trials_baseline %>% group_by(username, true_sequence) %>% summarise(medianRT = median(RT), sdRT = sd(RT))
+
+trials.table.median = trials.table.median %>% arrange(username, medianRT) %>% group_by(username) %>% mutate(rankRT = percent_rank(medianRT), devRT = scale(medianRT, scale = F, center = T)) %>% mutate(sequence_length = nchar(as.character(true_sequence)))                                                   
+
+# rank within each subject
+trials.table.rank = trials.table.median %>% group_by(true_sequence, sequence_length) %>% summarise(meandev = mean(devRT), meanrank = mean(rankRT), medianrank = median(rankRT), count = n(), minrank = min(rankRT), maxrank = max(rankRT)) %>% arrange(meanrank) 
+
+#trials.table.rank = subset(trials.table.rank, count > 1)
+plot.rank = ggplot(trials.table.median, aes(x = true_sequence, y = rankRT, col = username)) + 
+    geom_point() + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+print(plot.rank)
+
+trials.table.rank$logmedianrank = logit(trials.table.rank$medianrank + 0.0001)
+#model.rank = lm(logmedianrank ~ size_from + size_to, data = keys.table.rank)
+#summary(model.rank)
+
+plot(trials.table.rank$medianrank, lwd = 2, type = "l")
+lines(trials.table.rank$minrank, lty = 2)
+lines(trials.table.rank$maxrank, lty = 2)
+
+plot(trials.table.rank$count, jitter(trials.table.rank$medianrank))
+
+plot(trials.table.rank$sequence_length, jitter(trials.table.rank$medianrank))
+
+plot(trials.table.median$sequence_length, jitter(trials.table.median$rankRT))
+summary(
+lm(trials.table.median$sequence_length ~ trials.table.median$rankRT)
+)
+
+```
+
+Learning
+```{r}
+learners = c("kip1s002", "kip1s003", "kip1s004", "kip1s005", "kip1s006", "kip1s008", "kip1s009", "lup0s002")
+learners = c("kip1s002", "kip1s003", "kip1s004", "kip1s005", "kip1s008")
+
+ok_trials = subset(trials.table, accuracy == 1 &  paced == 0 & trial_type != 'missed' )
+
+myfunc <- function(alpha, x, y) sum((y - alpha[1]+ alpha[2]*exp(-alpha[3]*x))^2)
+
+learning_rate = function(y, plotit = F, main){ 
+  # x = seq(length(y)) - 1
+  # alpha = fminsearch(myfunc, c(500, 300, 1), x,  y )$xval
+  # 
+  # if(plotit){
+  #   print(length(y)) 
+  #   print(alpha)
+  #   plot(x, y, type = "b", pch = 20, main = main)
+  #   lines(x, alpha[1]+ alpha[2]*exp(-alpha[3]*x), col = 'red')
+  # }
+  n = length(y)
+  alpha = (y[1]-mean(y[seq(n -5, n)]))/y[1]
+  return(alpha)
+}
+
+
+# learning
+ok_trials_learning = subset(ok_trials, trial > 10 & username %in% learners & seq_train == 'trained') %>% group_by(username, true_sequence, sess_num) %>% summarise(medianRT = median(RT), sdRT = sd(RT))
+ok_trials_learning$username = droplevels(ok_trials_learning$username)
+
+ok_trials_learning$cluster = as.numeric(as.factor(paste(ok_trials_learning$true_sequence, ok_trials_learning$username)))
+
+# fit with stan
+stan_data = list(cluster = ok_trials_learning$cluster, x = ok_trials_learning$sess_num, y = ok_trials_learning$medianRT, 
+                 Nclus = max(ok_trials_learning$cluster), N = nrow(ok_trials_learning) )
+stan_control = list(adapt_delta = 0.9, max_treedepth = 12)
+
+fit = stan(file = "exponential_fit.stan", chains = 4, iter = 3000, warmup = 2000, data = stan_data, control = stan_control)
+pairs(fit, pars = c('mu_hyp', 'sigma_hyp'))
+traceplot(fit, par = c('mu_hyp', 'sigma_hyp'))
+
+params = summary(fit)$summary[, "mean"]
+a = params[grep("a\\[", names(params))]
+b = params[grep("b\\[", names(params))]
+c = params[grep("c\\[", names(params))]
+
+trials.table.rate = ok_trials_learning %>% group_by(username, true_sequence, cluster) %>% summarise(rateRT = b[cluster[1]])
+
+for(j in unique(ok_trials_learning$cluster)){
+  mydata = subset(as.data.frame(ok_trials_learning), cluster == j)
+  y = mydata$medianRT
+  x = mydata$sess_num
+  plot(x, y, pch = 20, cex = 1, main = j)
+  lines(x, a[j]*exp(-b[j]*x) + c[j], col = "red")
+}
+
+plot(trials.table.rate$username, trials.table.rate$rateRT, las = 2)
+
+trials.table.rank= trials.table.rate %>% arrange(username, true_sequence, rateRT) %>% group_by(username) %>% mutate(rankRT = percent_rank(rateRT), true_sequence = as.character(true_sequence)) %>% mutate(true_sequence = as.factor(true_sequence), sequence_length  = nchar(as.character(true_sequence)), 
+n1 = str_count(true_sequence, "1"),
+n2 = str_count(true_sequence, "2"),
+n3 = str_count(true_sequence, "3"),
+n4 = str_count(true_sequence, "4"))
+
+plot(jitter(trials.table.rank$sequence_length), jitter(trials.table.rank$rankRT))
+
+trials.table.ranked = trials.table.rank %>% group_by(true_sequence, sequence_length) %>% summarise(medianrank = median(rankRT), count = n(), minrank = min(rankRT), maxrank = max(rankRT)) %>% arrange(medianrank) 
+
+plot(trials.table.ranked$medianrank, lwd = 2, type = "l")
+lines(trials.table.ranked$minrank, lty = 2)
+lines(trials.table.ranked$maxrank, lty = 2)
+
+plot(trials.table.ranked$sequence_length, trials.table.ranked$medianrank)
+
+lm (rankRT ~ n1 + n2 + n3 + n4, data = trials.table.rank)
+summary(lm (rankRT ~ n1 + n2 + n3 + n4, data = trials.table.rank))
+# rank within each subject
+```
+
+
+```{r}
+
+slow = '1 2 3 - 3 4 - 1 - 2 4 - 1 3 4'
+fast = '2 3 4 - 1 4 - 3 - 1 2 - 1 3 4'
+
+print(ggplot(subset(ok_trials_learning, true_sequence ==  slow), 
+       aes(x = sess_num, y = medianRT, col = username)) + geom_line())
+
+print(ggplot(subset(ok_trials_learning, true_sequence ==  fast), 
+       aes(x = sess_num, y = medianRT, col = username)) + geom_line())
+
+
+plot.rank = ggplot(trials.table.median, aes(x = true_sequence, y = rankRT, col = username)) + 
+    geom_point() + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+print(plot.rank)
+```
+
 
 ```{r}
 trials.table = rbind(trials.table1, trials.table2)
@@ -234,7 +476,7 @@ print(plot.paced.wrong)
 
 ```{r fig.width=11, fig.asp=0.8}
 # plot also group aggregate per sequence and trained versus untrained
-finishers = c("kip1s002", "kip1s003", "kip1s004", "kip1s005", "kip1s008")
+finishers = c("kip1s002", "kip1s003", "kip1s004", "kip1s005", "kip1s008", "kip1s009")
 ok_unpaced_trials.group = subset(ok_unpaced_trials, username %in% finishers) %>% group_by(trial, sess_num, seq_train) %>% summarise(MT = mean(MT))
 
 plot.MT.group = ggplot(ok_unpaced_trials.group, aes(x = trial, y = MT, col = as.factor(seq_train), group =  as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( . ~ sess_num) + theme(legend.position="bottom")
@@ -306,8 +548,8 @@ paced_trials = subset(trials.table, paced == 1)
            
 diff.1 = apply(paced_trials[c("clock_fixation", "clock_execution", "clock_feedback", "clock_finished")], 2, diff)           
 diff.2 = apply(paced_trials[c("clock_fixation", "clock_execution", "clock_feedback", "clock_finished")], 1, diff) 
-print(diff.1)
-print(diff.2)
+#print(diff.1)
+#print(diff.2)
 #plot.fixation = ggplot(paced_trials, aes(x = trial, y = clock_fixation, group = sess_num, col = sess_num, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ true_sequence ) + theme(legend.position="none")
 
 #print(plot.fixation)
@@ -320,7 +562,17 @@ Lund pilot
 ```{r fig.width=11, fig.asp=0.8}
 plot.MT = ggplot(subset(ok_unpaced_trials, username == "lup0s002"), aes(x = trial, y = MT, col = as.factor(true_sequence), group = true_sequence)) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ sess_num) + theme(legend.position="bottom")
 
+last_trials = subset(ok_unpaced_trials, username == "lup0s002" & trial > 15) %>% group_by(sess_num, true_sequence, seq_train) %>% summarise(meanMT = mean(MT), sdMT = sd(MT))
+
+plot.meanMT = ggplot(last_trials, aes(x = sess_num, y = meanMT, group = true_sequence, col = as.factor(seq_train))) + geom_line(lwd=1) + geom_point(size=2) + theme(legend.position="none")
+
+last_trials = subset(ok_unpaced_trials, username == "lup0s002" & trial > 15) %>% group_by(sess_num, seq_train) %>% summarise(meanMT = mean(MT), sdMT = sd(MT))
+
+plot.meanMT2 = ggplot(last_trials, aes(x = sess_num, y = meanMT, col = as.factor(seq_train))) + geom_line(lwd=1) + geom_point(size=2) + theme(legend.position="none")
+
 print(plot.MT)
+print(plot.meanMT)
+print(plot.meanMT2)
 
 ```
 
@@ -339,3 +591,14 @@ print(plot.MT)
 print(plot.acc)
 
 ```
+
+
+```{r}
+#trialsfile = paste0('../../SeqLearnPilot/dataLundPilot/trialsfile-lup0s002_fmri.csv')
+#trials.table = read.table(trialsfile, sep =';', header = T, quote = "")
+#ok_trials = subset(trials.table, accuracy == 1 & run > 1)
+#table(ok_trials$true_sequence)
+#table(ok_trials$seq_train)
+
+```
+

@@ -47,10 +47,14 @@ def connect(opts):
                 engine = create_engine(engine_string)
                 
                 if opts.delete:
-                    engine.execute("drop table keys_table;")
-                    engine.execute("drop table trials_table;")
-                    engine.execute("drop table memo_table;")                    
-                    print('Deleted all database tables!')
+ 
+                    if raw_input("Are you sure? (y/n): ").lower().strip()[:1] \
+                    == "y": 
+                    
+                        engine.execute("drop table keys_table;")
+                        engine.execute("drop table trials_table;")
+                        engine.execute("drop table memo_table;")                    
+                        print('Deleted all database tables!')
 
                 if opts.upload:
                     

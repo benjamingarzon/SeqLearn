@@ -218,6 +218,13 @@ optional arguments:
 Example: 
 
 ```
+```
+Ver 1.4
+# schedule group added automatically, needs files sequences_grouped_001_lund1_0.json and sequences_grouped_001_lund1_1.json
+python SeqGen.py --sequence_file=./scheduling/sequences/sequences_grouped_001_lund1 --schedule_file=./scheduling/schedules/lup0schedule1 --type_file=./scheduling/seq_types_lu0.csv
+
+Older versions
+
 python SeqGen.py --sequence_file=./scheduling/sequences/sequences_001.json --schedule_file=./scheduling/schedules/kip0schedule1 --type_file=./scheduling/seq_types.csv
 python SeqGen.py --sequence_file=./scheduling/sequences/sequences_demo.json --schedule_file=./scheduling/schedules/schedule_simple --type_file=./scheduling/seq_types_simple.csv --split
 
@@ -229,16 +236,13 @@ python SeqGen.py --sequence_file=./scheduling/sequences/sequences_002.json --seq
 
 ```
 
-Add a second type of sequences (unseen)
+Add a second type of sequences (unseen - DEPRECATED)
 ```
 python SeqGen.py --sequence_file=./scheduling/sequences/sequences_001.json --sequence_file2=./scheduling/sequences/sequences_002.json --schedule_file=./scheduling/schedules/kip0schedule1 --type_file=./scheduling/seq_types.csv
 python SeqGen.py --sequence_file=./scheduling/sequences/sequences_001.json --sequence_file2=./scheduling/sequences/sequences_002.json --schedule_file=./scheduling/schedules/kip1schedule1 --type_file=./scheduling/seq_types.csv
 python SeqGen.py --sequence_file=./scheduling/sequences/sequences_002.json --sequence_file2=./scheduling/sequences/sequences_001.json --schedule_file=./scheduling/schedules/kip1schedule2 --type_file=./scheduling/seq_types.csv
 ```
 
-```
-python SeqGen.py --sequence_file=./scheduling/sequences/sequences_001.json --schedule_file=./scheduling/schedules/lup0schedule1 --type_file=./scheduling/seq_types_lu0.csv
-```
 
 # Function modes
 ## Home training

@@ -22,6 +22,8 @@ from argparse import ArgumentParser
 from sqlalchemy import create_engine, exc
 import sshtunnel
 from stimuli.stimuli import define_stimuli
+from shutil import copyfile
+
 
 sshtunnel.SSH_TIMEOUT = 20.0
 sshtunnel.TUNNEL_TIMEOUT = 20.0
@@ -167,9 +169,9 @@ def SeqLearn(opts):
         sess_num, sess_type, n_trials, seq_keys =\
         row.sess_num, row.sess_type, row.n_trials, row.seq_keys.split(" ") 
         
-        sequence_string, seq_train, seq_color, seq_type, paced, instruct =\
-        row.sequence_string, row.seq_train, row.seq_color, row.seq_type, \
-        row.paced, row.instruct
+        sequence_string, seq_train, seq_color, seq_type, paced, instruct, \
+        block = row.sequence_string, row.seq_train, row.seq_color, \
+        row.seq_type, row.paced, row.instruct, row.block
 
         sequence = string_to_seq(sequence_string)
 
@@ -284,17 +286,18 @@ def SeqLearn(opts):
             if config["MODE"] == "fmri":
                 current_stimuli = squareStimuli[trial-1]
             else:
-                current_stimuli = [trialStimulus[trial-1]] + squareStimuli[trial-1]
+                current_stimuli = [trialStimulus[trial-1]] + \
+                squareStimuli[trial-1]
  
             # present fixation
-            clock_fixation = wait_clock(globalClock, target_time, # when fixation starts
+            clock_fixation = wait_clock(globalClock, target_time, 
                                             rel = False)
          
             if config["MODE"] == "fmri":                 
                 if config["TRIGGER_FIXATION"] == 1:                 
                     event.waitKeys(keyList = [config["FMRI_TRIGGER"]])  
                 clock_fixation = globalClock.getTime()
-                print("Trial %d of %d"%(trial, n_trials))
+                print("Block %d, trial %d of %d"%(block, trial, n_trials))
                 
             target_time = clock_fixation + config["FIXATION_TIME"]
 
@@ -461,14 +464,12 @@ def SeqLearn(opts):
                         showStimulus(win, [last_bar, last_label, best_bar, 
                                            best_label, group_best_bar, 
                                            group_best_label, bottomline])
-            
-            if config["MODE"] != "fmri":        
-                wait_clock(globalClock, config["FEEDBACK_TIME"])
-                                            
-            # write results to files
+
             key_from = ["0"]
             
-            if config["MODE"] != "fmri":
+            if config["MODE"] != "fmri":        
+                wait_clock(globalClock, config["FEEDBACK_TIME"])                                                       
+#            if config["MODE"] != "fmri": 
                 if config["BREAKS"] == 1 and \
                 cum_trial%config["BREAK_TRIALS"] == 1: 
                     showStimulus(win, [instructionsbreak_message])
@@ -478,6 +479,10 @@ def SeqLearn(opts):
                 else: 
                     target_time = clock_feedback + config["FEEDBACK_TIME"] + \
                 config["BUFFER_TIME"]
+            else:
+                #decide do stretching when necessary
+                print("Stretching")
+                print("Accuracy: %f"%(accuracy))
                 
             clock_finished = wait_clock(globalClock, 
                         target_time, 
@@ -485,7 +490,10 @@ def SeqLearn(opts):
             
 #            showStimulus(win, [fixation_alt])
             target_time = clock_finished + ITI.pop()
+ 
+           # write results to files
             
+            key_from = ["0"]
             
             for keystroke in range(len(keys)):
                 
@@ -518,7 +526,8 @@ def SeqLearn(opts):
                     "{:.3f}".format(clock_finished - start_time),
                     "{:.3f}".format(globalClock.getTime()), 
                     paced,
-                    run
+                    run,
+                    block
                 ])
                 key_from = key_to
         
@@ -546,7 +555,8 @@ def SeqLearn(opts):
                     "{:.3f}".format(clock_finished - start_time),
                     "{:.3f}".format(globalClock.getTime()), 
                     paced,
-                    run
+                    run, 
+                    block
             ])
 
             trial = trial + trialincrease
@@ -570,6 +580,17 @@ def SeqLearn(opts):
     mymemo = pd.read_table(memofile.name, sep = ";")
     mykeys = pd.read_table(keysfile.name, sep = ";")
     mytrials = pd.read_table(trialsfile.name, sep = ";")
+    
+    # make a local backup
+    now = datetime.now()
+    timestring = now.strftime('%Y%m%d_%H%M')
+
+    copyfile(memofile.name, now.strftime(
+            './data/backup/memofile-%s-%s.csv'%(username, timestring)))
+    copyfile(keysfile.name, now.strftime(
+            './data/backup/keysfile-%s-%s.csv'%(username, timestring)))
+    copyfile(trialsfile.name, now.strftime(
+            './data/backup/trialsfile-%s-%s.csv'%(username, timestring)))
     
     if not opts.demo and not opts.no_upload:
         try:

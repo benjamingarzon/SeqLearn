@@ -48,6 +48,22 @@ class Generator:
             
         seq_list = [ (string_to_seq(x), x) for x in seqs[seq_type]]
         return(seq_list)
+        
+    def read_grouped(self, seq_file, seq_type=None):
+        """Read sequences from sequence file with predefined sequences."""
+                    
+        try:
+            seq_json = open(seq_file, "r")
+            seqs = json.load(seq_json)
+            seq_json.close()
+        except IOError: 
+            print "Error: Sequence file is missing!"
+        trained = [ (string_to_seq(x), x) 
+        for x in seqs[seq_type]['trained']]
+        untrained = [ (string_to_seq(x), x) 
+        for x in seqs[seq_type]['untrained']]
+        
+        return(trained, untrained)
     
     
 def string_to_seq(mystring):

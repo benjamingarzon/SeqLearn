@@ -197,13 +197,14 @@ for (i in seq(length(chosen_schedules))){
   print(t(finger_distribution.trained))
   print(t(finger_distribution.untrained))
   
-  json_file = paste0('../scheduling/sequences/sequences_', formatC(i, width = 3, flag = 0), '.json')
+  json_file = paste0('../scheduling/sequences/sequences_grouped_', formatC(i, width = 3, flag = 0), '.json')
   trained.chunks = schedule$trained
   untrained.chunks = schedule$untrained
   trained = translate_seqs(trained.chunks, chords)
   untrained = translate_seqs(untrained.chunks, chords)
-  myjson = toJSON(list(type1 = c(trained, untrained)))
-
+#  myjson = toJSON(list(type1 = c(trained, untrained)))
+  myjson = toJSON(list(type1 = list(trained = trained, untrained = untrained)))
+  
   write(myjson, json_file)
   
 } 
