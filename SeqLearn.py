@@ -165,7 +165,7 @@ def SeqLearn(opts):
 
     memofile.close()
     mystart = 0
-    stretch_trial = 1
+    stretch_trial = 0
     
     for rowindex, row in  enumerate(schedule.itertuples()):
         sess_num, sess_type, n_trials, seq_keys =\
@@ -226,11 +226,12 @@ def SeqLearn(opts):
                     showStimulus(win, [instructionsfmripaced1_message])
                     event.waitKeys(keyList = [config["FMRI_TRIGGER"]])  
             
-        else: # no instructions
+        #else: # no instructions
             # ask for a break
-            if config["BREAKS"] == 1: 
-                showStimulus(win, [instructionsbreakseq_message])
-                event.waitKeys(keyList = ["space"])  
+            #if config["BREAKS"] == 1: 
+            #    showStimulus(win, [instructionsbreakseq_message])
+            #    event.waitKeys(keyList = ["space"])  
+        
         if mystart == 1: # only first time we pass
             start_time = globalClock.getTime()
             target_time = start_time + config["START_TIME"]
@@ -294,7 +295,7 @@ def SeqLearn(opts):
                     showStimulus(win, [instructionsstretch_message])
                     target_time = clock_stretch + config["STRETCH_TIME"]
                     print("Stretching...")
-                    stretch_trial = 1
+                    stretch_trial = 0
                 else:
                     stretch_trial = stretch_trial + 1
 
@@ -481,7 +482,7 @@ def SeqLearn(opts):
             if config["MODE"] != "fmri":        
                 wait_clock(globalClock, config["FEEDBACK_TIME"])                                                       
                 if config["BREAKS"] == 1 and \
-                cum_trial%config["BREAK_TRIALS"] == 1: 
+                cum_trial%config["BREAK_TRIALS"] == 0: 
                     showStimulus(win, [instructionsbreak_message])
                     event.waitKeys(keyList = ["space"]) 
                     target_time = globalClock.getTime() + config["BUFFER_TIME"]                  

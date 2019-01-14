@@ -24,7 +24,7 @@ maxy = 4500
 miny = 500 
 
 # analyze only these
-group = c("kip1s002", "kip1s003")
+group = c("kip1s002", "kip1s003", "kip1s009")
 
 trials.table = subset(trials.table, username %in% group)
 
@@ -55,11 +55,11 @@ Mean performance
 ```{r fig.width=11, fig.asp=0.8}
 
 # consider only last trials 
-last_trials = subset(unpaced_trials, trial > 11) %>% 
+last_trials = subset(unpaced_trials, trial > 5) %>% 
   group_by(username, sess_num, true_sequence, seq_train) %>% 
   summarise(meanMT = mean(MT), sdMT = sd(MT))
 
-plot.meanMT = ggplot(last_trials, aes(x = sess_num, y = meanMT, group = true_sequence, col = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid(username ~ . ) + theme(legend.position="none")
+plot.meanMT = ggplot(last_trials, aes(x = sess_num, y = meanMT, group = true_sequence, col = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid(username ~ . ) + theme(legend.position="bottom")
 
 print(plot.meanMT)
 
@@ -76,15 +76,19 @@ print(plot.meanMT.user)
 
 Wrong trials 
 
-CONTROL FOR missed
-
 ```{r fig.width=11, fig.asp=0.8}
 
-unpaced_trials.wrong = unpaced_trials %>% group_by(username, sess_num, true_sequence, seq_train) %>% summarise(wrong = sum(accuracy < 1))
-paced_trials.wrong = paced_trials %>% group_by(username, sess_num, true_sequence, seq_train) %>% summarise(wrong = sum(accuracy < 1))
+unpaced_trials.wrong = unpaced_trials %>% 
+  group_by(username, sess_num, true_sequence, seq_train) %>% 
+  summarise(wrong_trials = sum(accuracy < 1))
 
-plot.unpaced.wrong = ggplot(unpaced_trials.wrong, aes(x = sess_num, y = wrong, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ .) + theme(legend.position="none")
-plot.paced.wrong = ggplot(paced_trials.wrong, aes(x = sess_num, y = wrong, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ .) + theme(legend.position="none")
+paced_trials.wrong = paced_trials %>% 
+  group_by(username, sess_num, true_sequence, seq_train) %>% 
+  summarise(wrong_trials = sum(accuracy < 1))
+
+plot.unpaced.wrong = ggplot(unpaced_trials.wrong, aes(x = sess_num, y = wrong_trials, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ .) + theme(legend.position="none")
+
+plot.paced.wrong = ggplot(paced_trials.wrong, aes(x = sess_num, y = wrong_trials, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ .) + theme(legend.position="none")
 
 print(plot.unpaced.wrong)
 print(plot.paced.wrong)
@@ -92,23 +96,26 @@ print(plot.paced.wrong)
 ```
 
 
+Missed trials 
+
 ```{r fig.width=11, fig.asp=0.8}
-# plot also group aggregate per sequence and trained versus untrained
-finishers = c("kip1s002", "kip1s003", "kip1s004", "kip1s005", "kip1s008", "kip1s009")
-ok_unpaced_trials.group = subset(ok_unpaced_trials, username %in% finishers) %>% group_by(trial, sess_num, seq_train) %>% summarise(MT = mean(MT))
 
-plot.MT.group = ggplot(ok_unpaced_trials.group, aes(x = trial, y = MT, col = as.factor(seq_train), group =  as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( . ~ sess_num) + theme(legend.position="bottom")
+unpaced_trials.missed = subset(trials.table, paced == 0 & trial_type == "missed") %>% 
+  group_by(username, sess_num, true_sequence, seq_train) %>% 
+  summarise(missed_trials = n())
 
-print(plot.MT.group)
+paced_trials.missed = subset(trials.table, paced == 1 & trial_type == "missed") %>% 
+  group_by(username, sess_num, true_sequence, seq_train) %>% 
+  summarise(missed_trials = n())
 
-ok_unpaced_trials.group = subset(ok_unpaced_trials, username %in% finishers & trial > 5 & trial < 11 ) %>% group_by(sess_num, seq_train) %>% summarise(MT = mean(MT))
+plot.unpaced.missed = ggplot(unpaced_trials.missed, aes(x = sess_num, y = missed_trials, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ .) + theme(legend.position="none")
 
-plot.MT.group = ggplot(ok_unpaced_trials.group, aes(x = sess_num, y = MT, col = as.factor(seq_train), group =  as.factor(seq_train))) + geom_line(lwd=1) + geom_point(size = 2)
+plot.paced.missed = ggplot(paced_trials.missed, aes(x = sess_num, y = missed_trials, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ .) + theme(legend.position="none")
 
-print(plot.MT.group)
+print(plot.unpaced.missed)
+print(plot.paced.missed)
 
 ```
-
 
 
 Session duration
@@ -121,9 +128,7 @@ print(plot.duration)
 ```
 
 
-Analyze dates and times
-
-
+Dates and times
 ```{r fig.width=11, fig.asp=0.8}
 
 trials.times = trials.table %>% mutate(sess_date = as.Date(sess_date), sess_time = as.POSIXct(sess_time, format="%H:%M:%S")) %>% group_by(username, sess_num, sess_date, sess_time, sess_type) %>% sample_n(1) 

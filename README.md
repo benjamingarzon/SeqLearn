@@ -7,11 +7,9 @@ The main script is SeqLearn.py. To get help:
 
 
 ```
-python SeqLearn.py -h
-
 usage: SeqLearn.py [-h] [--schedule_file SCHEDULE_FILE]
                    [--config_file CONFIG_FILE] [--restart] [--demo]
-                   [--session SESSION] [--fmri]
+                   [--session SESSION] [--run RUN] [--fmri] [--no_upload]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -22,7 +20,9 @@ optional arguments:
   --restart             Remove previous data and start from session 1.
   --demo                Do a demo, no saving.
   --session SESSION     Run only this session. Incompatible with --restart
+  --run RUN             Run only this run. Incompatible with --restart
   --fmri                Run in fMRI mode.
+  --no_upload           Do not upload the data to the database.
 ```
 
 
@@ -198,28 +198,31 @@ sequences or schedules across subjects. The schedule group can be 0 or 1 and all
 # Generating sequences
 Use the script called SeqGen.py. 
 ```
-python SeqGen.py -h
-
-usage: SeqGen.py [-h] [--sequence_file SEQ_FILE]
-                 [--schedule_file SCHEDULE_FILE] [--type_file TYPE_FILE]
-                 [--split]
+usage: SeqGen.py [-h] [--sequence_file SEQ_FILE] [--sequence_file2 SEQ_FILE2]
+                 [--unseen UNSEEN] [--schedule_file SCHEDULE_FILE]
+                 [--type_file TYPE_FILE] [--split] [--no_untrained]
 
 optional arguments:
   -h, --help            show this help message and exit
   --sequence_file SEQ_FILE
                         Enter sequence file.
+  --sequence_file2 SEQ_FILE2
+                        Enter additional sequence file. It can be used for
+                        non-memorized sequences or to vary untrained
+                        sequences.
+  --unseen UNSEEN       Add non-memorized sequences to test.
   --schedule_file SCHEDULE_FILE
                         Enter schedule file.
   --type_file TYPE_FILE
                         Enter sequence type file.
   --split               Returns separate files for training and testing
                         (_fMRI).
+  --no_untrained        Ignore untrained sequences.
 ```
 Example: 
 
 ```
-```
-Ver 1.4
+Ver 1.3
 # schedule group added automatically, needs files sequences_grouped_001_lund1_0.json and sequences_grouped_001_lund1_1.json
 python SeqGen.py --sequence_file=./scheduling/sequences/sequences_grouped_001_lund1 --schedule_file=./scheduling/schedules/lup0schedule1 --type_file=./scheduling/seq_types_lu0.csv
 
