@@ -108,6 +108,13 @@ def define_stimuli(win, username, config, texts, sess_num):
                                            alignHoriz="center", 
                                            pos = (0, 1))
 
+    stimuli["instructionsstretch_message"] = visual.TextStim(win, 
+                                           text = texts["TEXT_STRETCH"], 
+                                           height = config["TEXT_HEIGHT"], 
+                                           alignHoriz="center", 
+                                           pos = (0, 1))
+
+
     stimuli["last_label"] = visual.TextStim(win, 
                                     text = texts["LAST_LABEL"], 
                                     height = config["TEXT_HEIGHT"], 

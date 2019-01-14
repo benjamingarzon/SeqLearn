@@ -1,0 +1,143 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document: default
+---
+
+# open data
+```{r}
+rm(list=ls())
+
+library(ggplot2)
+library(reshape2)
+library(dplyr)
+
+#setwd("~/projects/SeqLearn/stats")
+
+trialsfile = paste0('../data/archive/trials_table-20190113_1631-KIpilot1db.csv')
+trials.table = unique(read.table(trialsfile, sep =';', header = T,quote = "")[-1])
+
+maxy = 4500 
+miny = 500 
+
+# analyze only these
+group = c("kip1s002", "kip1s003")
+
+trials.table = subset(trials.table, username %in% group)
+
+```
+
+
+Performance
+```{r fig.width=11, fig.asp=0.8}
+
+ok_trials = subset(trials.table, accuracy == 1)
+unpaced_trials = subset(trials.table, paced == 0 & trial_type != "missed")
+paced_trials = subset(trials.table, paced == 1 & trial_type != "missed")
+ok_unpaced_trials = subset(unpaced_trials, accuracy == 1)
+ok_paced_trials = subset(paced_trials, accuracy == 1)
+                      
+plot.MT = ggplot(ok_unpaced_trials, aes(x = trial, y = MT, col = as.factor(seq_train), group = true_sequence)) + geom_line(lwd=1) + geom_point() + ylim(miny, maxy) + facet_grid( username ~ sess_num) + theme(legend.position="bottom")
+
+plot.MT.paced = ggplot(ok_paced_trials, aes(x = trial, y = MT, col = as.factor(seq_train), group = true_sequence)) + geom_line(lwd=1) + geom_point() + ylim(miny, maxy) + facet_grid( username ~ sess_num) + theme(legend.position="none")
+
+print(plot.MT)
+print(plot.MT.paced)
+
+```
+
+
+
+Mean performance
+```{r fig.width=11, fig.asp=0.8}
+
+# consider only last trials 
+last_trials = subset(unpaced_trials, trial > 11) %>% 
+  group_by(username, sess_num, true_sequence, seq_train) %>% 
+  summarise(meanMT = mean(MT), sdMT = sd(MT))
+
+plot.meanMT = ggplot(last_trials, aes(x = sess_num, y = meanMT, group = true_sequence, col = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid(username ~ . ) + theme(legend.position="none")
+
+print(plot.meanMT)
+
+# aggregate within participant and compare participants
+
+last_trials.user = last_trials %>% 
+  group_by(username, sess_num, seq_train) %>% 
+  summarise(meanMT = mean(meanMT), sdMT = mean(sdMT))
+
+plot.meanMT.user = ggplot(last_trials.user, aes(x = sess_num, y = meanMT, col = username, lty = as.factor(seq_train), shape = as.factor(seq_train))) + geom_line(lwd=1) + geom_point(size = 3)
+
+print(plot.meanMT.user)
+```
+
+Wrong trials 
+
+CONTROL FOR missed
+
+```{r fig.width=11, fig.asp=0.8}
+
+unpaced_trials.wrong = unpaced_trials %>% group_by(username, sess_num, true_sequence, seq_train) %>% summarise(wrong = sum(accuracy < 1))
+paced_trials.wrong = paced_trials %>% group_by(username, sess_num, true_sequence, seq_train) %>% summarise(wrong = sum(accuracy < 1))
+
+plot.unpaced.wrong = ggplot(unpaced_trials.wrong, aes(x = sess_num, y = wrong, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ .) + theme(legend.position="none")
+plot.paced.wrong = ggplot(paced_trials.wrong, aes(x = sess_num, y = wrong, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ .) + theme(legend.position="none")
+
+print(plot.unpaced.wrong)
+print(plot.paced.wrong)
+
+```
+
+
+```{r fig.width=11, fig.asp=0.8}
+# plot also group aggregate per sequence and trained versus untrained
+finishers = c("kip1s002", "kip1s003", "kip1s004", "kip1s005", "kip1s008", "kip1s009")
+ok_unpaced_trials.group = subset(ok_unpaced_trials, username %in% finishers) %>% group_by(trial, sess_num, seq_train) %>% summarise(MT = mean(MT))
+
+plot.MT.group = ggplot(ok_unpaced_trials.group, aes(x = trial, y = MT, col = as.factor(seq_train), group =  as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( . ~ sess_num) + theme(legend.position="bottom")
+
+print(plot.MT.group)
+
+ok_unpaced_trials.group = subset(ok_unpaced_trials, username %in% finishers & trial > 5 & trial < 11 ) %>% group_by(sess_num, seq_train) %>% summarise(MT = mean(MT))
+
+plot.MT.group = ggplot(ok_unpaced_trials.group, aes(x = sess_num, y = MT, col = as.factor(seq_train), group =  as.factor(seq_train))) + geom_line(lwd=1) + geom_point(size = 2)
+
+print(plot.MT.group)
+
+```
+
+
+
+Session duration
+```{r fig.width=11, fig.asp=0.8}
+plot.duration = ggplot(trials.table, aes(x = sess_num, y = global_clock/60, col = username, group = username)) + 
+  stat_summary(fun.y = max, geom = "line", lwd = 1) +  stat_summary(fun.y = max, geom = "point") + ylab("Session duration")
+
+print(plot.duration)
+
+```
+
+
+Analyze dates and times
+
+
+```{r fig.width=11, fig.asp=0.8}
+
+trials.times = trials.table %>% mutate(sess_date = as.Date(sess_date), sess_time = as.POSIXct(sess_time, format="%H:%M:%S")) %>% group_by(username, sess_num, sess_date, sess_time, sess_type) %>% sample_n(1) 
+#kip1 = grep('kip1', trials.times$username)
+#trials.times =trials.times[kip1, ]
+plot.dates = ggplot(trials.times, aes(x = sess_num, y = sess_date, col = username, group = username)) + geom_line() + geom_point() + xlab("Session number") + ylab("Session date") + scale_y_date()
+
+print(plot.dates)
+
+table(trials.times$username)
+
+plot.times = ggplot(trials.times, aes(x = sess_num, y = sess_time)) + geom_line() + geom_point() + xlab("Session number") + ylab("Session time") + facet_grid( . ~ username)
+print(plot.times)
+
+```
+
+

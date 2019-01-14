@@ -85,7 +85,7 @@ Analyze chords
 
 ```{r fig.width=11, fig.asp=0.8}
 
-ok_keys = subset(keys.table, paced == 0 & trial_type != "missing" & accuracy == 1 & keystroke > 0) %>%
+ok_keys = subset(keys.table, paced == 0 & trial_type != "missed" & accuracy == 1 & keystroke > 0) %>%
   mutate(size_from = nchar(gsub(" ", "", key_from)), 
          size_to = nchar(gsub(" ", "", key_to)))
 
@@ -237,7 +237,7 @@ Baseline
 ```{r}
 
 
-ok_trials = subset(trials.table, paced == 0 & trial_type != "missing" & accuracy == 1)                                              
+ok_trials = subset(trials.table, paced == 0 & trial_type != "missed" & accuracy == 1)                                              
 # baseline
 ok_trials_baseline = subset(ok_trials, sess_num == 1 & trial < 5 )
 ok_trials_learning = subset(ok_trials, trial > 5 & trial < 11 & username %in% learners )
@@ -408,8 +408,8 @@ Analyze trial times
 maxy = 4500 
 miny = 500  
 ok_trials = subset(trials.table, accuracy == 1)
-unpaced_trials = subset(trials.table, paced == 0 & trial_type != "missing")
-paced_trials = subset(trials.table, paced == 1 & trial_type != "missing")
+unpaced_trials = subset(trials.table, paced == 0 & trial_type != "missed")
+paced_trials = subset(trials.table, paced == 1 & trial_type != "missed")
 ok_unpaced_trials = subset(unpaced_trials, accuracy == 1)
 ok_paced_trials = subset(paced_trials, accuracy == 1)
                       
@@ -542,7 +542,7 @@ Analyze clocks
 
 ```{r}
 
-trialsfile = paste0('../data/trialsfile-lup0s002_fmri.csv')
+trialsfile = paste0('../data/trialsfile-lup1s001_fmri.csv')
 trials.table = read.table(trialsfile, sep =';', header = T, quote = "")
 paced_trials = subset(trials.table, paced == 1)
            

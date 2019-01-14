@@ -28,7 +28,7 @@
 "RND_SEED":123,
 "ITIMEAN":1.0,
 "ITIRANGE":0.0,
-"ITIMEAN_FMRI":13.0,
+"ITIMEAN_FMRI":12.0,
 "ITIRANGE_FMRI":0.0,
 "HEADING_TEXT_HEIGHT":1,
 "TEXT_HEIGHT":0.7,
@@ -55,6 +55,7 @@
 "COLOR_LIST":["#e6194b","#3cb44b","#ffe119","#0082c8","#f58231","#911eb4","#46f0f0","#f032e6", "#111111"],
 "THUMBSUP_FILE":"./pics/thumbsup.JPG",
 "THUMBSDOWN_FILE":"./pics/thumbsdown.JPG",
-"N_RUNS": 4
-
+"N_RUNS": 4,
+"STRETCH_TRIALS": 6,
+"STRETCH_TIME": 4.0
 }

@@ -20,8 +20,9 @@
 "TEXT_INSTRUCTPACED1":"INSTRUCTIONS:\n\nNow you will repeat the same sequences but at a given pace. You will hear a beat and you need to press the chords following it. First there will be {} beats to show you the tempo and then you need to start pressing.",
 "TEXT_SPACE4":"Press space when ready to start the task.",
 "TEXT_INSTRUCTFMRI1":"INSTRUCTIONS:\n\n\n\nNow you will have to execute the sequences you have trained previously.\n\nThe task will start automatically.",
-"TEXT_INSTRUCTFMRIPACED1":"INSTRUCTIONS:\n\n\n\nYou will have to execute the sequences at a given pace. You will hear a beat and you need to press the chords following it. First there will be {} beats to show you the tempo and then you need to start pressing.\n\nThe task will start automatically.",
+"TEXT_INSTRUCTFMRIPACED1":"INSTRUCTIONS:\n\n\n\nYou will have to execute the sequences at a given pace. You will hear a beat and you need to press the chords following it. First there will be {} beats to show you the tempo and then you need to start pressing. Release after the last chord.\n\nIf you need to stretch your fingers, try to do it only when 'STRETCH' appears on the screen.\n\nThe task will start automatically.",
 "TEXT_BREAK_SEQUENCE":"Press space to continue to the next sequence.",
 "TEXT_BREAK":"You may take a break now.\n\nPress space to continue.",
+"TEXT_STRETCH":"STRETCH",
 "TEXT_OK":"Good!"
 }

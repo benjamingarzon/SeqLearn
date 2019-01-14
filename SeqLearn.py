@@ -73,7 +73,8 @@ def SeqLearn(opts):
     instructionspaced1_message = stimuli["instructionspaced1_message"]    
     instructionsfmri1_message = stimuli["instructionsfmri1_message"]
     instructionsfmripaced1_message = stimuli["instructionsfmripaced1_message"]    
-    instructionsbreak_message = stimuli["instructionsbreak_message"]
+    instructionsbreak_message = stimuli["instructionsbreak_message"]    
+    instructionsstretch_message = stimuli["instructionsstretch_message"]
     instructionsbreakseq_message = stimuli["instructionsbreaksequence_message"]
     last_label = stimuli["last_label"]
     best_label = stimuli["best_label"]
@@ -164,6 +165,7 @@ def SeqLearn(opts):
 
     memofile.close()
     mystart = 0
+    stretch_trial = 1
     
     for rowindex, row in  enumerate(schedule.itertuples()):
         sess_num, sess_type, n_trials, seq_keys =\
@@ -279,7 +281,6 @@ def SeqLearn(opts):
 
         execution_duration = config["BEAT_INTERVAL"]*nbeats + \
         config["BUFFER_TIME"] 
-
         while (trial <= n_trials):
 
             # prepare stimuli
@@ -464,12 +465,9 @@ def SeqLearn(opts):
                         showStimulus(win, [last_bar, last_label, best_bar, 
                                            best_label, group_best_bar, 
                                            group_best_label, bottomline])
-
-            key_from = ["0"]
             
             if config["MODE"] != "fmri":        
                 wait_clock(globalClock, config["FEEDBACK_TIME"])                                                       
-#            if config["MODE"] != "fmri": 
                 if config["BREAKS"] == 1 and \
                 cum_trial%config["BREAK_TRIALS"] == 1: 
                     showStimulus(win, [instructionsbreak_message])
@@ -480,9 +478,18 @@ def SeqLearn(opts):
                     target_time = clock_feedback + config["FEEDBACK_TIME"] + \
                 config["BUFFER_TIME"]
             else:
+
                 #decide do stretching when necessary
-                print("Stretching")
                 print("Accuracy: %f"%(accuracy))
+                print("Stretch: %d"%(stretch_trial))
+                
+                if stretch_trial == config["STRETCH_TRIALS"] :
+                    showStimulus(win, [instructionsstretch_message])
+                    target_time = clock_feedback + config["STRETCH_TIME"]
+                    print("Stretching...")
+                    stretch_trial = 1
+                else:
+                    stretch_trial = stretch_trial + 1
                 
             clock_finished = wait_clock(globalClock, 
                         target_time, 
