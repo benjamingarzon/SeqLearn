@@ -282,10 +282,22 @@ def SeqLearn(opts):
         execution_duration = config["BEAT_INTERVAL"]*nbeats + \
         config["BUFFER_TIME"] 
         while (trial <= n_trials):
-
+            
             # prepare stimuli
             if config["MODE"] == "fmri":
                 current_stimuli = squareStimuli[trial-1]
+
+                # stretch time
+                if stretch_trial == config["STRETCH_TRIALS"]:
+                    clock_stretch = wait_clock(globalClock, target_time, 
+                                            rel = False)
+                    showStimulus(win, [instructionsstretch_message])
+                    target_time = clock_stretch + config["STRETCH_TIME"]
+                    print("Stretching...")
+                    stretch_trial = 1
+                else:
+                    stretch_trial = stretch_trial + 1
+
             else:
                 current_stimuli = [trialStimulus[trial-1]] + \
                 squareStimuli[trial-1]
@@ -481,16 +493,7 @@ def SeqLearn(opts):
 
                 #decide do stretching when necessary
                 print("Accuracy: %f"%(accuracy))
-                print("Stretch: %d"%(stretch_trial))
-                
-                if stretch_trial == config["STRETCH_TRIALS"] :
-                    showStimulus(win, [instructionsstretch_message])
-                    target_time = clock_feedback + config["STRETCH_TIME"]
-                    print("Stretching...")
-                    stretch_trial = 1
-                else:
-                    stretch_trial = stretch_trial + 1
-                
+                                
             clock_finished = wait_clock(globalClock, 
                         target_time, 
                         rel = False)
