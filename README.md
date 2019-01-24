@@ -23,6 +23,7 @@ optional arguments:
   --run RUN             Run only this run. Incompatible with --restart
   --fmri                Run in fMRI mode.
   --no_upload           Do not upload the data to the database.
+  --ignore_misses       Ignore misses, don't repeat trial.  
 ```
 
 
