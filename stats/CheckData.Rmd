@@ -15,8 +15,6 @@ library(ggplot2)
 library(reshape2)
 library(dplyr)
 
-#setwd("~/projects/SeqLearn/stats")
-
 trialsfile = paste0('../data/archive/trials_table-20190113_1631-KIpilot1db.csv')
 trials.table = unique(read.table(trialsfile, sep =';', header = T,quote = "")[-1])
 
@@ -24,7 +22,7 @@ maxy = 4500
 miny = 500 
 
 # analyze only these
-group = c("kip1s002", "kip1s003", "kip1s009")
+group = c("kip1s002", "kip1s003", "kip1s004", "kip1s005", "kip1s008", "kip1s009")
 
 trials.table = subset(trials.table, username %in% group)
 
@@ -32,7 +30,7 @@ trials.table = subset(trials.table, username %in% group)
 
 
 Performance
-```{r fig.width=11, fig.asp=0.8}
+```{r fig.width=14, fig.asp=0.4}
 
 ok_trials = subset(trials.table, accuracy == 1)
 unpaced_trials = subset(trials.table, paced == 0 & trial_type != "missed")
@@ -40,9 +38,9 @@ paced_trials = subset(trials.table, paced == 1 & trial_type != "missed")
 ok_unpaced_trials = subset(unpaced_trials, accuracy == 1)
 ok_paced_trials = subset(paced_trials, accuracy == 1)
                       
-plot.MT = ggplot(ok_unpaced_trials, aes(x = trial, y = MT, col = as.factor(seq_train), group = true_sequence)) + geom_line(lwd=1) + geom_point() + ylim(miny, maxy) + facet_grid( username ~ sess_num) + theme(legend.position="bottom")
+plot.MT = ggplot(ok_unpaced_trials, aes(x = trial, y = MT, col = as.factor(seq_train), group = true_sequence)) + geom_line(lwd=1) + geom_point() + ylim(miny, maxy) + facet_grid( username ~ sess_num) + theme(legend.position="bottom") + theme_bw()
 
-plot.MT.paced = ggplot(ok_paced_trials, aes(x = trial, y = MT, col = as.factor(seq_train), group = true_sequence)) + geom_line(lwd=1) + geom_point() + ylim(miny, maxy) + facet_grid( username ~ sess_num) + theme(legend.position="none")
+plot.MT.paced = ggplot(ok_paced_trials, aes(x = trial, y = MT, col = as.factor(seq_train), group = true_sequence)) + geom_line(lwd=1) + geom_point() + ylim(miny, maxy) + facet_grid( username ~ sess_num) + theme(legend.position="none") + theme_bw()
 
 print(plot.MT)
 print(plot.MT.paced)
@@ -52,14 +50,14 @@ print(plot.MT.paced)
 
 
 Mean performance
-```{r fig.width=11, fig.asp=0.8}
+```{r fig.width=25, fig.asp=0.6}
 
 # consider only last trials 
 last_trials = subset(unpaced_trials, trial > 5) %>% 
   group_by(username, sess_num, true_sequence, seq_train) %>% 
   summarise(meanMT = mean(MT), sdMT = sd(MT))
 
-plot.meanMT = ggplot(last_trials, aes(x = sess_num, y = meanMT, group = true_sequence, col = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid(username ~ . ) + theme(legend.position="bottom")
+plot.meanMT = ggplot(last_trials, aes(x = sess_num, y = meanMT, group = true_sequence, col = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( seq_train ~ username ) + theme(legend.position="bottom") + theme_bw()
 
 print(plot.meanMT)
 
@@ -69,9 +67,20 @@ last_trials.user = last_trials %>%
   group_by(username, sess_num, seq_train) %>% 
   summarise(meanMT = mean(meanMT), sdMT = mean(sdMT))
 
-plot.meanMT.user = ggplot(last_trials.user, aes(x = sess_num, y = meanMT, col = username, lty = as.factor(seq_train), shape = as.factor(seq_train))) + geom_line(lwd=1) + geom_point(size = 3)
+plot.meanMT.user = ggplot(last_trials.user, aes(x = sess_num, y = meanMT, col = username, lty = as.factor(seq_train), shape = as.factor(seq_train))) + geom_line(lwd=1) + geom_point(size = 3) + facet_grid( .~ seq_train) + theme_bw()
 
 print(plot.meanMT.user)
+
+# aggregate within sequence 
+last_trials.sequence = last_trials %>% 
+  group_by(true_sequence, username, sess_num, seq_train) %>% 
+  summarise(meanMT = mean(meanMT), sdMT = mean(sdMT))
+
+plot.meanMT.sequence = ggplot(last_trials.sequence, aes(x = sess_num, y = meanMT, group = username, lty = as.factor(seq_train), col = username)) + geom_line(lwd=1) + geom_point(size = 3) + facet_grid( seq_train ~ true_sequence ) + theme_bw() + theme(legend.position="bottom") 
+
+print(plot.meanMT.sequence)
+
+
 ```
 
 Wrong trials 
@@ -86,9 +95,9 @@ paced_trials.wrong = paced_trials %>%
   group_by(username, sess_num, true_sequence, seq_train) %>% 
   summarise(wrong_trials = sum(accuracy < 1))
 
-plot.unpaced.wrong = ggplot(unpaced_trials.wrong, aes(x = sess_num, y = wrong_trials, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ .) + theme(legend.position="none")
+plot.unpaced.wrong = ggplot(unpaced_trials.wrong, aes(x = sess_num, y = wrong_trials, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ .) + theme(legend.position="none") + theme_bw()
 
-plot.paced.wrong = ggplot(paced_trials.wrong, aes(x = sess_num, y = wrong_trials, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ .) + theme(legend.position="none")
+plot.paced.wrong = ggplot(paced_trials.wrong, aes(x = sess_num, y = wrong_trials, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ .) + theme(legend.position="none") + theme_bw()
 
 print(plot.unpaced.wrong)
 print(plot.paced.wrong)

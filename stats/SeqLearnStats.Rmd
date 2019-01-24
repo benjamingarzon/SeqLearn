@@ -19,6 +19,8 @@ Conclusions
 - longer from and to chords are more difficult: maximize 2 - 3  and 3 - 2 chords, and 2 - 3 over 3 - 2 
 - unseen and untrained take the  same time: memorization does not make a difference
 
+- larger chords take longer, the effect is larger for landing chords
+- fingers 1 (pinky) and 3 (ring) take longer 
 
 ```{r}
 rm(list=ls())
@@ -32,7 +34,10 @@ library(reshape2)
 library(dplyr)
 library(stringr)
 library(boot)
+library(lme4)
 library(lmPerm)
+library(lmerTest)
+library(tibble)
 #library(GGally)
 #library(network)
 library(rstan)
@@ -85,150 +90,147 @@ Analyze chords
 
 ```{r fig.width=11, fig.asp=0.8}
 
-ok_keys = subset(keys.table, paced == 0 & trial_type != "missed" & accuracy == 1 & keystroke > 0) %>%
-  mutate(size_from = nchar(gsub(" ", "", key_from)), 
-         size_to = nchar(gsub(" ", "", key_to)))
-
-# baseline
-ok_keys_baseline = subset(ok_keys, sess_num == 1 & trial < 5 )
-
-  keys.table.median = ok_keys_baseline %>% group_by(username, key_from, key_to, size_from, size_to) %>% summarise(medianRT = median(RT), sdRT = sd(RT))
-
-keys.table.median = keys.table.median %>% arrange(username, medianRT) %>% group_by(username) %>% mutate(rankRT = percent_rank(medianRT), transition= paste(key_from, key_to, sep = ' - '), size_trans = size_from + size_to, devRT = scale(medianRT, scale = F, center = T))
-
-# rank within each subject
-plot.median = ggplot(keys.table.median, aes(x = key_from, y = medianRT)) + 
-    geom_errorbar(aes(ymin=medianRT-sdRT, ymax=medianRT+sdRT), width=.1) +
-    geom_line() + 
-    geom_point() + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + facet_grid( . ~ username)
-print(plot.median)
-
-keys.table.rank = keys.table.median %>% group_by(key_from, key_to, size_from, size_to, transition, size_trans) %>% summarise(meandev = mean(devRT), meanrank = mean(rankRT), medianrank = median(rankRT), count = n(), minrank = min(rankRT), maxrank = max(rankRT)) %>% arrange(meanrank)
-
-keys.table.rank = keys.table.rank %>% mutate(
-         to1 = length(grep("1", key_to)),
-         to2 = length(grep("2", key_to)),
-         to3 = length(grep("3", key_to)),
-         to4 = length(grep("4", key_to)),
-         from1 = length(grep("1", key_from)),
-         from2 = length(grep("2", key_from)),
-         from3 = length(grep("3", key_from)),
-         from4 = length(grep("4", key_from))
-)
-
-keys.table.rank = subset(keys.table.rank, count > 1)
-plot.rank = ggplot(keys.table.median, aes(x = transition, y = rankRT, col = username)) + 
-    geom_point() + theme(axis.text.x = element_text(angle = 90, hjust = 1))
-#print(plot.rank)
-keys.table.rank$logmedianrank = logit(keys.table.rank$medianrank + 0.0001)
-model.rank = lm(logmedianrank ~ size_from + size_to, data = keys.table.rank)
-summary(model.rank)
-model.rank = lm(logmedianrank ~ to1*to2 + to1*to3 + to1*to4 + to2*to3 + to2*to4 + to3*to4, data = keys.table.rank)
-summary(model.rank)
-model.rank = lm(logmedianrank ~ from1 + from2 + from3 + from4, data = keys.table.rank)
-summary(model.rank)
-
-plot(keys.table.rank$medianrank, lwd = 2, type = "l")
-lines(keys.table.rank$minrank, lty = 2)
-lines(keys.table.rank$maxrank, lty = 2)
-
-#par(mfrow = c(1, 3))
-# boxplot(keys.table.rank$medianrank ~ keys.table.rank$size_trans, main = "transition")
-# boxplot(keys.table.rank$medianrank ~ keys.table.rank$size_from, main = "from")
-# boxplot(keys.table.rank$medianrank ~ keys.table.rank$size_to, main = "to")
-# 
-# boxplot(keys.table.rank$medianrank ~ keys.table.rank$to1, main = "to_1")
-
-# plot.keystrokepairs = ggplot(keys.table.rank, aes(x = key_from, y = key_to, fill = medianRT)) + geom_tile() + theme_classic()
-# print(plot.keystrokepairs)
-
+count_keys = function(x, u) length(grep(u, x))
+                              
+ok_keys = subset(keys.table, paced == 0 &
+                   trial_type != "missed" &
+                   accuracy == 1 &
+                   keystroke > 0) %>%
+  mutate(logRT = log(RT), 
+         size_from = nchar(gsub(" ", "", key_from)), 
+         size_to = nchar(gsub(" ", "", key_to)),
+         to1 = sapply(key_to, count_keys, "1"),
+         to2 = sapply(key_to, count_keys, "2"),
+         to3 = sapply(key_to, count_keys, "3"),
+         to4 = sapply(key_to, count_keys, "4"),
+         from1 = sapply(key_from, count_keys, "1"),
+         from2 = sapply(key_from, count_keys, "2"),
+         from3 = sapply(key_from, count_keys, "3"),
+         from4 = sapply(key_from, count_keys, "4")
+         )
 
 ```
+
+
+```{r fig.width=10, fig.asp=0.8}
+# baseline
+ok_keys_baseline = subset(ok_keys, sess_num == 1 & trial < 10 )
+
+RT.mod.chords = lmer(logRT ~ key_from + key_to + keystroke + trial + (1 + trial|username), data = ok_keys_baseline)
+RT.mod.chords.sum = summary(RT.mod.chords)
+
+RT.mod.chords.coefs = #as.data.frame(RT.mod.chords.sum$coefficients[grep("to", rownames(RT.mod.chords.sum$coefficients)), ]) %>%
+  as.data.frame(RT.mod.chords.sum$coefficients[-1, ]) %>%
+  rownames_to_column(var = "Combination") %>% 
+  arrange(`t value`) %>% mutate(expEstimate = exp(Estimate))
+
+RT.mod.chords.plot = ggplot(RT.mod.chords.coefs, aes( x = reorder(Combination, `t value`), y = expEstimate )) + 
+  geom_col() + 
+  theme_bw() + 
+  theme(axis.text.x = element_text(angle = 90)) + 
+  xlab("Combination") + 
+  ylab("Relative RT difference")
+print(RT.mod.chords.plot)
+
+```
+
+Learning keys
+
+Fit rates
+
 ```{r}
 
-learners = c("kip1s002", "kip1s003", "kip1s004", "kip1s005", "kip1s006", "kip1s008", "kip1s009", "lup0s002")
+learners = c("kip1s002", "kip1s003", "kip1s004", "kip1s005", "kip1s006", "kip1s008", "kip1s009") #, "lup0s002")
 
 # learning
-# subjects with 
-ok_keys_learning = subset(ok_keys, trial > 5 & trial < 11 & username %in% learners )
 
+ok_keys_learning = subset(ok_keys, trial > 5 & username %in% learners & seq_train == 'trained') #
+ok_keys_learning$username = droplevels(ok_keys_learning$username)
+ok_keys_learning$cluster = as.numeric(as.factor(paste(ok_keys_learning$key_from, ok_keys_learning$key_to, ok_keys_learning$username)))
 
-learning_rate = function(y, plotit = F){ 
-  x = seq(length(y)) - 1 
-  m = lm(log(y) ~ x)   
-#  print(coef(m))
-  
-  alpha = exp(coef(m)[1])
-  beta = -coef(m)[2]
+# fit with stan to calculate rates
+stan_data = list(cluster = ok_keys_learning$cluster, 
+                 x = ok_keys_learning$sess_num, 
+                 y = ok_keys_learning$logRT, 
+                 Nclus = max(ok_keys_learning$cluster), 
+                 N = nrow(ok_keys_learning) )
 
-  if(plotit){
-   print(length(y))   
-   plot(x, y)
-   lines(x, alpha*exp(-beta*x), col = 'red')
-  }
-  
-  return(beta)
-  }
+stan_control = list(adapt_delta = 0.9, max_treedepth = 12)
 
+fit = stan(file = "exponential_fit.stan", chains = 4, iter = 3000, warmup = 2000, data = stan_data, control = stan_control)
+#fit = vb(stan_model("exponential_fit.stan"), data = stan_data)
+pairs(fit, pars = c('mu_hyp', 'sigma_hyp'))
+traceplot(fit, par = c('mu_hyp', 'sigma_hyp'))
+launch_shinystan(fit)
 
-keys.table.median = ok_keys_learning %>% group_by(username, key_from, key_to, size_from, size_to) %>% 
-  summarise(medianRT = median(RT), sdRT = sd(RT), rateRT = learning_rate(RT))
+params = summary(fit)$summary[, "mean"]
+a = params[grep("a\\[", names(params))]
+b = params[grep("b\\[", names(params))]
+c = params[grep("c\\[", names(params))]
 
-keys.table.median = keys.table.median %>% arrange(username, medianRT) %>% group_by(username) %>% mutate(rankRT = percent_rank(rateRT), transition= paste(key_from, key_to, sep = ' - '), size_trans = size_from + size_to, devRT = scale(medianRT, scale = F, center = T))
+# calculate differences
+d = NULL
+for (j in sort(unique(ok_keys_learning$cluster))){
+  mydata = subset(ok_keys_learning, cluster == j)
+  d[j] = mean(mydata$RT[mydata$sess_num == 1]) - mean(mydata$RT[mydata$sess_num == max(mydata$sess_num)]) 
+}
 
-# rank within each subject
-plot.median = ggplot(keys.table.median, aes(x = key_from, y = medianRT)) + 
-    geom_errorbar(aes(ymin=medianRT-sdRT, ymax=medianRT+sdRT), width=.1) +
-    geom_line() + 
-    geom_point() + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + facet_grid( . ~ username)
-print(plot.median)
+trials.table.rate = ok_keys_learning %>% group_by(username, key_from, key_to, cluster) %>% summarise(rateRT = b[cluster[1]], diffRT = d[cluster[1]])
 
-keys.table.rank = keys.table.median %>% group_by(key_from, key_to, size_from, size_to, transition, size_trans) %>% summarise(meandev = mean(devRT), meanrank = mean(rankRT), medianrank = median(rankRT), count = n(), minrank = min(rankRT), maxrank = max(rankRT)) %>% arrange(meanrank)
-
-keys.table.median = keys.table.median %>% mutate(
-         to1 = length(grep("1", key_to)),
-         to2 = length(grep("2", key_to)),
-         to3 = length(grep("3", key_to)),
-         to4 = length(grep("4", key_to)),
-         from1 = length(grep("1", key_from)),
-         from2 = length(grep("2", key_from)),
-         from3 = length(grep("3", key_from)),
-         from4 = length(grep("4", key_from))
-)
-
-keys.table.rank = subset(keys.table.rank, count > 1)
-plot.rank = ggplot(keys.table.median, aes(x = transition, y = rankRT, col = username)) + 
-    geom_point() + theme(axis.text.x = element_text(angle = 90, hjust = 1))
-#print(plot.rank)
-keys.table.median$logmedianrank = logit((keys.table.median$rankRT + 0.1)*0.9)
-
-
-keys.table.extremes = subset(keys.table.median, size_to != 2 )
-
-model.rank = lmp(rankRT ~ size_to, data = keys.table.extremes, perm = 'Exact')
-summary(model.rank)
-plot( jitter(rankRT) ~ jitter(size_to), keys.table.extremes)
-
-model.rank = lm(rankRT ~ to1*to2 + to1*to3 + to1*to4 + to2*to3 + to2*to4 + to3*to4, data = keys.table.median)
-summary(model.rank)
-model.rank = lm(logmedianrank ~ from1 + from2 + from3 + from4, data = keys.table.median)
-summary(model.rank)
-
-plot(keys.table.rank$medianrank, lwd = 2, type = "l")
-lines(keys.table.rank$minrank, lty = 2)
-lines(keys.table.rank$maxrank, lty = 2)
-
-# par(mfrow = c(1, 3))
-# boxplot(keys.table.rank$medianrank ~ keys.table.rank$size_trans, main = "transition")
-# boxplot(keys.table.rank$medianrank ~ keys.table.rank$size_from, main = "from")
-# boxplot(keys.table.rank$medianrank ~ keys.table.rank$size_to, main = "to")
-# 
-# boxplot(keys.table.rank$medianrank ~ keys.table.rank$to1, main = "to_1")
-# 
-# plot.keystrokepairs = ggplot(keys.table.rank, aes(x = key_from, y = key_to, fill = medianRT)) + geom_tile() + theme_classic()
-# print(plot.keystrokepairs)
+clusters = c(13, 46, 7, 11) #(unique(ok_keys_learning$cluster) # extremes by rate (13, 46) and by difference (7, 11) 
+for(j in clusters){
+  mydata = subset(as.data.frame(ok_keys_learning), cluster == j)
+  y = mydata$logRT
+  x = mydata$sess_num
+  plot(x, y, pch = 20, cex = 1, main = j, ylim = c(4, 7.5))
+  lines(x, a[j]*exp(-b[j]*x) + c[j], col = "red", lwd = 2)
+}
 
 ```
+
+Look at rates
+```{r}
+#RT.mod.chords = lmer(rateRT ~ key_from + key_to + keystroke + trial + (1 + trial|username), data = ok_keys_baseline)
+RT.mod.chords = lmer(rateRT ~ key_from + key_to + (1|username), data = trials.table.rate)
+RT.mod.chords.sum = summary(RT.mod.chords)
+
+RT.mod.chords.coefs = 
+  as.data.frame(RT.mod.chords.sum$coefficients[-1, ]) %>%
+  rownames_to_column(var = "Combination") %>% 
+  arrange(`t value`) %>% mutate(expEstimate = exp(Estimate))
+
+RT.mod.chords.plot = ggplot(RT.mod.chords.coefs, aes( x = reorder(Combination, `t value`), y = expEstimate )) + 
+  geom_col() + 
+  theme_bw() + 
+  theme(axis.text.x = element_text(angle = 90)) + 
+  xlab("Combination") + 
+  ylab("Relative effect on learning rate")
+print(RT.mod.chords.plot)
+
+```
+
+Look at differences
+
+```{r}
+
+RT.mod.chords = lmer(diffRT ~ key_from + key_to + (1|username), data = trials.table.rate)
+RT.mod.chords.sum = summary(RT.mod.chords)
+
+RT.mod.chords.coefs = 
+  as.data.frame(RT.mod.chords.sum$coefficients[-1, ]) %>%
+  rownames_to_column(var = "Combination") %>% 
+  arrange(`t value`) %>% mutate(expEstimate = exp(Estimate))
+
+RT.mod.chords.plot = ggplot(RT.mod.chords.coefs, aes( x = reorder(Combination, `t value`), y = Estimate )) + 
+  geom_col() + 
+  theme_bw() + 
+  theme(axis.text.x = element_text(angle = 90)) + 
+  xlab("Combination") + 
+  ylab("Effect on MT difference")
+print(RT.mod.chords.plot)
+
+```
+
 
 
 Same but for sequences
@@ -276,7 +278,7 @@ lm(trials.table.median$sequence_length ~ trials.table.median$rankRT)
 Learning
 ```{r}
 learners = c("kip1s002", "kip1s003", "kip1s004", "kip1s005", "kip1s006", "kip1s008", "kip1s009", "lup0s002")
-learners = c("kip1s002", "kip1s003", "kip1s004", "kip1s005", "kip1s008")
+learners = c("kip1s002", "kip1s003", "kip1s004", "kip1s005", "kip1s008", "kip1s009")
 
 ok_trials = subset(trials.table, accuracy == 1 &  paced == 0 & trial_type != 'missed' )
 
@@ -595,12 +597,35 @@ print(plot.acc)
 
 ```{r}
 #trialsfile = paste0('../../SeqLearnPilot/dataLundPilot/trialsfile-lup0s002_fmri.csv')
-trialsfile = paste0('../../SeqLearnPilot/data/trialsfile-lup1s001_fmri.csv')
+trialsfile = paste0('../../dataLeftHandPilots/dataLundPilot1/trialsfile-lup1s001_fmri.csv')
 trials.table = read.table(trialsfile, sep =';', header = T, quote = "")
 #ok_trials = subset(trials.table, accuracy == 1 & run > 1)
 #table(ok_trials$true_sequence)
 #table(ok_trials$seq_train)
  diff(trials.table$clock_fixation)
+
+```
+
+Motivation factor
+```{r}
+nsess=24
+baseline = 7
+x = seq(nsess)
+factor = 0.8
+maxscore = 2 + .1*x
+lm(ok_unpaced_trials$score ~ ok_unpaced_trials$sess_num)
+
+y1 = baseline*exp(-(x-1)/nsess)
+y2 = maxscore*(1 + factor*exp(-2*(x-1)/nsess))
+y = apply(cbind(y1, y2), 1, max)
+
+#print(ggplot(ok_unpaced_trials, aes(x = sess_num, y = score, col = username)) + geom_point())
+plot(ok_unpaced_trials$sess_num, ok_unpaced_trials$score)
+lines(x, y1, col ="black")
+lines(x, y2, col ="blue")
+lines(x, y, col ="red")
+lines(x, maxscore, col ="green")
+
 
 ```
 

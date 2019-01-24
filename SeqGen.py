@@ -44,7 +44,7 @@ def generate_with_predefined_sequences(opts, sched_group):
 
         seq_type, seq_length, max_chord_size, seq_keys, n_free_trials, \
         n_paced_trials, n_free_trials_testing, n_paced_trials_testing, \
-        blocks, n_seqs, n_seqs_fmri, \
+        blocks, n_seqs_trained, n_seqs_untrained, n_seqs_fmri, \
         n_sess, testing_sessions, n_runs = row
         testing_session_list = \
         [int(x) for x in str(testing_sessions).split(",")]
@@ -60,13 +60,24 @@ def generate_with_predefined_sequences(opts, sched_group):
 
         trained_seqs, untrained_seqs \
         = mygenerator.read_grouped(seq_file, seq_type)
-          
+        
         n_trained = len(trained_seqs)
         n_untrained = len(untrained_seqs)
         reorder_trained = list(permutations(range(n_trained)))    
         reorder_trained_fmri = list(combinations(range(n_trained), n_seqs_fmri))    
-        reorder_untrained = list(combinations(range(n_untrained), n_seqs)) if not opts.no_untrained else []  
+#        reorder_untrained = list(combinations(range(n_untrained), n_seqs_untrained)) if not opts.no_untrained else []  
+        reorder_untrained = []
         
+        untrained_list = range(n_untrained)
+        one = untrained_list[0]
+        twos = untrained_list[1:3]
+        rest = untrained_list[3:]
+        
+        for k in range(len(testing_session_list)):
+            mycombination = [one, twos[k % 2], rest[k % len(rest)]]
+
+            random.shuffle(mycombination)
+            reorder_untrained.append(tuple(mycombination))
 #        if sched_group == 1: # swap trained and untrained
 #            seq_list.reverse()
        # n_seqs: how many are presented
@@ -83,8 +94,8 @@ def generate_with_predefined_sequences(opts, sched_group):
             del color_list[index]            
 
 #        untrained_index = 0                 
-        trained_comb_num = 1
-        untrained_comb_num = 1
+        trained_comb_num = 0
+        untrained_comb_num = 0
  
         for sess in range(n_sess):
 
@@ -106,7 +117,7 @@ def generate_with_predefined_sequences(opts, sched_group):
                     n_trials = n_free_trials if paced == 0 else \
                     n_paced_trials
                     
-                    for seq in range(n_seqs):        
+                    for seq in range(n_seqs_trained):        
                         instruct = 1 if seq == 0 else 0
                         seq_index = trained_combination[seq]
                         seq_train = "trained"
@@ -122,7 +133,7 @@ def generate_with_predefined_sequences(opts, sched_group):
                                 seq_type,
                                 sequence_string, 
                                 seq_train,
-                                seq_color[sequence],
+                                seq_color[sequence_string],
                                 trained_combination,
                                 seq_index,
                                 paced,
@@ -135,30 +146,33 @@ def generate_with_predefined_sequences(opts, sched_group):
                 else: # testing / fmri
                     untrained_combination = \
                     list(reorder_untrained[untrained_comb_num \
-                                         % len(reorder_untrained)]) if not opts.no_untrained > 0 else []   
-                    untrained_comb_num = untrained_comb_num + 1
-
+                                         % len(reorder_untrained)]) if not \
+    opts.no_untrained > 0 else []   
+                    print(untrained_combination)
+                    print(reorder_untrained)
                     
                     if paced == 0:
                         sess_type = "testing"
                         n_trials = n_free_trials_testing
 
-                        for seq in range(2*n_seqs): # trained and untrained        
+                        for seq in range(n_seqs_trained + n_seqs_untrained): # trained and untrained        
                             instruct = 1 if seq == 0 else 0
 
                             # interleave trained/untrained 
                             if seq % 2 == 1 and not opts.no_untrained: 
                                 seq_index = untrained_combination[(seq - 1)/2]
+                                shuffled_combination = untrained_combination
                                 seq_train = "untrained"
                                 sequence, sequence_string = \
                                 untrained_seqs[seq_index]
                                 
                             else :
                                 seq_index = trained_combination[seq/2]
+                                shuffled_combination = trained_combination
                                 seq_train = "trained"
                                 sequence, sequence_string = \
                                 trained_seqs[seq_index]
-
+                                
                             if n_trials > 0:
                                 row_list.append([
                                     sess_num,
@@ -169,7 +183,7 @@ def generate_with_predefined_sequences(opts, sched_group):
                                     sequence_string, 
                                     seq_train,
                                     seq_color[sequence_string],
-                                    trained_combination,
+                                    shuffled_combination, 
                                     seq_index,
                                     paced,
                                     instruct,
@@ -179,6 +193,8 @@ def generate_with_predefined_sequences(opts, sched_group):
 
 
                     else:
+                        untrained_comb_num = untrained_comb_num + 1
+
                         sess_type = "fmri"
 
                         combination_index = trained_fmri_combination + \
@@ -357,12 +373,19 @@ def main():
     
     print("Preparing schedule...")
     opts = parser.parse_args()
-    opts.seq_file =  "./scheduling/sequences/sequences_grouped_001_lund1"
-    opts.schedule_file =  "./scheduling/schedules/lup1schedule1"
-    opts.type_file = "./scheduling/seq_types_lu1.csv"
-    opts.no_untrained = True
+    opts.type_file = "./scheduling/seq_types_lup2.csv"
+    opts.no_untrained = False
     opts.split = True
+
+    opts.seq_file =  "./scheduling/sequences/sequences_lup2_001"
+    opts.schedule_file =  "./scheduling/schedules/lup2schedule1"
     generate_with_predefined_sequences(opts, sched_group = 0)
+
+    opts.seq_file =  "./scheduling/sequences/sequences_lup2_002"
+    opts.schedule_file =  "./scheduling/schedules/lup2schedule2"
+    generate_with_predefined_sequences(opts, sched_group = 0)
+
+
 #    generate_with_predefined_sequences(opts, sched_group = 1)
     print("Done!")
   

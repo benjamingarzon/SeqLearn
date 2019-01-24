@@ -122,23 +122,25 @@ get_finger_distribution = function(chunk, chords){
   return(colSums(chords[chunk, ]))
 }
 
-# calculate the distance betwwen finger distributionss
+# calculate the distance between finger distributions
+# ideally minimal
 finger_distribution_distance = function(schedule, chords){
   
-  finger_distribution.trained = rowSums(sapply(schedule$trained, get_finger_distribution, chords))
-  finger_distribution.untrained = rowSums(sapply(schedule$untrained, get_finger_distribution, chords))  
-
-    return(sum(abs(finger_distribution.trained - finger_distribution.untrained)))
+  finger_distribution.trained = rowMeans(sapply(schedule$trained, get_finger_distribution, chords))
+  finger_distribution.untrained = rowMeans(sapply(schedule$untrained, get_finger_distribution, chords))  
+  #print(finger_distribution.trained)
+  #print(finger_distribution.untrained)
+  return(sum(abs(finger_distribution.trained - finger_distribution.untrained)))
 
   }
 
 # calculate the number of different chords between trained and untrained
-# want it to be maximal
-chord_distance = function(schedule){
+# ideally maximal
+chord_distance = function(schedule, size){
   
   eldist = as.matrix(proxy::dist(c(schedule$trained, schedule$untrained), chunkdist))
   n = ncol(eldist)
-  return(min(eldist[1:n/2, (n/2+1):n]))
+  return(min(eldist[1:size, (size+1):n]))
   }
   
 # get schedules with x trained and y untrained sequences
@@ -165,6 +167,26 @@ get_schedules = function(cluster, size){
   schedules = c(schedules, get_groups(trained[, c], cluster, size))
   return(schedules)
 } 
+
+get_schedules_complete = function(cluster, size){
+  
+  # get groups 
+  get_groups = function(taken, cluster, size){
+    schedule = list()
+    schedule[[1]] = list(trained = cluster[taken], untrained = cluster[-taken] )
+    return(schedule)
+  } 
+  
+  # select k, and put in two groups
+  myset = seq(length(cluster))
+  trained = combn(myset, size)
+  
+  schedules = NULL
+  for (c in seq(ncol(trained)))
+    schedules = c(schedules, get_groups(trained[, c], cluster, size))
+  return(schedules)
+} 
+
 
 
 # translate sequences

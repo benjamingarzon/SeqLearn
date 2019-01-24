@@ -363,7 +363,8 @@ def SeqLearn(opts):
                                            [config["ESCAPE_KEY"]], 
                                            timeStamped = trialClock)
                 
-            trialincrease = 1 if config["MODE"] == "fmri" else 0
+            trialincrease = 1 if config["MODE"] == "fmri" or opts.no_miss \
+            else 0
 
             if len(keypresses) <= 1:
                 clock_feedback = wait_clock(globalClock, 
@@ -696,7 +697,6 @@ def build_parser():
                         "--restart",
                         required = False)
 
-
     parser.add_argument("--fmri", 
                         dest = "run_fmri", 
                         help = "Run in fMRI mode.",
@@ -706,6 +706,12 @@ def build_parser():
     parser.add_argument("--no_upload", 
                         dest = "no_upload", 
                         help = "Do not upload the data to the database.",
+                        action="store_true",
+                        required = False)
+
+    parser.add_argument("--ignore_misses", 
+                        dest = "no_miss", 
+                        help = "Ignore misses, don't repeat trial.",
                         action="store_true",
                         required = False)
 

@@ -237,6 +237,10 @@ python SeqGen.py --sequence_file=./scheduling/sequences/sequences_002.json --sch
 python SeqGen.py --sequence_file=./scheduling/sequences/sequences_001.json --sequence_file2=./scheduling/sequences/sequences_002.json --schedule_file=./scheduling/schedules/kip1schedule1 --type_file=./scheduling/seq_types_ki1.csv
 python SeqGen.py --sequence_file=./scheduling/sequences/sequences_002.json --sequence_file2=./scheduling/sequences/sequences_001.json --schedule_file=./scheduling/schedules/kip1schedule2 --type_file=./scheduling/seq_types_ki1.csv
 
+
+python SeqGen.py --sequence_file=./scheduling/sequences/sequences_lup2_001 --schedule_file=./scheduling/schedules/lup2schedule1 --type_file=./scheduling/seq_types_lup2.csv
+python SeqGen.py --sequence_file=./scheduling/sequences/sequences_lup2_002 --schedule_file=./scheduling/schedules/lup2schedule2 --type_file=./scheduling/seq_types_lup2.csv
+
 ```
 
 Add a second type of sequences (unseen - DEPRECATED)

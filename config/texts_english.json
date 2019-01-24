@@ -7,7 +7,7 @@
 "TEXT_ERROR":"You made a mistake!\nTry again.",
 "TEXT_LATE":"Too slow, you need to respond faster!",
 "TEXT_MISS":"Hey! Are you here??",
-"TEXT_BYE":"Session completed.\n\nShutting down... bye!",
+"TEXT_BYE":"Session completed.\n\nShutting down... thanks!",
 "TEXT_SPACE":"Press space when you have memorized the sequence.",
 "TEXT_SELECT":"Click on the correct keys of the sequence and press space.",
 "TEXT_INTRO":"Welcome!\nParticipant: {}\nSession: {}",

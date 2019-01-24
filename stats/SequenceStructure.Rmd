@@ -29,8 +29,8 @@ source("./SequenceStructureFuncs.R")
 
 chords = rbind(
   c(1, 1, 1, 0),
-  c(1, 1, 0, 1),
-  c(1, 0, 1, 1),
+#  c(1, 1, 0, 1),
+#  c(1, 0, 1, 1),
   c(0, 1, 1, 1), 
   c(1, 1, 0, 0),
   c(0, 0, 1, 1),
@@ -41,7 +41,8 @@ chords = rbind(
   c(1, 0, 0, 0),
   c(0, 1, 0, 0),
   c(0, 0, 1, 0),
-  c(0, 0, 0, 1)
+  c(0, 0, 0, 1),
+  c(1, 1, 1, 1)
 )             
 
 
@@ -70,10 +71,9 @@ Path generation
 # generate all paths
 seq_size = 5
 
-paths = generate_paths(chords, c(3), seq_size)
+paths = generate_paths(chords, allowed_dist = c(3), seq_size)
 # select the most relevant paths
 chunks = select_unique(paths, seq_size)
-
 ```
 
 Configuration 1:
@@ -99,14 +99,16 @@ eldist.mat = as.matrix(eldist)
 Find clusters
 ```{r}
 
-schedule_size = 3
+
+schedule_size = 3 # number of trained
 
 #  find clusters of sequences with uncommon transitions
 hc.complete = hclust(maxdist.vec - vecdist, method = "complete")
 plot(hc.complete)
 clusters = cutree(hc.complete, h = 1)
 clusters.table = table(clusters)
-sel.clus = which(clusters.table > schedule_size*2)# at least 6 different sequences needed
+sel.clus = which(clusters.table > 8 )# at least 6 different sequences needed
+#sel.clus = which(clusters.table > max(clusters.table) - 4)
 
 sel.chunks =  list()
 degree = min.eldist = NULL
@@ -115,14 +117,15 @@ for (i in seq(length(sel.clus))){
   sel.chunks[[i]] = chunks[which(clusters == sel.clus[i])]
   chunks.vecdist = get_vecdist(sel.chunks[[i]], nchords)
   chunks.eldist = proxy::dist(sel.chunks[[i]], chunkdist)
-  schedules = get_schedules(sel.chunks[[i]], schedule_size)
+#  schedules = get_schedules(sel.chunks[[i]], schedule_size)
+  schedules = get_schedules_complete(sel.chunks[[i]], schedule_size)
   myfinger_distance = c(myfinger_distance,
                         sapply(schedules, finger_distribution_distance, chords)
   )
   mychord_distance = c(mychord_distance,
-                       sapply(schedules, chord_distance)
+                       sapply(schedules, chord_distance, size = schedule_size)
   )
-  myschedules =c(myschedules, 
+  myschedules = c(myschedules, 
                  schedules)
   mytransitions = rbind(mytransitions, 
                  t(sapply(schedules, get_transition_distribution, nchords)))
@@ -136,16 +139,26 @@ for (i in seq(length(sel.clus))){
 
 # ensure that the frequency of fingers is the same and that there are the minimum possible number of common chords between trained and untrained
 
-plot(jitter(mychord_distance), jitter(myfinger_distance), pch = 20, cex = 0.3 ) 
-chosen_indices = which(myfinger_distance == 0 & mychord_distance==max(mychord_distance))
-chosen_schedules = myschedules[chosen_indices]
+plot(jitter(mychord_distance), jitter(myfinger_distance), pch = 20, cex = 0.3) 
+#chosen_indices = which(myfinger_distance == min(myfinger_distance[mychord_distance==max(mychord_distance)]) & mychord_distance==max(mychord_distance))
+#chosen_schedules = myschedules[chosen_indices]
+
+chosen_indices = which(mychord_distance==max(mychord_distance))
+chosen_schedules.1 = myschedules[chosen_indices]
+myfinger_distance = myfinger_distance[chosen_indices]
+
+chosen_schedules.2 = chosen_schedules.1[order(myfinger_distance)]
+
+#lapply(chosen_schedules, function(x) x$trained)
+
 
 # check distribution of fingers and transitions
 ```
 
-# schedules (1 and 2) and (3 and 4) are the same
 # write out
 ```{r}
+
+chosen_schedules = chosen_schedules.2[c(2 , 3)] # arbitrary
 
 vecs.trained = vecs.untrained = NULL
 
@@ -153,22 +166,28 @@ for (i in seq(length(chosen_schedules))){
   
   schedule = chosen_schedules[[i]]
     
+  print("----")
   print(i)
+  print("Trained:")
+  print(schedule$trained)
   finger_distribution.trained = sapply(schedule$trained, get_finger_distribution, chords)
   finger_distribution.untrained = sapply(schedule$untrained, get_finger_distribution, chords)  
   vecs.trained = rbind(vecs.trained, rowSums(sapply(schedule$trained, chunk_to_bin, nchords)))
   vecs.untrained = rbind(vecs.untrained, rowSums(sapply(schedule$untrained, chunk_to_bin, nchords)))
 
   transition.distribution = get_transition_distribution(schedule, nchords)
-  
+  print("Finger distribution")
   print(t(finger_distribution.trained))
   print(t(finger_distribution.untrained))
-  
+  print("Finger distribution distance")
+  print(sapply(list(schedule), finger_distribution_distance, chords))
+  print("Chord distance")
+  print(sapply(list(schedule), chord_distance, size = schedule_size))  
 } 
 
 
 # if I select k schedules, how many different transitions do I cover?
-k = 4
+k = 2
 n_chosen = length(chosen_schedules)
 mycomb = combn(n_chosen, k)
 for (j in seq(ncol(mycomb))){
@@ -180,7 +199,7 @@ for (j in seq(ncol(mycomb))){
   print(s)
   }
 
-chosen_schedules = chosen_schedules[c(1, 3)]
+#chosen_schedules = chosen_schedules[c(1, 3)]
 
 for (i in seq(length(chosen_schedules))){
   
@@ -197,7 +216,7 @@ for (i in seq(length(chosen_schedules))){
   print(t(finger_distribution.trained))
   print(t(finger_distribution.untrained))
   
-  json_file = paste0('../scheduling/sequences/sequences_grouped_', formatC(i, width = 3, flag = 0), '.json')
+  json_file = paste0('../scheduling/sequences/sequences_lup2_', formatC(i, width = 3, flag = 0), '_0.json')
   trained.chunks = schedule$trained
   untrained.chunks = schedule$untrained
   trained = translate_seqs(trained.chunks, chords)

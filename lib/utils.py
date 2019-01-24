@@ -101,7 +101,7 @@ def calcmaxgroupscore(session, n_sessions, factor, baseline, maxscore):
     """    
     maxgroupscore = np.max(
             (baseline*np.exp(-(session-1)/n_sessions),
-            maxscore*(1 + factor*np.exp(-(session-1)/n_sessions)))
+            maxscore*(1 + factor*np.exp(-2*(session-1)/n_sessions)))
             )
     return(maxgroupscore)
 
