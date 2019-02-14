@@ -46,7 +46,7 @@ cd $INSTALLPATH\SeqLearn
 conda create -y -n psychopyenv
 source activate psychopyenv
 conda install -y python=2.7.13
-conda install -y -c anaconda pandas mysql-python-connector sqlalchemy
+conda install -y -c anaconda pandas mysql-python sqlalchemy scikit-learn
 conda install -y -c conda-forge sshtunnel wxpython=3.0
 conda install -y -c cogsci psychopy pygame
 ```
