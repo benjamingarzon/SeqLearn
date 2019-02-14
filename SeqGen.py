@@ -75,11 +75,9 @@ def generate_with_predefined_sequences(opts, sched_group):
         
         for k in range(len(testing_session_list)):
             mycombination = [one, twos[k % 2], rest[k % len(rest)]]
-
             random.shuffle(mycombination)
             reorder_untrained.append(tuple(mycombination))
-#        if sched_group == 1: # swap trained and untrained
-#            seq_list.reverse()
+
        # n_seqs: how many are presented
        # get colors
         seq_color = {}
@@ -201,9 +199,9 @@ def generate_with_predefined_sequences(opts, sched_group):
                         untrained_combination
                         combination_type = \
                         len(trained_fmri_combination)*["trained"] + \
-                        len(trained_combination)*["untrained"]
+                        len(trained_fmri_combination)*["untrained"] # same amount of trained and untrained
                         combination = zip(combination_type, combination_index)
-
+                        print(combination)
                         n_trials = np.sum(np.array(blocks))
                         # compute run statistics
                         nbeats = config["MAX_CHORD_SIZE"] + \

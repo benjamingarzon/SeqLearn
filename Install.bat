@@ -23,7 +23,7 @@ cd %INSTALLPATH%\SeqLearn
 conda create -y -n psychopyenv
 call activate psychopyenv
 conda install -y python=2.7.13
-conda install -y -c anaconda pandas mysql-python sqlalchemy
+conda install -y -c anaconda pandas mysql-python sqlalchemy scikit-learn
 conda install -y -c conda-forge sshtunnel wxpython=3.0
 conda install -y -c cogsci psychopy pygame
 
@@ -50,8 +50,19 @@ echo echo Starting program. This may take a few seconds... >> SequencePracticeDe
 echo python SeqLearn.py --demo ^> NUL >> SequencePracticeDemo.bat
 echo call deactivate" >> SequencePracticeDemo.bat
 
+echo set INSTALLPATH=%INSTALLPATH% > UploadData.bat
+echo set SEQDIR=%INSTALLPATH%\SeqLearn >> UploadData.bat
+echo set PATH=%ANACONDAPATH%\Scripts;%ANACONDAPATH%\;%PATH% >> UploadData.bat
+echo call activate psychopyenv >> UploadData.bat
+echo cd %INSTALLPATH%\SeqLearn >> UploadData.bat
+echo echo Uploading data. This may take a few seconds... >> UploadData.bat 
+echo python UploadData.py ^> NUL >> UploadData.bat
+echo call deactivate" >> UploadData.bat
+
 move SequencePractice.bat "%HOMEPATH%\Desktop"
 move SequencePracticeDemo.bat "%HOMEPATH%\Desktop"
+move UploadData.bat "%HOMEPATH%\Desktop"
+
 rm stats/*
 rmdir stats
 

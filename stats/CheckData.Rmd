@@ -15,14 +15,14 @@ library(ggplot2)
 library(reshape2)
 library(dplyr)
 
-trialsfile = paste0('../data/archive/trials_table-20190113_1631-KIpilot1db.csv')
+trialsfile = paste0('../data/archive/trials_table-20190213_1119-Lundpilot2db.csv')
 trials.table = unique(read.table(trialsfile, sep =';', header = T,quote = "")[-1])
 
 maxy = 4500 
 miny = 500 
 
 # analyze only these
-group = c("kip1s002", "kip1s003", "kip1s004", "kip1s005", "kip1s008", "kip1s009")
+group = c("lup2s002", "lup2s003", "lup2s004", "lup2s005", "lup2s006", "lup2s007")
 
 trials.table = subset(trials.table, username %in% group)
 
@@ -42,8 +42,11 @@ plot.MT = ggplot(ok_unpaced_trials, aes(x = trial, y = MT, col = as.factor(seq_t
 
 plot.MT.paced = ggplot(ok_paced_trials, aes(x = trial, y = MT, col = as.factor(seq_train), group = true_sequence)) + geom_line(lwd=1) + geom_point() + ylim(miny, maxy) + facet_grid( username ~ sess_num) + theme(legend.position="none") + theme_bw()
 
+plot.MT.paced.hist = ggplot(ok_paced_trials, aes(x = MT, col = as.factor(seq_train), group = true_sequence)) + geom_histogram(bins = 50) + facet_grid(  username ~ . ) + theme(legend.position="none") + theme_bw()
+ 
 print(plot.MT)
 print(plot.MT.paced)
+print(plot.MT.paced.hist)
 
 ```
 

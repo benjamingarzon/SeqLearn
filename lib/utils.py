@@ -11,11 +11,12 @@ import json, csv
 import numpy as np
 import pandas as pd
 from psychopy import gui, event, core
-from scipy.spatial.distance import pdist #, squareform
+from scipy.spatial.distance import pdist, squareform
 from scipy.cluster.hierarchy import linkage, cut_tree
 from collections import defaultdict
 import glob, os
 from generator.generator import seq_to_stim, seq_to_string, string_to_seq
+from sklearn.metrics import silhouette_score
 
 def get_seq_types(type_file=None):
     """ 
@@ -200,6 +201,10 @@ def startSession(opts):
         n_sess = np.max(schedule["sess_num"])
     except IOError: 
         print("Error: Schedule file is missing!")
+
+    maxscore = defaultdict(float)
+    maxgroupscore = defaultdict(lambda:config["MAXSCORE_BASELINE"], {})
+
    
     try:
         # proceed from where it was left before
@@ -208,7 +213,8 @@ def startSession(opts):
         trialsfile = open(trialsfilename, "ab")
         trialstable = pd.read_csv(trialsfilename, sep=';')
 
-        next_sess_num = np.max(trialstable["sess_num"]) + 1
+        last_sess_num = np.max(trialstable["sess_num"])
+        next_sess_num = last_sess_num + 1
         q = np.where(schedule["sess_num"] >= next_sess_num)
         # sess_num is zero if there are no more sessions left
         sess_num = schedule["sess_num"][np.min(q)] if q[0].size else 0
@@ -216,12 +222,13 @@ def startSession(opts):
         #run = np.max(trialstable[, "run"]) + 1
 
         if config["MODE"] == "fmri": 
-            run = np.max(trialstable["run"]) + 1
+            run = np.max(trialstable.loc[trialstable["sess_num"] == \
+                                         last_sess_num, "run"]) + 1
 
             if run > config["N_RUNS"]: # we did the last run, move to next
                 run = 1
             else:    
-                sess_num = np.max(trialstable["sess_num"]) 
+                sess_num = last_sess_num
                 
         else:
             run = 1
@@ -232,9 +239,6 @@ def startSession(opts):
         if opts.session >= 0:
             sess_num = opts.session
 
-            
-        maxscore = defaultdict(float)
-        maxgroupscore = defaultdict(float)
         for seq in np.unique(trialstable["true_sequence"]):
             maxscore[seq] = np.max(
                     trialstable.loc[trialstable["true_sequence"] == seq, 
@@ -264,8 +268,6 @@ def startSession(opts):
         keysfile = open(keysfilename, "wb")
         trialsfile = open(trialsfilename, "wb")
         sess_num = np.min(schedule["sess_num"])
-        maxscore = defaultdict(float)
-        maxgroupscore = defaultdict(lambda:config["MAXSCORE_BASELINE"], {})
         
         # connect files with a csv writer
         memowriter = csv.writer(memofile, delimiter=";")
@@ -374,8 +376,23 @@ def filter_keys(keypresses, n_chords, key_code):
     # cluster the sequence in chords
     d = pdist(np.reshape(allkeytimes, (-1, 1))) # can be done faster 
     Z = linkage(d, 'complete')
-    clusters = np.array([ x[0] for x in cut_tree(Z, n_clusters = n_chords)])
-
+    
+    #clusters = np.array([ x[0] for x in cut_tree(Z, n_clusters = n_chords)])
+    n_keys = len(keypresses)
+    ##### different clusters
+    solutions = []
+    for n_clusters in range(2, np.min((n_chords + 2, n_keys))):
+        clusters = np.array([ x[0] for x in cut_tree(Z, n_clusters = n_clusters)])
+        ss = silhouette_score(squareform(d), clusters, metric='precomputed')
+        solutions.append((n_clusters, clusters, ss))
+    # get best one
+    if len(solutions) > 0:
+        maxsolution = max(solutions, key=lambda x:x[2])
+        clusters = maxsolution[1]
+    else:
+        clusters = n_keys*[0]
+    #####
+    
     keys = []
     keytimes = []
 

@@ -170,6 +170,13 @@ alter table keys_table add column run int after paced;
 
 ```
 
+For linux
+```
+sudo useradd -m -d /home/researcher researcher
+sudo passwd
+
+```
+
 # Preparing a study
 
 - Create a database and users.

@@ -21,7 +21,11 @@ def connect(opts):
     db_config_json.close()
     database = opts.database if opts.database else db_config['DATABASE'] 
     
-    sql_name = 'root'
+    if username == 'researcher':
+        sql_name = 'researcher'
+    else:
+        sql_name = 'root'
+        
     if opts.upload:
         mypath, mysuffix = opts.upload.split(",")
         sql_name = mysuffix

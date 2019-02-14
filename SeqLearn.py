@@ -76,6 +76,8 @@ def SeqLearn(opts):
     instructionsbreak_message = stimuli["instructionsbreak_message"]    
     instructionsstretch_message = stimuli["instructionsstretch_message"]
     instructionsbreakseq_message = stimuli["instructionsbreaksequence_message"]
+    beatslow_message = stimuli["beatslow_message"]
+    beatfast_message = stimuli["beatfast_message"]
     last_label = stimuli["last_label"]
     best_label = stimuli["best_label"]
     group_best_label = stimuli["group_best_label"]
@@ -166,6 +168,7 @@ def SeqLearn(opts):
     memofile.close()
     mystart = 0
     stretch_trial = 0
+    fmri_trial = 1
     
     for rowindex, row in  enumerate(schedule.itertuples()):
         sess_num, sess_type, n_trials, seq_keys =\
@@ -174,7 +177,8 @@ def SeqLearn(opts):
         sequence_string, seq_train, seq_color, seq_type, paced, instruct, \
         block = row.sequence_string, row.seq_train, row.seq_color, \
         row.seq_type, row.paced, row.instruct, row.block
-
+#        if paced == 0:
+#            continue
         sequence = string_to_seq(sequence_string)
 
         if config["USE_BUTTONBOX"]: 
@@ -295,7 +299,7 @@ def SeqLearn(opts):
                     showStimulus(win, [instructionsstretch_message])
                     target_time = clock_stretch + config["STRETCH_TIME"]
                     print("Stretching...")
-                    stretch_trial = 0
+                    stretch_trial = 1
                 else:
                     stretch_trial = stretch_trial + 1
 
@@ -311,7 +315,11 @@ def SeqLearn(opts):
                 if config["TRIGGER_FIXATION"] == 1:                 
                     event.waitKeys(keyList = [config["FMRI_TRIGGER"]])  
                 clock_fixation = globalClock.getTime()
-                print("Block %d, trial %d of %d"%(block, trial, n_trials))
+                print("Block %d, trial %d of %d, total trial %d"%(block, 
+                                                                  trial, 
+                                                                  n_trials, 
+                                                                  fmri_trial))
+                fmri_trial = fmri_trial + 1
                 
             target_time = clock_fixation + config["FIXATION_TIME"]
 
@@ -352,6 +360,7 @@ def SeqLearn(opts):
                         keypresses.extend(partial_keypresses)
 
             else: # unpaced
+
                 target_time = target_time + maxwait + config["BUFFER_TIME"]                  
 
                 event.clearEvents()
@@ -424,7 +433,7 @@ def SeqLearn(opts):
 
                         if config["BUZZER_ON"] == 1:
                             buzzer.play()
-                
+
                     score = 0
                     
                 else:
@@ -434,11 +443,30 @@ def SeqLearn(opts):
                     if paced == 1:
                         clock_feedback = wait_clock(globalClock, target_time, 
                                                     rel = False)
-                        if config["MODE"] != "fmri":
-                            showStimulus(win, [ok_sign, ok_message])
-                        
+                        if config["MODE"] != "fmri":                            
+                            
+                            if MT > config["BEAT_INTERVAL"]*(len(sequence)-1)\
+                            *(1 + config["BEAT_THR"]):
+                                showStimulus(win, [beatslow_message])
+                                trialincrease = 0
+                                trial_type = "slow"
+                            else:
+                                
+                                if MT < config["BEAT_INTERVAL"]*(len(sequence)-1)*\
+                                (1 - config["BEAT_THR"]):
+                                    showStimulus(win, [beatfast_message])
+                                    trialincrease = 0
+                                    trial_type = "fast"
+
+                                else:
+                                    showStimulus(win, [ok_sign, ok_message])
+                        # control pace
+                            config["BEAT_INTERVAL"]*nbeats
+                            
+                            
                     else:    
                         # feedback
+                        
                         pastmaxscore = maxscore[sequence_string] \
                         if sequence_string in maxscore.keys() else score                    
                                 
@@ -494,7 +522,7 @@ def SeqLearn(opts):
             else:
 
                 #decide do stretching when necessary
-                print("Accuracy: %f"%(accuracy))
+                print("Accuracy: %.2f"%(accuracy))
                                 
             clock_finished = wait_clock(globalClock, 
                         target_time, 
