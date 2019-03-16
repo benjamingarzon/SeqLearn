@@ -11,5 +11,5 @@ SeqLearn1.6 Lund Pilot fMRI 4
     - Changed to 5 runs
     - Randomization avoids equal consecutive trials
     - Added stretch column in db
-    
+    - Changed to 3 beats
 
