@@ -1,0 +1,126 @@
+---
+  title: "R Notebook"
+output:
+  html_document:
+  df_print: paged
+html_notebook: default
+pdf_document: default
+---
+  
+# open data
+```{r}
+rm(list=ls())
+
+library(ggplot2)
+library(reshape2)
+library(dplyr)
+
+theme_lh <- function () { 
+    theme_bw(base_size=24, base_family="Avenir")
+}
+
+# KI data
+trialsfile1 = paste0('../data/archive/trials_table-20190113_1631-KIpilot1db.csv')
+trials.table1 = unique(read.table(trialsfile1, sep =';', header = T,quote = "")[-1]) %>% mutate(site = "KI")
+
+# Lund data
+trialsfile2 = paste0('../data/archive/trials_table-20190313_2239-Lundpilot2db.csv')
+trials.table2 = unique(read.table(trialsfile2, sep =';', header = T,quote = "")[-1]) %>% mutate(site = "Lund")
+trials.table2 = subset(trials.table2, sess_num <= 18)
+maxy = 4500 
+miny = 500 
+
+# analyze only these
+learners = c("kip1s002", "kip1s003", "kip1s004", "kip1s005", "kip1s008", "kip1s009", 
+            "lup2s002", "lup2s003", "lup2s004", "lup2s005", "lup2s006", "lup2s007", "lup2s008")
+
+common_cols = intersect(colnames(trials.table1), colnames(trials.table2))
+
+trials.table = rbind(trials.table1[common_cols], trials.table2[common_cols])
+trials.table = subset(trials.table, username %in% learners)
+
+# remove an invalid session
+trials.table = subset(trials.table, !(username == 'lup2s005' & sess_num == 1))
+
+```
+
+
+Performance
+```{r fig.width=20, fig.asp=0.4}
+unpaced_trials = subset(trials.table, paced == 0 & trial_type != "missed")
+ok_unpaced_trials = subset(unpaced_trials, accuracy == 1)
+ok_training_trials = subset(ok_unpaced_trials,  seq_train != "unseen")
+ok_training_trials.sel = subset(ok_unpaced_trials,  username %in% c("lup2s002", "lup2s003", "lup2s006", "lup2s007"))
+plot.MT = ggplot(ok_training_trials.sel, aes(x = trial, y = MT, group = true_sequence, col = seq_train)) + geom_point(size = 1) + ylim(miny, maxy) + facet_grid( username ~ sess_num) + theme_lh() + theme(axis.text.x = element_text(size = 12), strip.text.y = element_blank(), strip.background = element_blank()) + theme(legend.position="none") + xlab('Session/trial') + ylab('Movement duration  (ms)') 
+ 
+print(plot.MT)
+
+```
+
+
+
+Mean performance
+```{r fig.width=25, fig.asp=0.6}
+
+# consider only last trials, aggregate within participant and compare participants
+mean.user = subset(ok_unpaced_trials, trial > 5) %>% 
+  group_by(username, sess_num, seq_train, site) %>% 
+  summarise(meanMT = mean(MT))
+mean.user.trained = subset(mean.user, seq_train == "trained")
+
+plot.meanMT.user = ggplot(mean.user.trained, aes(x = sess_num, y = meanMT, col = username, lty = as.factor(site))) + geom_line(lwd=2, alpha = 0.5) + geom_point(size = 3, alpha = 0.5) + geom_smooth(aes(group=site), alpha = 0.2) + theme_lh()  + xlab('Session') + ylab('Movement duration  (ms)') + theme( legend.position="none")
+
+print(plot.meanMT.user)
+
+plot.meanMT.site = ggplot(mean.user.trained, aes(x = sess_num, y = meanMT, group = site, col = site)) + 
+  geom_smooth()  + theme_lh() + theme( legend.position="none") + xlab('Session') + ylab('Movement duration (ms)')
+
+print(plot.meanMT.site)
+
+```
+
+
+Trained vs untrained
+```{r fig.width=20, fig.asp=0.6}
+
+get_untrained_type = function(n, type){
+  if( type == "trained") {
+    return ("Trained")
+    } else {
+  #if ( n %in% c(1, 4)) return("Untrained")
+  #else return("-")
+
+  if (n == 1) return("1x")
+  if (n == 2) return("2x")
+  if (n == 3) return("3x")
+  if (n == 4) return("4x")
+  }
+}
+
+# identify the type of sequence depending on how many times it has been shown
+
+mean.user.sequence = subset(ok_unpaced_trials, trial > 5) %>% 
+  group_by(username, sess_num, seq_train, site, true_sequence) %>% 
+  summarise(meanMT = mean(MT))
+
+# remove average for each subject
+
+mean.user.sequence.demeaned = mean.user.sequence %>% group_by(username) %>% mutate(meanMT = meanMT - mean(meanMT)) 
+
+mean.sequence.counts = mean.user.sequence.demeaned %>% 
+  group_by(username, seq_train, site, true_sequence) %>% 
+  mutate(n = n()) %>% mutate(untrained_type = mapply(get_untrained_type, n, seq_train)) 
+
+mean.sequence.counts = subset(mean.sequence.counts, untrained_type != "-")
+
+#mean.summary = subset(mean.sequence.counts, (site == "KI" & sess_num == 24) | (site == "Lund" & sess_num == 18) | sess_num == 1) %>% mutate(session
+mean.summary = subset(mean.sequence.counts,  site == "Lund" & (sess_num == 18 | sess_num == 1)) %>% mutate(session = ifelse(sess_num == 1, "First", "Last")) %>% group_by(username, untrained_type, session, site) %>% 
+  summarise(meanMT = mean(meanMT))
+
+melted.summary = subset(melt(mean.summary, id.vars = c("site", "username", "session", "untrained_type")))
+
+plot.summary = ggplot(melted.summary, aes(x = session, y = value, fill = untrained_type)) + geom_boxplot() + theme_lh() + theme(legend.title=element_blank()) + xlab('Session') + ylab('Movement duration  (ms)') # + facet_grid(.~site)
+print(plot.summary)
+
+
+```

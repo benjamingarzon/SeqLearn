@@ -206,19 +206,21 @@ def generate_with_predefined_sequences(opts, sched_group):
                         # compute run statistics
                         nbeats = config["MAX_CHORD_SIZE"] + \
                         config["EXTRA_BEATS"]
+                        
                         trial_duration = config["BEAT_INTERVAL"]*nbeats + \
                         config["BUFFER_TIME"] + config["FIXATION_TIME"] + \
                         config["ITIMEAN_FMRI"] 
                         run_duration = trial_duration*n_trials*\
-                        (len(combination)) + config["START_TIME_FMRI"]
-                        
+                        (len(combination)) + config["START_TIME_FMRI"] + \
+                        (len(combination)*n_trials/config["STRETCH_TRIALS"]-1)*config["STRETCH_TIME"]
+              
                         total_duration = run_duration*n_runs 
                         total_trials = n_runs*n_trials
                     
                         print("Trial duration: %.2f s; "
                               %(trial_duration) +
-                              "Run duration: %.2f m; "
-                              %(run_duration/60) +
+                              "Run duration: %.2f s (%.2f m); "
+                              %(run_duration, run_duration/60) +
                               "Total duration: %.2f m; "
                               %(total_duration/60) + 
                               "Total trials per sequence: %d"
@@ -230,12 +232,19 @@ def generate_with_predefined_sequences(opts, sched_group):
                             
                             shuffled_combination_run = \
                             shuffle_order(combination)
-                            
+                            last_seq = 0               
                             for block, n_group in enumerate(blocks):
-
                                 shuffled_combination = \
                                 shuffle_order(shuffled_combination_run)
-                                
+                                # avoid repetitions
+                                while last_seq == shuffled_combination[0]:
+                                    
+                                    shuffled_combination = \
+                                    shuffle_order(shuffled_combination_run)
+                                    
+                                last_seq = shuffled_combination[-1]
+                                        
+                                    
                                 # shuffle trained and untrained
                                 for seq in range(len(shuffled_combination)):         
                                     instruct = 1 if seq == 0 and \
@@ -371,7 +380,7 @@ def main():
     
     print("Preparing schedule...")
     opts = parser.parse_args()
-    opts.type_file = "./scheduling/seq_types_lup2.csv"
+    opts.type_file = "./scheduling/seq_types_lup2.1.csv"
     opts.no_untrained = False
     opts.split = True
 

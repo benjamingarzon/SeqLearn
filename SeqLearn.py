@@ -12,7 +12,7 @@ from __future__ import division
 from psychopy import visual, core, event, prefs, logging
 from datetime import datetime
 from lib.utils import showStimulus, scorePerformance, startSession, \
-filter_keys, test_sequence, update_table, wait_clock
+filter_keys, test_sequence, update_table, wait_clock, generate_ITIs
 from generator.generator import string_to_seq, seq_to_string, seq_to_stim
 prefs.general["audioLib"] = ["pygame"]
 import numpy as np
@@ -44,6 +44,8 @@ def SeqLearn(opts):
     memofile, keysfile, trialsfile, maxscore, maxgroupscore, config, texts, \
     schedule, schedule_unique, run = \
     startSession(opts)
+
+    np.random.seed(config["RND_SEED"])
 
 ############################ 
 ## Define window and stimuli
@@ -104,19 +106,18 @@ def SeqLearn(opts):
         
     logging.LogFile(f=config["LOG_FILE"], filemode='w')
 #    logging.setDefaultClock(globalClock)
-    np.random.seed(config["RND_SEED"])
     
     
     if config["MODE"] == "fmri":
         itimean = config["ITIMEAN_FMRI"]
         itirange = config["ITIRANGE_FMRI"]
+        ititype = 'exp'
     else:
         itimean = config["ITIMEAN"]
         itirange = config["ITIRANGE"]
-    
-    ITI = list(np.random.uniform(itimean + itirange, 
-                           itimean + itirange, 
-                           size=100000))
+        ititype = 'uni'
+        
+    ITI = list(generate_ITIs(itimean, itirange, ititype))
     
 ############################ 
 ## Experiment Section
@@ -286,7 +287,11 @@ def SeqLearn(opts):
 
         execution_duration = config["BEAT_INTERVAL"]*nbeats + \
         config["BUFFER_TIME"] 
+
         while (trial <= n_trials):
+            
+            do_stretch = 1 if stretch_trial == config["STRETCH_TRIALS"] - 1 \
+            and config["MODE"] == "fmri" else 0
             
             # prepare stimuli
             if config["MODE"] == "fmri":
@@ -300,9 +305,10 @@ def SeqLearn(opts):
                     target_time = clock_stretch + config["STRETCH_TIME"]
                     print("Stretching...")
                     stretch_trial = 1
+                    
                 else:
                     stretch_trial = stretch_trial + 1
-
+                    
             else:
                 current_stimuli = [trialStimulus[trial-1]] + \
                 squareStimuli[trial-1]
@@ -522,7 +528,9 @@ def SeqLearn(opts):
             else:
 
                 #decide do stretching when necessary
-                print("Accuracy: %.2f"%(accuracy))
+                print("Accuracy: %.2f, Clock: %.2f"%(accuracy, 
+                                              globalClock.getTime()))
+                
                                 
             clock_finished = wait_clock(globalClock, 
                         target_time, 
@@ -567,7 +575,8 @@ def SeqLearn(opts):
                     "{:.3f}".format(globalClock.getTime()), 
                     paced,
                     run,
-                    block
+                    block, 
+                    do_stretch
                 ])
                 key_from = key_to
         
@@ -596,13 +605,13 @@ def SeqLearn(opts):
                     "{:.3f}".format(globalClock.getTime()), 
                     paced,
                     run, 
-                    block
+                    block, 
+                    do_stretch
             ])
 
             trial = trial + trialincrease
             cum_trial = cum_trial + 1    
             #wait_clock(globalClock, config["FIXATION_TIME"]) 
-
             
         if exiting:
             print("Session has been interrupted. Bye!")
@@ -611,8 +620,10 @@ def SeqLearn(opts):
 ############################ 
 ## Sync local files with database
 ############################ 
-
-    showStimulus(win, [bye_message]) 
+    if config["MODE"] != "fmri":
+        showStimulus(win, [bye_message]) 
+    else:
+        wait_clock(globalClock, target_time, rel = False)
         
     keysfile.close()
     trialsfile.close()

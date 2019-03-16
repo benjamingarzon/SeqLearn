@@ -604,10 +604,10 @@ trials.table = read.table(trialsfile, sep =';', header = T, quote = "")
 #ok_trials = subset(trials.table, accuracy == 1 & run > 1)
 #table(ok_trials$true_sequence)
 #table(ok_trials$seq_train)
-trials.table = subset(trials.table, sess_num == 18 & run == 1)
- diff(trials.table$clock_fixation)
+#trials.table = subset(trials.table, sess_num == 18 & run == 1)
+# diff(trials.table$clock_fixation)
 d = c(diff(trials.table$clock_fixation), 0)
-print(cbind(trials.table$block, trials.table$trial, trials.table$clock_fixation, d, d > 21))
+print(cbind(trials.table$block, trials.table$trial, trials.table$clock_fixation, d, trials.table$stretch))
 ```
 
 Motivation factor

@@ -319,8 +319,8 @@ def startSession(opts):
                 "global_clock",
                 "paced",
                 "run",
-                "block"
-
+                "block",
+                "stretch"
         ])
     
         trialswriter.writerow([
@@ -348,7 +348,8 @@ def startSession(opts):
                 "global_clock",
                 "paced",
                 "run",
-                "block"
+                "block",
+                "stretch"
         ])
 
     # select schedule for this session
@@ -587,3 +588,23 @@ def wait_clock(myclock, t, rel = True):
             pass
         mytime = myclock.getTime()
     return(mytime)
+    
+def generate_ITIs(itimean, itirange, ititype):
+    Nitis = 10000
+
+    if ititype == 'exp':
+        # truncated exponential
+        ITIs = np.random.exponential(itimean, Nitis)
+  
+        maxiti = itimean*np.exp(itirange)
+        miniti = itimean/np.exp(itirange)
+        ITIs[ITIs > maxiti] = maxiti
+        ITIs[ITIs < miniti] = miniti
+        print("ITI: (min = %.2f, mean = %.2f, max = %.2f)"%(miniti, 
+                                                      np.mean(ITIs), 
+                                                      maxiti))
+    else:
+        ITIs = list(np.random.uniform(itimean + itirange, 
+                       itimean + itirange, 
+                       size=Nitis))
+    return(ITIs)

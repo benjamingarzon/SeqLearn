@@ -15,14 +15,14 @@ library(ggplot2)
 library(reshape2)
 library(dplyr)
 
-trialsfile = paste0('../data/archive/trials_table-20190213_1119-Lundpilot2db.csv')
+trialsfile = paste0('../data/archive/trials_table-20190316_1422-Lundpilot2db.csv')
 trials.table = unique(read.table(trialsfile, sep =';', header = T,quote = "")[-1])
 
 maxy = 4500 
 miny = 500 
 
 # analyze only these
-group = c("lup2s002", "lup2s003", "lup2s004", "lup2s005", "lup2s006", "lup2s007")
+group = c("lup2s001")#, "lup2s002", "lup2s003", "lup2s004", "lup2s005", "lup2s006", "lup2s007", "lup2s008", "lup2s009")
 
 trials.table = subset(trials.table, username %in% group)
 
@@ -56,7 +56,7 @@ Mean performance
 ```{r fig.width=25, fig.asp=0.6}
 
 # consider only last trials 
-last_trials = subset(unpaced_trials, trial > 5) %>% 
+last_trials = subset(ok_unpaced_trials, trial > 5) %>% 
   group_by(username, sess_num, true_sequence, seq_train) %>% 
   summarise(meanMT = mean(MT), sdMT = sd(MT))
 

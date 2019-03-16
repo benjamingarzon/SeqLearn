@@ -5,4 +5,8 @@
 .pyc
 .html
 .pdf
+*.TMP
+*/*.TMP
 data/archive/*.csv
+data/backup/*.csv
+data/*.csv

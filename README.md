@@ -161,12 +161,14 @@ drop user 'subject001'@'localhost';
 
 To add a column:
 ```
-alter table keys_table add column global_clock double after clock_feedback;
+alter table keys_table add column stretch double after clock_feedback;
 
 
 alter table memo_table add column run int after "global_clock";
 alter table trials_table add column run int after paced;
 alter table keys_table add column run int after paced;
+alter table trials_table add column stretch int after block;
+alter table keys_table add column stretch int after block;
 
 ```
 
