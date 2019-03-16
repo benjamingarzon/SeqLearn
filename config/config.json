@@ -40,7 +40,7 @@
 "BUZZER_FILE":"./sounds/buzzer.wav",
 "BEAT_INTERVAL":0.7,
 "BEAT_THR":0.1,
-"EXTRA_BEATS":4,
+"EXTRA_BEATS":3,
 "WRONG_FILE":"./pics/wrong.JPG",
 "OK_FILE":"./pics/OK.JPG",
 "HAND_FILE":"./pics/lefthand_sequence.JPG",
