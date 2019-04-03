@@ -1,6 +1,6 @@
 {
 "MODE":"home",
-"USE_BUTTONBOX":1,
+"USE_BUTTONBOX":0,
 "FULL_SCREEN":0,
 "SEQ_KEYS":["1", "2", "3", "4"],
 "BUTTONBOX_KEYS":["9", "8", "7", "6"],
@@ -18,7 +18,7 @@
 "BGCOLOR":"white",
 "ESCAPE_KEY":"escape",
 "SEQ_LENGTH":5,
-"SEQ_LENGTH_DEMO":3,
+"SEQ_LENGTH_DEMO":4,
 "START_TIME":1.0,
 "START_TIME_FMRI":10.0,
 "FIXATION_TIME":1.0,
