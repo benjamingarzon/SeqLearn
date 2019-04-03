@@ -1,7 +1,7 @@
 {
 "MODE":"home",
-"USE_BUTTONBOX":0,
-"FULL_SCREEN":0,
+"USE_BUTTONBOX":1,
+"FULL_SCREEN":1,
 "SEQ_KEYS":["1", "2", "3", "4"],
 "BUTTONBOX_KEYS":["9", "8", "7", "6"],
 "BUTTONBOX_KEYS_FMRI":["9", "8", "7", "6"],
