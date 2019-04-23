@@ -107,7 +107,7 @@ hc.complete = hclust(maxdist.vec - vecdist, method = "complete")
 plot(hc.complete)
 clusters = cutree(hc.complete, h = 1)
 clusters.table = table(clusters)
-sel.clus = which(clusters.table > 8 )# at least 6 different sequences needed
+sel.clus = which(clusters.table > 8 )# at least 8 different sequences needed
 #sel.clus = which(clusters.table > max(clusters.table) - 4)
 
 sel.chunks =  list()
@@ -131,25 +131,17 @@ for (i in seq(length(sel.clus))){
                  t(sapply(schedules, get_transition_distribution, nchords)))
                  
   print(i)
-  # min.eldist[i] = min(chunks.eldist)
-  # if(min(chunks.eldist)==2)
-  # hc.el = hclust(chunks.eldist, method = "complete")
-  # plot(hc.el)
 }
 
 # ensure that the frequency of fingers is the same and that there are the minimum possible number of common chords between trained and untrained
 
 plot(jitter(mychord_distance), jitter(myfinger_distance), pch = 20, cex = 0.3) 
-#chosen_indices = which(myfinger_distance == min(myfinger_distance[mychord_distance==max(mychord_distance)]) & mychord_distance==max(mychord_distance))
-#chosen_schedules = myschedules[chosen_indices]
 
 chosen_indices = which(mychord_distance==max(mychord_distance))
 chosen_schedules.1 = myschedules[chosen_indices]
 myfinger_distance = myfinger_distance[chosen_indices]
 
 chosen_schedules.2 = chosen_schedules.1[order(myfinger_distance)]
-
-#lapply(chosen_schedules, function(x) x$trained)
 
 
 # check distribution of fingers and transitions

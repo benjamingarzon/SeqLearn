@@ -16,3 +16,7 @@ SeqLearn1.6 Lund Pilot fMRI 4
 
 SeqLearn1.7 Lund Pilot fMRI 4 
     - ITImean 9.0, ITIrange 0.3
+
+SeqLearn2.0 Lund Experiment Wave 1 
+    - ITImean 6.7, ITIrange 0.23
+    - 

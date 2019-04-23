@@ -59,9 +59,22 @@ echo echo Uploading data. This may take a few seconds... >> UploadData.bat
 echo python UploadData.py ^> NUL >> UploadData.bat
 echo call deactivate" >> UploadData.bat
 
+echo set INSTALLPATH=%INSTALLPATH% > SequencePracticeSession.bat
+echo set SEQDIR=%INSTALLPATH%\SeqLearn >> SequencePracticeSession.bat
+echo set PATH=%ANACONDAPATH%\Scripts;%ANACONDAPATH%\;%PATH% >> SequencePracticeSession.bat
+echo call activate psychopyenv >> SequencePracticeSession.bat
+echo echo Starting program. This may take a few seconds... >> SequencePracticeSession.bat 
+echo cd %INSTALLPATH%\SeqLearn >> SequencePracticeSession.bat
+echo set /p SESSNUM="Enter session number:"
+
+echo python SeqLearn.py --session %SESSNUM% ^> NUL >> SequencePracticeSession.bat
+echo call deactivate" >> SequencePracticeSession.bat
+
+mkdir "%HOMEPATH%\Desktop\SeqLearnUtils"
 move SequencePractice.bat "%HOMEPATH%\Desktop"
 move SequencePracticeDemo.bat "%HOMEPATH%\Desktop"
-move UploadData.bat "%HOMEPATH%\Desktop"
+move UploadData.bat "%HOMEPATH%\Desktop\SeqLearnUtils"
+move SequencePracticeSession.bat "%HOMEPATH%\Desktop\SeqLearnUtils"
 
 rm stats/*
 rmdir stats

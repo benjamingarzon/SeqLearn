@@ -100,9 +100,13 @@ def calcmaxgroupscore(session, n_sessions, factor, baseline, maxscore):
     """ 
     Calculates the maxscore. 
     """    
+#    maxgroupscore = np.max(
+#            (baseline*np.exp(-(session-1)/n_sessions),
+#            maxscore*(1 + factor*np.exp(-2*(session-1)/n_sessions)))
+#            )
     maxgroupscore = np.max(
-            (baseline*np.exp(-(session-1)/n_sessions),
-            maxscore*(1 + factor*np.exp(-2*(session-1)/n_sessions)))
+            (baseline*np.exp(-session/n_sessions),
+            maxscore*(1 + factor*np.exp(-2*session/n_sessions)))
             )
     return(maxgroupscore)
 
@@ -212,14 +216,24 @@ def startSession(opts):
         keysfile = open(keysfilename, "ab")
         trialsfile = open(trialsfilename, "ab")
         trialstable = pd.read_csv(trialsfilename, sep=';')
+        # get last session from session file    
+        try:
+            last_json = open("./config/last_session.json", "r")
+            json_obj = json.load(last_json)
+            if username in json_obj.keys():
+                last_sess_num = json_obj[username]
+            else: 
+                last_sess_num = np.max(trialstable["sess_num"])
+            last_json.close()
+        except IOError: 
+            print("Session file not found.")
+            last_sess_num = np.max(trialstable["sess_num"])
 
-        last_sess_num = np.max(trialstable["sess_num"])
+        #last_sess_num = np.max(trialstable["sess_num"])
         next_sess_num = last_sess_num + 1
         q = np.where(schedule["sess_num"] >= next_sess_num)
         # sess_num is zero if there are no more sessions left
         sess_num = schedule["sess_num"][np.min(q)] if q[0].size else 0
-        #trialstable.loc[schedule["sess_type"] == "fmri", :]
-        #run = np.max(trialstable[, "run"]) + 1
 
         if config["MODE"] == "fmri": 
             run = np.max(trialstable.loc[trialstable["sess_num"] == \
@@ -424,7 +438,7 @@ def filter_keys(keypresses, n_chords, key_code):
 #            )
 #    plt.show()
 
-    return(keys, keytimes, RTs)        
+    return(keys, keytimes, RTs, allkeys)        
 
 
 def test_sequence(mystring, win, config, mycolor, texts, instructions_space,
@@ -600,11 +614,29 @@ def generate_ITIs(itimean, itirange, ititype):
         miniti = itimean/np.exp(itirange)
         ITIs[ITIs > maxiti] = maxiti
         ITIs[ITIs < miniti] = miniti
-        print("ITI: (min = %.2f, mean = %.2f, max = %.2f)"%(miniti, 
+        print("ITI: (min = %.1f, mean = %.1f, max = %.1f, diff = %.1f)"%(miniti, 
                                                       np.mean(ITIs), 
-                                                      maxiti))
+                                                      maxiti, 
+                                                      maxiti-miniti))
     else:
         ITIs = list(np.random.uniform(itimean + itirange, 
                        itimean + itirange, 
                        size=Nitis))
     return(ITIs)
+    
+def end_session(username, sess_num):
+    try:
+        last_json = open("./config/last_session.json", "a")
+        json_obj = json.load(last_json)
+        json_obj[username] = sess_num
+        json.dump(json_obj, last_json)
+        last_json.close()
+                
+    except IOError: 
+        print("Session file not found; a new one will be created.")
+        json_obj = {username: sess_num}
+        last_json = open("./config/last_session.json", "w")
+        json.dump(json_obj, last_json)
+        last_json.close()
+
+    

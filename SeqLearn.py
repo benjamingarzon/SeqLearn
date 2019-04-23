@@ -12,7 +12,8 @@ from __future__ import division
 from psychopy import visual, core, event, prefs, logging
 from datetime import datetime
 from lib.utils import showStimulus, scorePerformance, startSession, \
-filter_keys, test_sequence, update_table, wait_clock, generate_ITIs
+filter_keys, test_sequence, update_table, wait_clock, generate_ITIs, \
+end_session
 from generator.generator import string_to_seq, seq_to_string, seq_to_stim
 prefs.general["audioLib"] = ["pygame"]
 import numpy as np
@@ -24,7 +25,6 @@ import sshtunnel
 from stimuli.stimuli import define_stimuli
 from shutil import copyfile
 
-
 sshtunnel.SSH_TIMEOUT = 20.0
 sshtunnel.TUNNEL_TIMEOUT = 20.0
 
@@ -35,6 +35,8 @@ def SeqLearn(opts):
 ############################ 
     
     if opts.restart: # remove previous files
+        if os.path.exists("./config/last_session.json"):
+            os.remove("./config/last_session.json")
         for fl in glob.glob("./data/*.csv"):
             os.remove(fl)    
     
@@ -45,7 +47,8 @@ def SeqLearn(opts):
     schedule, schedule_unique, run = \
     startSession(opts)
 
-    np.random.seed(config["RND_SEED"])
+    # different random ITIs for different groups and sessions
+    np.random.seed(config["RND_SEED"] + 1000*sched_group + 100*sess_num + 10*run)
 
 ############################ 
 ## Define window and stimuli
@@ -132,12 +135,14 @@ def SeqLearn(opts):
 
         if not config["MODE"] == "fmri": # home mode                       
             showStimulus(win, [instructionspre1_message, hand_sign])
-            event.waitKeys(keyList = ["space"]) 
+            if not opts.automate: 
+                event.waitKeys(keyList = ["space"]) 
         
         if config["PRESHOW"] == 1:           
     
             showStimulus(win, [instructionspre2_message])
-            event.waitKeys(keyList = ["space"]) 
+            if not opts.automate: 
+                event.waitKeys(keyList = ["space"]) 
     
             for row in schedule_unique.itertuples():    
                 squares = seq_to_stim(row.sequence_string, row.seq_color, win, 
@@ -164,7 +169,8 @@ def SeqLearn(opts):
     
         if not config["MODE"] == "fmri": # home mode                       
             showStimulus(win, [instructions1_message, hand_sign])
-            event.waitKeys(keyList = ["space"]) 
+            if not opts.automate: 
+                event.waitKeys(keyList = ["space"]) 
 
     memofile.close()
     mystart = 0
@@ -191,6 +197,8 @@ def SeqLearn(opts):
         else:        
             key_code = {key: value for (key, value) in zip(seq_keys, 
                              seq_keys)}
+    
+        key_code[config["ESCAPE_KEY"]]  = config["ESCAPE_KEY"]
 
         mystart = mystart + 1
             
@@ -210,14 +218,17 @@ def SeqLearn(opts):
                                     alignHoriz="center") 
                     
                     showStimulus(win, [instructions2_message])
-                    event.waitKeys(keyList = ["space"]) 
+                    if not opts.automate: 
+                        event.waitKeys(keyList = ["space"]) 
                 
                     showStimulus(win, [instructions3_message, bars_sign])
-                    event.waitKeys(keyList = ["space"]) 
+                    if not opts.automate: 
+                        event.waitKeys(keyList = ["space"]) 
                 
                     showStimulus(win, [instructions4_message, \
                                        instructions4_space])
-                    event.waitKeys(keyList = ["space"]) 
+                    if not opts.automate: 
+                        event.waitKeys(keyList = ["space"]) 
 #                else: # does not happen
 #                    showStimulus(win, [instructionsfmri1_message])
 #                    event.waitKeys(keyList = [config["FMRI_TRIGGER"]])  
@@ -226,10 +237,12 @@ def SeqLearn(opts):
                 if not config["MODE"] == "fmri": # home mode                    
                     showStimulus(win, [instructionspaced1_message, 
                                        instructions4_space])
-                    event.waitKeys(keyList = ["space"]) 
+                    if not opts.automate: 
+                        event.waitKeys(keyList = ["space"]) 
                 else: # fmri presentation
                     showStimulus(win, [instructionsfmripaced1_message])
-                    event.waitKeys(keyList = [config["FMRI_TRIGGER"]])  
+                    if not opts.automate: 
+                        event.waitKeys(keyList = [config["FMRI_TRIGGER"]])  
             
         #else: # no instructions
             # ask for a break
@@ -318,7 +331,7 @@ def SeqLearn(opts):
                                             rel = False)
          
             if config["MODE"] == "fmri":                 
-                if config["TRIGGER_FIXATION"] == 1:                 
+                if config["TRIGGER_FIXATION"] == 1 and not opts.automate:                 
                     event.waitKeys(keyList = [config["FMRI_TRIGGER"]])  
                 clock_fixation = globalClock.getTime()
                 print("Block %d, trial %d of %d, total trial %d"%(block, 
@@ -378,7 +391,7 @@ def SeqLearn(opts):
                                            [config["ESCAPE_KEY"]], 
                                            timeStamped = trialClock)
                 
-            trialincrease = 1 if config["MODE"] == "fmri" or opts.no_miss \
+            trialincrease = 1 if config["MODE"] == "fmri" or opts.automate \
             else 0
 
             if len(keypresses) <= 1:
@@ -413,17 +426,16 @@ def SeqLearn(opts):
 
             else:
                 misses = 0
-                keys, keytimes, RTs = filter_keys(keypresses, 
+                keys, keytimes, RTs, allkeys = filter_keys(keypresses, 
                                                   len(sequence),
                                                   key_code)
                 trial_type = "done"
                 accuracy, MT, score  = scorePerformance(keys, RTs, sequence, 
                                                         keytimes)
-
-                if [config["ESCAPE_KEY"]] in keys:
+                if config["ESCAPE_KEY"] in allkeys:
                     
-                    if np.sum([key == [config["ESCAPE_KEY"]] 
-                        for key in keys]) > 1:
+                    if np.sum([key == config["ESCAPE_KEY"] 
+                        for key in allkeys]) > 1:
                         exiting = True
                         break
                 
@@ -519,9 +531,9 @@ def SeqLearn(opts):
                 if config["BREAKS"] == 1 and \
                 cum_trial%config["BREAK_TRIALS"] == 0: 
                     showStimulus(win, [instructionsbreak_message])
-                    event.waitKeys(keyList = ["space"]) 
-                    target_time = globalClock.getTime() + config["BUFFER_TIME"]                  
-    
+                    if not opts.automate:
+                        event.waitKeys(keyList = ["space"]) 
+                    target_time = globalClock.getTime() + config["BUFFER_TIME"]
                 else: 
                     target_time = clock_feedback + config["FEEDBACK_TIME"] + \
                 config["BUFFER_TIME"]
@@ -686,12 +698,12 @@ def SeqLearn(opts):
         #finally:
 
 ############################ 
-## Quit
+## Close
 ############################ 
     wait_clock(globalClock, config["FIXATION_TIME"])
-
     win.close()
-    core.quit()
+    if not exiting and not opts.demo:
+        end_session(username, sess_num)
 
 
 def build_parser():
@@ -748,19 +760,20 @@ def build_parser():
                         action="store_true",
                         required = False)
 
-    parser.add_argument("--ignore_misses", 
-                        dest = "no_miss", 
-                        help = "Ignore misses, don't repeat trial.",
+    parser.add_argument("--automate", 
+                        dest = "automate", 
+                        help = "Run automatically for testing.",
                         action="store_true",
                         required = False)
 
     return(parser)
 
 def main():
-
     parser = build_parser()
     opts = parser.parse_args()
     SeqLearn(opts)
+    core.quit()
+
     
 if __name__== "__main__":
   main()

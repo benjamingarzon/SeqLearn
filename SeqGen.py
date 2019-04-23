@@ -9,7 +9,7 @@ A tool for generating discrete sequences.
 """
 # add a sequence number / code
 
-from lib.utils import get_config, get_seq_types
+from lib.utils import get_config, get_seq_types, generate_ITIs
 from generator.generator import Generator
 import pandas as pd
 import numpy as np
@@ -22,7 +22,7 @@ def shuffle_order(x):
     random.shuffle(y) 
     return(y)
 
-def generate_with_predefined_sequences(opts, sched_group):
+def generate_with_predefined_sequences(opts, TR, sched_group, group = 'experimental'):
     """
     Generate schedule using sequences already defined. 
     """
@@ -31,15 +31,17 @@ def generate_with_predefined_sequences(opts, sched_group):
     type_data = get_seq_types(opts.type_file)
      
     seq_file = \
-    opts.seq_file + "_{}.json".format(sched_group) \
+    opts.seq_file + ".json".format(sched_group) \
     if opts.seq_file else "./scheduling/sequences.json"
+#    opts.seq_file + "_{}.json".format(sched_group) \
     color_list = config["COLOR_LIST"]
     
     # create sequences
     row_list = []
-    sess_num = 1
+    sess_num = 0 # 0 is baseline session
 
-
+    np.random.seed(config["RND_SEED"] + 1000*sched_group)
+    
     for index, row in type_data.iterrows():        
 
         seq_type, seq_length, max_chord_size, seq_keys, n_free_trials, \
@@ -48,7 +50,6 @@ def generate_with_predefined_sequences(opts, sched_group):
         n_sess, testing_sessions, n_runs = row
         testing_session_list = \
         [int(x) for x in str(testing_sessions).split(",")]
-
     
         seq_keys = seq_keys.split(" ")
         blocks = [int(x) for x in blocks.split(",")]
@@ -57,7 +58,6 @@ def generate_with_predefined_sequences(opts, sched_group):
             set=seq_keys, 
             size=seq_length,
             maxchordsize=max_chord_size)
-
         trained_seqs, untrained_seqs \
         = mygenerator.read_grouped(seq_file, seq_type)
         
@@ -69,12 +69,16 @@ def generate_with_predefined_sequences(opts, sched_group):
         reorder_untrained = []
         
         untrained_list = range(n_untrained)
-        one = untrained_list[0]
-        twos = untrained_list[1:3]
-        rest = untrained_list[3:]
-        
+        #one = untrained_list[0]
+        #twos = untrained_list[1:3]
+        #rest = untrained_list[3:]
+        untrained_groups = []
+        for j in range(n_seqs_untrained):
+            untrained_groups.append(untrained_list[j::n_seqs_untrained])
+
         for k in range(len(testing_session_list)):
-            mycombination = [one, twos[k % 2], rest[k % len(rest)]]
+#            mycombination = [one, twos[k % 2], rest[k % len(rest)]]
+            mycombination = [x[k % len(x)] for x in untrained_groups]
             random.shuffle(mycombination)
             reorder_untrained.append(tuple(mycombination))
 
@@ -108,9 +112,9 @@ def generate_with_predefined_sequences(opts, sched_group):
             for paced in range(2):
 
                 myruns = n_runs if paced and \
-                sess+1 in testing_session_list else 1 
+                sess_num in testing_session_list else 1 # sess+1
                                         
-                if not sess + 1 in testing_session_list: # training
+                if not sess_num in testing_session_list: # training sess + 1
                     sess_type = "training"
                     n_trials = n_free_trials if paced == 0 else \
                     n_paced_trials
@@ -122,7 +126,7 @@ def generate_with_predefined_sequences(opts, sched_group):
                         sequence, sequence_string = \
                         trained_seqs[seq_index]
 
-                        if n_trials > 0:
+                        if n_trials and group == 'experimental'> 0:
                             row_list.append([
                                 sess_num,
                                 sess_type,
@@ -146,8 +150,8 @@ def generate_with_predefined_sequences(opts, sched_group):
                     list(reorder_untrained[untrained_comb_num \
                                          % len(reorder_untrained)]) if not \
     opts.no_untrained > 0 else []   
-                    print(untrained_combination)
-                    print(reorder_untrained)
+#                    print(untrained_combination)
+#                    print(reorder_untrained)
                     
                     if paced == 0:
                         sess_type = "testing"
@@ -206,10 +210,13 @@ def generate_with_predefined_sequences(opts, sched_group):
                         # compute run statistics
                         nbeats = config["MAX_CHORD_SIZE"] + \
                         config["EXTRA_BEATS"]
-                        
+
+                        ITI = list(generate_ITIs(config["ITIMEAN_FMRI"], 
+                                                 config["ITIRANGE_FMRI"], 
+                                                 'exp'))                        
                         trial_duration = config["BEAT_INTERVAL"]*nbeats + \
                         config["BUFFER_TIME"] + config["FIXATION_TIME"] + \
-                        config["ITIMEAN_FMRI"] 
+                        np.mean(ITI) #config["ITIMEAN_FMRI"] 
                         run_duration = trial_duration*n_trials*\
                         (len(combination)) + config["START_TIME_FMRI"] + \
                         (len(combination)*n_trials/config["STRETCH_TRIALS"]-1)*config["STRETCH_TIME"]
@@ -219,8 +226,8 @@ def generate_with_predefined_sequences(opts, sched_group):
                     
                         print("Trial duration: %.2f s; "
                               %(trial_duration) +
-                              "Run duration: %.2f s (%.2f m); "
-                              %(run_duration, run_duration/60) +
+                              "Run duration: %.2f s (%.2f m, %d frames); "
+                              %(run_duration, run_duration/60, np.ceil(run_duration/TR)) +
                               "Total duration: %.2f m; "
                               %(total_duration/60) + 
                               "Total trials per sequence: %d"
@@ -307,7 +314,7 @@ def generate_with_predefined_sequences(opts, sched_group):
 #                         inplace = True)
 
     if opts.schedule_file:
-        schedulefilename = opts.schedule_file + "_{}".format(sched_group)
+        schedulefilename = opts.schedule_file + "_s{}".format(sched_group)
     else:    
         schedulefilename = "./scheduling/schedule{}".format(sched_group) 
 
@@ -380,18 +387,28 @@ def main():
     
     print("Preparing schedule...")
     opts = parser.parse_args()
-    opts.type_file = "./scheduling/seq_types_lup2.1.csv"
+    opts.type_file = "./scheduling/seq_types_lue1.csv"
     opts.no_untrained = False
     opts.split = True
+    N_SCHEDULES = 10
+    TR = 1.2
+    
+    for sched_group in range(N_SCHEDULES):
+        opts.seq_file =  "./scheduling/sequences/sequences_lue1_001"
+        opts.schedule_file =  "./scheduling/schedules/lue1schedule_g1_c1"
+        generate_with_predefined_sequences(opts, TR, sched_group = sched_group, group = 'experimental')
 
-    opts.seq_file =  "./scheduling/sequences/sequences_lup2_001"
-    opts.schedule_file =  "./scheduling/schedules/lup2schedule1"
-    generate_with_predefined_sequences(opts, sched_group = 0)
+        opts.seq_file =  "./scheduling/sequences/sequences_lue1_002"
+        opts.schedule_file =  "./scheduling/schedules/lue1schedule_g1_c2"
+        generate_with_predefined_sequences(opts, TR, sched_group = sched_group, group = 'experimental')
 
-    opts.seq_file =  "./scheduling/sequences/sequences_lup2_002"
-    opts.schedule_file =  "./scheduling/schedules/lup2schedule2"
-    generate_with_predefined_sequences(opts, sched_group = 0)
+        opts.seq_file =  "./scheduling/sequences/sequences_lue1_001"
+        opts.schedule_file =  "./scheduling/schedules/lue1schedule_g2_c1"
+        generate_with_predefined_sequences(opts, TR, sched_group = sched_group, group = 'control')
 
+        opts.seq_file =  "./scheduling/sequences/sequences_lue1_002"
+        opts.schedule_file =  "./scheduling/schedules/lue1schedule_g2_c2"
+        generate_with_predefined_sequences(opts, TR, sched_group = sched_group, group = 'control')
 
 #    generate_with_predefined_sequences(opts, sched_group = 1)
     print("Done!")

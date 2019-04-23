@@ -1,0 +1,1121 @@
+sess_num;sess_type;n_trials;seq_keys;seq_type;sequence_string;seq_train;seq_color;combination;seq_order;paced;instruct;run;block
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('trained', 0), ('untrained', 0), ('trained', 1)];2;1;1;1;1
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('trained', 0), ('untrained', 0), ('trained', 1)];2;1;0;1;1
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('trained', 0), ('untrained', 0), ('trained', 1)];2;1;0;1;1
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('trained', 0), ('untrained', 0), ('trained', 1)];2;1;0;1;1
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;1;2
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;1;2
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;1;2
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;1;2
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;1;3
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;1;3
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;1;3
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;1;3
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('trained', 1), ('untrained', 0), ('untrained', 1)];2;1;0;1;4
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('trained', 1), ('untrained', 0), ('untrained', 1)];2;1;0;1;4
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('trained', 1), ('untrained', 0), ('untrained', 1)];2;1;0;1;4
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('trained', 1), ('untrained', 0), ('untrained', 1)];2;1;0;1;4
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('untrained', 1), ('trained', 0), ('trained', 1)];2;1;0;1;5
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('untrained', 1), ('trained', 0), ('trained', 1)];2;1;0;1;5
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('untrained', 1), ('trained', 0), ('trained', 1)];2;1;0;1;5
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('untrained', 1), ('trained', 0), ('trained', 1)];2;1;0;1;5
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('trained', 0), ('trained', 1), ('untrained', 1)];2;1;0;1;6
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('trained', 0), ('trained', 1), ('untrained', 1)];2;1;0;1;6
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('trained', 0), ('trained', 1), ('untrained', 1)];2;1;0;1;6
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('trained', 0), ('trained', 1), ('untrained', 1)];2;1;0;1;6
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 1), ('untrained', 0), ('trained', 1)];2;1;0;1;7
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('untrained', 1), ('untrained', 0), ('trained', 1)];2;1;0;1;7
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('untrained', 1), ('untrained', 0), ('trained', 1)];2;1;0;1;7
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 1), ('untrained', 0), ('trained', 1)];2;1;0;1;7
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;1;8
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;1;8
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;1;8
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;1;8
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 0), ('trained', 1), ('untrained', 1)];2;1;1;2;1
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('untrained', 0), ('trained', 1), ('untrained', 1)];2;1;0;2;1
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 0), ('trained', 1), ('untrained', 1)];2;1;0;2;1
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('untrained', 0), ('trained', 1), ('untrained', 1)];2;1;0;2;1
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('trained', 0), ('untrained', 1), ('trained', 1)];2;1;0;2;2
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('trained', 0), ('untrained', 1), ('trained', 1)];2;1;0;2;2
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('trained', 0), ('untrained', 1), ('trained', 1)];2;1;0;2;2
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('trained', 0), ('untrained', 1), ('trained', 1)];2;1;0;2;2
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 1), ('untrained', 0), ('trained', 1)];2;1;0;2;3
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('untrained', 1), ('untrained', 0), ('trained', 1)];2;1;0;2;3
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('untrained', 1), ('untrained', 0), ('trained', 1)];2;1;0;2;3
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 1), ('untrained', 0), ('trained', 1)];2;1;0;2;3
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('trained', 1), ('untrained', 1), ('untrained', 0)];2;1;0;2;4
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('trained', 1), ('untrained', 1), ('untrained', 0)];2;1;0;2;4
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('trained', 1), ('untrained', 1), ('untrained', 0)];2;1;0;2;4
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('trained', 1), ('untrained', 1), ('untrained', 0)];2;1;0;2;4
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('trained', 1), ('untrained', 0), ('untrained', 1)];2;1;0;2;5
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('trained', 1), ('untrained', 0), ('untrained', 1)];2;1;0;2;5
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('trained', 1), ('untrained', 0), ('untrained', 1)];2;1;0;2;5
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('trained', 1), ('untrained', 0), ('untrained', 1)];2;1;0;2;5
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('trained', 0), ('trained', 1), ('untrained', 1)];2;1;0;2;6
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('trained', 0), ('trained', 1), ('untrained', 1)];2;1;0;2;6
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('trained', 0), ('trained', 1), ('untrained', 1)];2;1;0;2;6
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('trained', 0), ('trained', 1), ('untrained', 1)];2;1;0;2;6
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('trained', 1), ('untrained', 0), ('untrained', 1)];2;1;0;2;7
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('trained', 1), ('untrained', 0), ('untrained', 1)];2;1;0;2;7
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('trained', 1), ('untrained', 0), ('untrained', 1)];2;1;0;2;7
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('trained', 1), ('untrained', 0), ('untrained', 1)];2;1;0;2;7
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 0), ('trained', 0), ('untrained', 1)];2;1;0;2;8
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('untrained', 0), ('trained', 0), ('untrained', 1)];2;1;0;2;8
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 0), ('trained', 0), ('untrained', 1)];2;1;0;2;8
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('untrained', 0), ('trained', 0), ('untrained', 1)];2;1;0;2;8
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('untrained', 0), ('trained', 0), ('trained', 1)];2;1;1;3;1
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('untrained', 0), ('trained', 0), ('trained', 1)];2;1;0;3;1
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('untrained', 0), ('trained', 0), ('trained', 1)];2;1;0;3;1
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('untrained', 0), ('trained', 0), ('trained', 1)];2;1;0;3;1
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('trained', 0), ('untrained', 1), ('trained', 1)];2;1;0;3;2
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('trained', 0), ('untrained', 1), ('trained', 1)];2;1;0;3;2
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('trained', 0), ('untrained', 1), ('trained', 1)];2;1;0;3;2
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('trained', 0), ('untrained', 1), ('trained', 1)];2;1;0;3;2
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('trained', 1), ('untrained', 1), ('trained', 0)];2;1;0;3;3
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('trained', 1), ('untrained', 1), ('trained', 0)];2;1;0;3;3
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('trained', 1), ('untrained', 1), ('trained', 0)];2;1;0;3;3
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('trained', 1), ('untrained', 1), ('trained', 0)];2;1;0;3;3
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('untrained', 0), ('trained', 1), ('trained', 0)];2;1;0;3;4
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('untrained', 0), ('trained', 1), ('trained', 0)];2;1;0;3;4
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('untrained', 0), ('trained', 1), ('trained', 0)];2;1;0;3;4
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('untrained', 0), ('trained', 1), ('trained', 0)];2;1;0;3;4
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('untrained', 0), ('trained', 0), ('trained', 1)];2;1;0;3;5
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('untrained', 0), ('trained', 0), ('trained', 1)];2;1;0;3;5
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('untrained', 0), ('trained', 0), ('trained', 1)];2;1;0;3;5
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('untrained', 0), ('trained', 0), ('trained', 1)];2;1;0;3;5
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('trained', 1), ('untrained', 1), ('untrained', 0)];2;1;0;3;6
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('trained', 1), ('untrained', 1), ('untrained', 0)];2;1;0;3;6
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('trained', 1), ('untrained', 1), ('untrained', 0)];2;1;0;3;6
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('trained', 1), ('untrained', 1), ('untrained', 0)];2;1;0;3;6
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('trained', 0), ('trained', 1), ('untrained', 0)];2;1;0;3;7
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('trained', 0), ('trained', 1), ('untrained', 0)];2;1;0;3;7
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('trained', 0), ('trained', 1), ('untrained', 0)];2;1;0;3;7
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('trained', 0), ('trained', 1), ('untrained', 0)];2;1;0;3;7
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 1), ('trained', 1), ('untrained', 0)];2;1;0;3;8
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('untrained', 1), ('trained', 1), ('untrained', 0)];2;1;0;3;8
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 1), ('trained', 1), ('untrained', 0)];2;1;0;3;8
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('untrained', 1), ('trained', 1), ('untrained', 0)];2;1;0;3;8
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('trained', 1), ('untrained', 1), ('trained', 0)];2;1;1;4;1
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('trained', 1), ('untrained', 1), ('trained', 0)];2;1;0;4;1
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('trained', 1), ('untrained', 1), ('trained', 0)];2;1;0;4;1
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('trained', 1), ('untrained', 1), ('trained', 0)];2;1;0;4;1
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('trained', 0), ('untrained', 1), ('trained', 1)];2;1;0;4;2
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('trained', 0), ('untrained', 1), ('trained', 1)];2;1;0;4;2
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('trained', 0), ('untrained', 1), ('trained', 1)];2;1;0;4;2
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('trained', 0), ('untrained', 1), ('trained', 1)];2;1;0;4;2
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('untrained', 1), ('trained', 0), ('trained', 1)];2;1;0;4;3
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('untrained', 1), ('trained', 0), ('trained', 1)];2;1;0;4;3
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('untrained', 1), ('trained', 0), ('trained', 1)];2;1;0;4;3
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('untrained', 1), ('trained', 0), ('trained', 1)];2;1;0;4;3
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('trained', 1), ('trained', 0), ('untrained', 1)];2;1;0;4;4
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('trained', 1), ('trained', 0), ('untrained', 1)];2;1;0;4;4
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('trained', 1), ('trained', 0), ('untrained', 1)];2;1;0;4;4
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('trained', 1), ('trained', 0), ('untrained', 1)];2;1;0;4;4
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 0), ('trained', 1), ('untrained', 1)];2;1;0;4;5
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('untrained', 0), ('trained', 1), ('untrained', 1)];2;1;0;4;5
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 0), ('trained', 1), ('untrained', 1)];2;1;0;4;5
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('untrained', 0), ('trained', 1), ('untrained', 1)];2;1;0;4;5
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('trained', 1), ('trained', 0), ('untrained', 1)];2;1;0;4;6
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('trained', 1), ('trained', 0), ('untrained', 1)];2;1;0;4;6
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('trained', 1), ('trained', 0), ('untrained', 1)];2;1;0;4;6
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('trained', 1), ('trained', 0), ('untrained', 1)];2;1;0;4;6
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 1), ('untrained', 0), ('trained', 1)];2;1;0;4;7
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('untrained', 1), ('untrained', 0), ('trained', 1)];2;1;0;4;7
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('untrained', 1), ('untrained', 0), ('trained', 1)];2;1;0;4;7
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 1), ('untrained', 0), ('trained', 1)];2;1;0;4;7
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 1), ('trained', 1), ('untrained', 0)];2;1;0;4;8
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('untrained', 1), ('trained', 1), ('untrained', 0)];2;1;0;4;8
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 1), ('trained', 1), ('untrained', 0)];2;1;0;4;8
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('untrained', 1), ('trained', 1), ('untrained', 0)];2;1;0;4;8
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;1;5;1
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;5;1
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;5;1
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;5;1
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 0), ('trained', 1), ('untrained', 1)];2;1;0;5;2
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('untrained', 0), ('trained', 1), ('untrained', 1)];2;1;0;5;2
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 0), ('trained', 1), ('untrained', 1)];2;1;0;5;2
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('untrained', 0), ('trained', 1), ('untrained', 1)];2;1;0;5;2
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 0), ('untrained', 1), ('trained', 1)];2;1;0;5;3
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('untrained', 0), ('untrained', 1), ('trained', 1)];2;1;0;5;3
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('untrained', 0), ('untrained', 1), ('trained', 1)];2;1;0;5;3
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 0), ('untrained', 1), ('trained', 1)];2;1;0;5;3
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 1), ('untrained', 0), ('trained', 1)];2;1;0;5;4
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('untrained', 1), ('untrained', 0), ('trained', 1)];2;1;0;5;4
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('untrained', 1), ('untrained', 0), ('trained', 1)];2;1;0;5;4
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 1), ('untrained', 0), ('trained', 1)];2;1;0;5;4
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('trained', 0), ('trained', 1), ('untrained', 1)];2;1;0;5;5
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('trained', 0), ('trained', 1), ('untrained', 1)];2;1;0;5;5
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('trained', 0), ('trained', 1), ('untrained', 1)];2;1;0;5;5
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('trained', 0), ('trained', 1), ('untrained', 1)];2;1;0;5;5
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 1), ('untrained', 0)];2;1;0;5;6
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 1), ('untrained', 0)];2;1;0;5;6
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('trained', 0), ('untrained', 1), ('untrained', 0)];2;1;0;5;6
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('trained', 0), ('untrained', 1), ('untrained', 0)];2;1;0;5;6
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('untrained', 0), ('trained', 1), ('trained', 0)];2;1;0;5;7
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('untrained', 0), ('trained', 1), ('trained', 0)];2;1;0;5;7
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('untrained', 0), ('trained', 1), ('trained', 0)];2;1;0;5;7
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('untrained', 0), ('trained', 1), ('trained', 0)];2;1;0;5;7
+0;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;5;8
+0;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;5;8
+0;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;5;8
+0;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;5;8
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 2), ('untrained', 3), ('trained', 1)];2;1;1;1;1
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 0), ('untrained', 2), ('untrained', 3), ('trained', 1)];2;1;0;1;1
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 0), ('untrained', 2), ('untrained', 3), ('trained', 1)];2;1;0;1;1
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 2), ('untrained', 3), ('trained', 1)];2;1;0;1;1
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 2), ('untrained', 3), ('trained', 0), ('trained', 1)];2;1;0;1;2
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 2), ('untrained', 3), ('trained', 0), ('trained', 1)];2;1;0;1;2
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 2), ('untrained', 3), ('trained', 0), ('trained', 1)];2;1;0;1;2
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 2), ('untrained', 3), ('trained', 0), ('trained', 1)];2;1;0;1;2
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 2), ('trained', 0), ('trained', 1), ('untrained', 3)];2;1;0;1;3
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 2), ('trained', 0), ('trained', 1), ('untrained', 3)];2;1;0;1;3
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 2), ('trained', 0), ('trained', 1), ('untrained', 3)];2;1;0;1;3
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 2), ('trained', 0), ('trained', 1), ('untrained', 3)];2;1;0;1;3
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 3), ('trained', 0), ('untrained', 2)];2;1;0;1;4
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 1), ('untrained', 3), ('trained', 0), ('untrained', 2)];2;1;0;1;4
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 3), ('trained', 0), ('untrained', 2)];2;1;0;1;4
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 1), ('untrained', 3), ('trained', 0), ('untrained', 2)];2;1;0;1;4
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 3), ('untrained', 2)];2;1;0;1;5
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 3), ('untrained', 2)];2;1;0;1;5
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 1), ('trained', 0), ('untrained', 3), ('untrained', 2)];2;1;0;1;5
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 1), ('trained', 0), ('untrained', 3), ('untrained', 2)];2;1;0;1;5
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 3), ('trained', 0), ('trained', 1), ('untrained', 2)];2;1;0;1;6
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 3), ('trained', 0), ('trained', 1), ('untrained', 2)];2;1;0;1;6
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 3), ('trained', 0), ('trained', 1), ('untrained', 2)];2;1;0;1;6
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 3), ('trained', 0), ('trained', 1), ('untrained', 2)];2;1;0;1;6
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 2), ('trained', 1), ('untrained', 3)];2;1;0;1;7
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 0), ('untrained', 2), ('trained', 1), ('untrained', 3)];2;1;0;1;7
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 2), ('trained', 1), ('untrained', 3)];2;1;0;1;7
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 0), ('untrained', 2), ('trained', 1), ('untrained', 3)];2;1;0;1;7
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 3), ('trained', 1), ('untrained', 2)];2;1;0;1;8
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 0), ('untrained', 3), ('trained', 1), ('untrained', 2)];2;1;0;1;8
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 3), ('trained', 1), ('untrained', 2)];2;1;0;1;8
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 0), ('untrained', 3), ('trained', 1), ('untrained', 2)];2;1;0;1;8
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 3), ('untrained', 2), ('trained', 0), ('trained', 1)];2;1;1;2;1
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 3), ('untrained', 2), ('trained', 0), ('trained', 1)];2;1;0;2;1
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 3), ('untrained', 2), ('trained', 0), ('trained', 1)];2;1;0;2;1
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 3), ('untrained', 2), ('trained', 0), ('trained', 1)];2;1;0;2;1
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 3), ('trained', 1), ('trained', 0), ('untrained', 2)];2;1;0;2;2
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 3), ('trained', 1), ('trained', 0), ('untrained', 2)];2;1;0;2;2
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 3), ('trained', 1), ('trained', 0), ('untrained', 2)];2;1;0;2;2
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 3), ('trained', 1), ('trained', 0), ('untrained', 2)];2;1;0;2;2
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 3), ('trained', 1), ('untrained', 2), ('trained', 0)];2;1;0;2;3
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 3), ('trained', 1), ('untrained', 2), ('trained', 0)];2;1;0;2;3
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 3), ('trained', 1), ('untrained', 2), ('trained', 0)];2;1;0;2;3
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 3), ('trained', 1), ('untrained', 2), ('trained', 0)];2;1;0;2;3
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 2), ('trained', 0), ('untrained', 3)];2;1;0;2;4
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 1), ('untrained', 2), ('trained', 0), ('untrained', 3)];2;1;0;2;4
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 2), ('trained', 0), ('untrained', 3)];2;1;0;2;4
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 1), ('untrained', 2), ('trained', 0), ('untrained', 3)];2;1;0;2;4
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 3), ('trained', 1), ('untrained', 2)];2;1;0;2;5
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 0), ('untrained', 3), ('trained', 1), ('untrained', 2)];2;1;0;2;5
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 3), ('trained', 1), ('untrained', 2)];2;1;0;2;5
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 0), ('untrained', 3), ('trained', 1), ('untrained', 2)];2;1;0;2;5
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 3), ('untrained', 2), ('trained', 1), ('trained', 0)];2;1;0;2;6
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 3), ('untrained', 2), ('trained', 1), ('trained', 0)];2;1;0;2;6
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 3), ('untrained', 2), ('trained', 1), ('trained', 0)];2;1;0;2;6
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 3), ('untrained', 2), ('trained', 1), ('trained', 0)];2;1;0;2;6
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 3), ('trained', 0), ('untrained', 2)];2;1;0;2;7
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 1), ('untrained', 3), ('trained', 0), ('untrained', 2)];2;1;0;2;7
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 3), ('trained', 0), ('untrained', 2)];2;1;0;2;7
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 1), ('untrained', 3), ('trained', 0), ('untrained', 2)];2;1;0;2;7
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 3), ('trained', 1), ('untrained', 2)];2;1;0;2;8
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 0), ('untrained', 3), ('trained', 1), ('untrained', 2)];2;1;0;2;8
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 3), ('trained', 1), ('untrained', 2)];2;1;0;2;8
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 0), ('untrained', 3), ('trained', 1), ('untrained', 2)];2;1;0;2;8
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 3), ('untrained', 2), ('trained', 0), ('trained', 1)];2;1;1;3;1
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 3), ('untrained', 2), ('trained', 0), ('trained', 1)];2;1;0;3;1
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 3), ('untrained', 2), ('trained', 0), ('trained', 1)];2;1;0;3;1
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 3), ('untrained', 2), ('trained', 0), ('trained', 1)];2;1;0;3;1
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 3), ('trained', 1), ('untrained', 2), ('trained', 0)];2;1;0;3;2
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 3), ('trained', 1), ('untrained', 2), ('trained', 0)];2;1;0;3;2
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 3), ('trained', 1), ('untrained', 2), ('trained', 0)];2;1;0;3;2
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 3), ('trained', 1), ('untrained', 2), ('trained', 0)];2;1;0;3;2
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 2), ('untrained', 3), ('trained', 1), ('trained', 0)];2;1;0;3;3
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 2), ('untrained', 3), ('trained', 1), ('trained', 0)];2;1;0;3;3
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 2), ('untrained', 3), ('trained', 1), ('trained', 0)];2;1;0;3;3
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 2), ('untrained', 3), ('trained', 1), ('trained', 0)];2;1;0;3;3
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 3), ('trained', 1), ('untrained', 2), ('trained', 0)];2;1;0;3;4
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 3), ('trained', 1), ('untrained', 2), ('trained', 0)];2;1;0;3;4
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 3), ('trained', 1), ('untrained', 2), ('trained', 0)];2;1;0;3;4
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 3), ('trained', 1), ('untrained', 2), ('trained', 0)];2;1;0;3;4
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 2), ('trained', 0), ('untrained', 3)];2;1;0;3;5
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 1), ('untrained', 2), ('trained', 0), ('untrained', 3)];2;1;0;3;5
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 2), ('trained', 0), ('untrained', 3)];2;1;0;3;5
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 1), ('untrained', 2), ('trained', 0), ('untrained', 3)];2;1;0;3;5
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('trained', 1), ('untrained', 3), ('untrained', 2)];2;1;0;3;6
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('trained', 1), ('untrained', 3), ('untrained', 2)];2;1;0;3;6
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 0), ('trained', 1), ('untrained', 3), ('untrained', 2)];2;1;0;3;6
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 0), ('trained', 1), ('untrained', 3), ('untrained', 2)];2;1;0;3;6
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 3), ('untrained', 2), ('trained', 0)];2;1;0;3;7
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 1), ('untrained', 3), ('untrained', 2), ('trained', 0)];2;1;0;3;7
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 1), ('untrained', 3), ('untrained', 2), ('trained', 0)];2;1;0;3;7
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 3), ('untrained', 2), ('trained', 0)];2;1;0;3;7
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 3), ('trained', 1), ('trained', 0), ('untrained', 2)];2;1;0;3;8
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 3), ('trained', 1), ('trained', 0), ('untrained', 2)];2;1;0;3;8
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 3), ('trained', 1), ('trained', 0), ('untrained', 2)];2;1;0;3;8
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 3), ('trained', 1), ('trained', 0), ('untrained', 2)];2;1;0;3;8
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 2), ('untrained', 3), ('trained', 0), ('trained', 1)];2;1;1;4;1
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 2), ('untrained', 3), ('trained', 0), ('trained', 1)];2;1;0;4;1
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 2), ('untrained', 3), ('trained', 0), ('trained', 1)];2;1;0;4;1
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 2), ('untrained', 3), ('trained', 0), ('trained', 1)];2;1;0;4;1
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 3), ('trained', 0), ('untrained', 2), ('trained', 1)];2;1;0;4;2
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 3), ('trained', 0), ('untrained', 2), ('trained', 1)];2;1;0;4;2
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 3), ('trained', 0), ('untrained', 2), ('trained', 1)];2;1;0;4;2
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 3), ('trained', 0), ('untrained', 2), ('trained', 1)];2;1;0;4;2
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 3), ('trained', 1), ('untrained', 2), ('trained', 0)];2;1;0;4;3
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 3), ('trained', 1), ('untrained', 2), ('trained', 0)];2;1;0;4;3
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 3), ('trained', 1), ('untrained', 2), ('trained', 0)];2;1;0;4;3
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 3), ('trained', 1), ('untrained', 2), ('trained', 0)];2;1;0;4;3
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 3), ('trained', 1), ('trained', 0), ('untrained', 2)];2;1;0;4;4
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 3), ('trained', 1), ('trained', 0), ('untrained', 2)];2;1;0;4;4
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 3), ('trained', 1), ('trained', 0), ('untrained', 2)];2;1;0;4;4
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 3), ('trained', 1), ('trained', 0), ('untrained', 2)];2;1;0;4;4
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 2), ('untrained', 3), ('trained', 1)];2;1;0;4;5
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 0), ('untrained', 2), ('untrained', 3), ('trained', 1)];2;1;0;4;5
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 0), ('untrained', 2), ('untrained', 3), ('trained', 1)];2;1;0;4;5
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 2), ('untrained', 3), ('trained', 1)];2;1;0;4;5
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 2), ('untrained', 3), ('trained', 1)];2;1;0;4;6
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 0), ('untrained', 2), ('untrained', 3), ('trained', 1)];2;1;0;4;6
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 0), ('untrained', 2), ('untrained', 3), ('trained', 1)];2;1;0;4;6
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 2), ('untrained', 3), ('trained', 1)];2;1;0;4;6
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 3), ('trained', 1), ('trained', 0), ('untrained', 2)];2;1;0;4;7
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 3), ('trained', 1), ('trained', 0), ('untrained', 2)];2;1;0;4;7
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 3), ('trained', 1), ('trained', 0), ('untrained', 2)];2;1;0;4;7
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 3), ('trained', 1), ('trained', 0), ('untrained', 2)];2;1;0;4;7
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 3), ('trained', 1), ('untrained', 2)];2;1;0;4;8
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 0), ('untrained', 3), ('trained', 1), ('untrained', 2)];2;1;0;4;8
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 3), ('trained', 1), ('untrained', 2)];2;1;0;4;8
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 0), ('untrained', 3), ('trained', 1), ('untrained', 2)];2;1;0;4;8
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 2), ('trained', 0), ('trained', 1), ('untrained', 3)];2;1;1;5;1
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 2), ('trained', 0), ('trained', 1), ('untrained', 3)];2;1;0;5;1
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 2), ('trained', 0), ('trained', 1), ('untrained', 3)];2;1;0;5;1
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 2), ('trained', 0), ('trained', 1), ('untrained', 3)];2;1;0;5;1
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 2), ('untrained', 3), ('trained', 1), ('trained', 0)];2;1;0;5;2
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 2), ('untrained', 3), ('trained', 1), ('trained', 0)];2;1;0;5;2
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 2), ('untrained', 3), ('trained', 1), ('trained', 0)];2;1;0;5;2
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 2), ('untrained', 3), ('trained', 1), ('trained', 0)];2;1;0;5;2
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 3), ('trained', 0), ('untrained', 2), ('trained', 1)];2;1;0;5;3
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 3), ('trained', 0), ('untrained', 2), ('trained', 1)];2;1;0;5;3
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 3), ('trained', 0), ('untrained', 2), ('trained', 1)];2;1;0;5;3
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 3), ('trained', 0), ('untrained', 2), ('trained', 1)];2;1;0;5;3
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 2), ('trained', 0), ('trained', 1), ('untrained', 3)];2;1;0;5;4
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 2), ('trained', 0), ('trained', 1), ('untrained', 3)];2;1;0;5;4
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 2), ('trained', 0), ('trained', 1), ('untrained', 3)];2;1;0;5;4
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 2), ('trained', 0), ('trained', 1), ('untrained', 3)];2;1;0;5;4
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 2), ('untrained', 3), ('trained', 1), ('trained', 0)];2;1;0;5;5
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 2), ('untrained', 3), ('trained', 1), ('trained', 0)];2;1;0;5;5
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 2), ('untrained', 3), ('trained', 1), ('trained', 0)];2;1;0;5;5
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 2), ('untrained', 3), ('trained', 1), ('trained', 0)];2;1;0;5;5
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 3), ('untrained', 2), ('trained', 0)];2;1;0;5;6
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 1), ('untrained', 3), ('untrained', 2), ('trained', 0)];2;1;0;5;6
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 1), ('untrained', 3), ('untrained', 2), ('trained', 0)];2;1;0;5;6
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 3), ('untrained', 2), ('trained', 0)];2;1;0;5;6
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 3), ('trained', 1), ('untrained', 2), ('trained', 0)];2;1;0;5;7
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 3), ('trained', 1), ('untrained', 2), ('trained', 0)];2;1;0;5;7
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 3), ('trained', 1), ('untrained', 2), ('trained', 0)];2;1;0;5;7
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 3), ('trained', 1), ('untrained', 2), ('trained', 0)];2;1;0;5;7
+6;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 3), ('trained', 1), ('trained', 0), ('untrained', 2)];2;1;0;5;8
+6;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 3), ('trained', 1), ('trained', 0), ('untrained', 2)];2;1;0;5;8
+6;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 3), ('trained', 1), ('trained', 0), ('untrained', 2)];2;1;0;5;8
+6;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 3), ('trained', 1), ('trained', 0), ('untrained', 2)];2;1;0;5;8
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 4), ('untrained', 5)];2;1;1;1;1
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 4), ('untrained', 5)];2;1;0;1;1
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 1), ('trained', 0), ('untrained', 4), ('untrained', 5)];2;1;0;1;1
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 1), ('trained', 0), ('untrained', 4), ('untrained', 5)];2;1;0;1;1
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 4), ('trained', 0), ('trained', 1), ('untrained', 5)];2;1;0;1;2
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 4), ('trained', 0), ('trained', 1), ('untrained', 5)];2;1;0;1;2
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 4), ('trained', 0), ('trained', 1), ('untrained', 5)];2;1;0;1;2
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 4), ('trained', 0), ('trained', 1), ('untrained', 5)];2;1;0;1;2
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 5), ('untrained', 4), ('trained', 0)];2;1;0;1;3
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 1), ('untrained', 5), ('untrained', 4), ('trained', 0)];2;1;0;1;3
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 1), ('untrained', 5), ('untrained', 4), ('trained', 0)];2;1;0;1;3
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 5), ('untrained', 4), ('trained', 0)];2;1;0;1;3
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 5), ('trained', 1), ('untrained', 4), ('trained', 0)];2;1;0;1;4
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 5), ('trained', 1), ('untrained', 4), ('trained', 0)];2;1;0;1;4
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 5), ('trained', 1), ('untrained', 4), ('trained', 0)];2;1;0;1;4
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 5), ('trained', 1), ('untrained', 4), ('trained', 0)];2;1;0;1;4
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 4), ('untrained', 5), ('trained', 0)];2;1;0;1;5
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 1), ('untrained', 4), ('untrained', 5), ('trained', 0)];2;1;0;1;5
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 1), ('untrained', 4), ('untrained', 5), ('trained', 0)];2;1;0;1;5
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 4), ('untrained', 5), ('trained', 0)];2;1;0;1;5
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 5), ('untrained', 4)];2;1;0;1;6
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 5), ('untrained', 4)];2;1;0;1;6
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 1), ('trained', 0), ('untrained', 5), ('untrained', 4)];2;1;0;1;6
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 1), ('trained', 0), ('untrained', 5), ('untrained', 4)];2;1;0;1;6
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 5), ('trained', 1), ('trained', 0), ('untrained', 4)];2;1;0;1;7
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 5), ('trained', 1), ('trained', 0), ('untrained', 4)];2;1;0;1;7
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 5), ('trained', 1), ('trained', 0), ('untrained', 4)];2;1;0;1;7
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 5), ('trained', 1), ('trained', 0), ('untrained', 4)];2;1;0;1;7
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 5), ('trained', 0), ('untrained', 4)];2;1;0;1;8
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 1), ('untrained', 5), ('trained', 0), ('untrained', 4)];2;1;0;1;8
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 5), ('trained', 0), ('untrained', 4)];2;1;0;1;8
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 1), ('untrained', 5), ('trained', 0), ('untrained', 4)];2;1;0;1;8
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 5), ('trained', 0), ('untrained', 4)];2;1;1;2;1
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 1), ('untrained', 5), ('trained', 0), ('untrained', 4)];2;1;0;2;1
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 5), ('trained', 0), ('untrained', 4)];2;1;0;2;1
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 1), ('untrained', 5), ('trained', 0), ('untrained', 4)];2;1;0;2;1
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 5), ('untrained', 4), ('trained', 1), ('trained', 0)];2;1;0;2;2
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 5), ('untrained', 4), ('trained', 1), ('trained', 0)];2;1;0;2;2
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 5), ('untrained', 4), ('trained', 1), ('trained', 0)];2;1;0;2;2
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 5), ('untrained', 4), ('trained', 1), ('trained', 0)];2;1;0;2;2
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 4), ('untrained', 5)];2;1;0;2;3
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 4), ('untrained', 5)];2;1;0;2;3
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 1), ('trained', 0), ('untrained', 4), ('untrained', 5)];2;1;0;2;3
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 1), ('trained', 0), ('untrained', 4), ('untrained', 5)];2;1;0;2;3
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 4), ('untrained', 5), ('trained', 1), ('trained', 0)];2;1;0;2;4
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 4), ('untrained', 5), ('trained', 1), ('trained', 0)];2;1;0;2;4
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 4), ('untrained', 5), ('trained', 1), ('trained', 0)];2;1;0;2;4
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 4), ('untrained', 5), ('trained', 1), ('trained', 0)];2;1;0;2;4
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 5), ('untrained', 4), ('trained', 0)];2;1;0;2;5
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 1), ('untrained', 5), ('untrained', 4), ('trained', 0)];2;1;0;2;5
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 1), ('untrained', 5), ('untrained', 4), ('trained', 0)];2;1;0;2;5
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 5), ('untrained', 4), ('trained', 0)];2;1;0;2;5
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 5), ('trained', 0), ('trained', 1), ('untrained', 4)];2;1;0;2;6
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 5), ('trained', 0), ('trained', 1), ('untrained', 4)];2;1;0;2;6
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 5), ('trained', 0), ('trained', 1), ('untrained', 4)];2;1;0;2;6
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 5), ('trained', 0), ('trained', 1), ('untrained', 4)];2;1;0;2;6
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 5), ('trained', 0), ('trained', 1), ('untrained', 4)];2;1;0;2;7
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 5), ('trained', 0), ('trained', 1), ('untrained', 4)];2;1;0;2;7
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 5), ('trained', 0), ('trained', 1), ('untrained', 4)];2;1;0;2;7
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 5), ('trained', 0), ('trained', 1), ('untrained', 4)];2;1;0;2;7
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('trained', 1), ('untrained', 5), ('untrained', 4)];2;1;0;2;8
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('trained', 1), ('untrained', 5), ('untrained', 4)];2;1;0;2;8
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 0), ('trained', 1), ('untrained', 5), ('untrained', 4)];2;1;0;2;8
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 0), ('trained', 1), ('untrained', 5), ('untrained', 4)];2;1;0;2;8
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 5), ('trained', 0), ('trained', 1), ('untrained', 4)];2;1;1;3;1
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 5), ('trained', 0), ('trained', 1), ('untrained', 4)];2;1;0;3;1
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 5), ('trained', 0), ('trained', 1), ('untrained', 4)];2;1;0;3;1
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 5), ('trained', 0), ('trained', 1), ('untrained', 4)];2;1;0;3;1
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 5), ('untrained', 4), ('trained', 1), ('trained', 0)];2;1;0;3;2
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 5), ('untrained', 4), ('trained', 1), ('trained', 0)];2;1;0;3;2
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 5), ('untrained', 4), ('trained', 1), ('trained', 0)];2;1;0;3;2
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 5), ('untrained', 4), ('trained', 1), ('trained', 0)];2;1;0;3;2
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 5), ('trained', 0), ('trained', 1), ('untrained', 4)];2;1;0;3;3
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 5), ('trained', 0), ('trained', 1), ('untrained', 4)];2;1;0;3;3
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 5), ('trained', 0), ('trained', 1), ('untrained', 4)];2;1;0;3;3
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 5), ('trained', 0), ('trained', 1), ('untrained', 4)];2;1;0;3;3
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 5), ('trained', 0), ('trained', 1), ('untrained', 4)];2;1;0;3;4
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 5), ('trained', 0), ('trained', 1), ('untrained', 4)];2;1;0;3;4
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 5), ('trained', 0), ('trained', 1), ('untrained', 4)];2;1;0;3;4
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 5), ('trained', 0), ('trained', 1), ('untrained', 4)];2;1;0;3;4
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 5), ('untrained', 4), ('trained', 1), ('trained', 0)];2;1;0;3;5
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 5), ('untrained', 4), ('trained', 1), ('trained', 0)];2;1;0;3;5
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 5), ('untrained', 4), ('trained', 1), ('trained', 0)];2;1;0;3;5
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 5), ('untrained', 4), ('trained', 1), ('trained', 0)];2;1;0;3;5
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 4), ('trained', 0), ('trained', 1), ('untrained', 5)];2;1;0;3;6
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 4), ('trained', 0), ('trained', 1), ('untrained', 5)];2;1;0;3;6
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 4), ('trained', 0), ('trained', 1), ('untrained', 5)];2;1;0;3;6
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 4), ('trained', 0), ('trained', 1), ('untrained', 5)];2;1;0;3;6
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 5), ('trained', 1), ('untrained', 4)];2;1;0;3;7
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 0), ('untrained', 5), ('trained', 1), ('untrained', 4)];2;1;0;3;7
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 5), ('trained', 1), ('untrained', 4)];2;1;0;3;7
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 0), ('untrained', 5), ('trained', 1), ('untrained', 4)];2;1;0;3;7
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 4), ('untrained', 5), ('trained', 0)];2;1;0;3;8
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 1), ('untrained', 4), ('untrained', 5), ('trained', 0)];2;1;0;3;8
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 1), ('untrained', 4), ('untrained', 5), ('trained', 0)];2;1;0;3;8
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 4), ('untrained', 5), ('trained', 0)];2;1;0;3;8
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 4), ('untrained', 5)];2;1;1;4;1
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 4), ('untrained', 5)];2;1;0;4;1
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 1), ('trained', 0), ('untrained', 4), ('untrained', 5)];2;1;0;4;1
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 1), ('trained', 0), ('untrained', 4), ('untrained', 5)];2;1;0;4;1
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 4), ('untrained', 5), ('trained', 1)];2;1;0;4;2
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 0), ('untrained', 4), ('untrained', 5), ('trained', 1)];2;1;0;4;2
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 0), ('untrained', 4), ('untrained', 5), ('trained', 1)];2;1;0;4;2
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 4), ('untrained', 5), ('trained', 1)];2;1;0;4;2
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 5), ('trained', 1), ('untrained', 4), ('trained', 0)];2;1;0;4;3
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 5), ('trained', 1), ('untrained', 4), ('trained', 0)];2;1;0;4;3
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 5), ('trained', 1), ('untrained', 4), ('trained', 0)];2;1;0;4;3
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 5), ('trained', 1), ('untrained', 4), ('trained', 0)];2;1;0;4;3
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 4), ('untrained', 5), ('trained', 0), ('trained', 1)];2;1;0;4;4
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 4), ('untrained', 5), ('trained', 0), ('trained', 1)];2;1;0;4;4
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 4), ('untrained', 5), ('trained', 0), ('trained', 1)];2;1;0;4;4
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 4), ('untrained', 5), ('trained', 0), ('trained', 1)];2;1;0;4;4
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('trained', 1), ('untrained', 4), ('untrained', 5)];2;1;0;4;5
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('trained', 1), ('untrained', 4), ('untrained', 5)];2;1;0;4;5
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 0), ('trained', 1), ('untrained', 4), ('untrained', 5)];2;1;0;4;5
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 0), ('trained', 1), ('untrained', 4), ('untrained', 5)];2;1;0;4;5
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('trained', 1), ('untrained', 5), ('untrained', 4)];2;1;0;4;6
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('trained', 1), ('untrained', 5), ('untrained', 4)];2;1;0;4;6
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 0), ('trained', 1), ('untrained', 5), ('untrained', 4)];2;1;0;4;6
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 0), ('trained', 1), ('untrained', 5), ('untrained', 4)];2;1;0;4;6
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 4), ('untrained', 5), ('trained', 1)];2;1;0;4;7
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 0), ('untrained', 4), ('untrained', 5), ('trained', 1)];2;1;0;4;7
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 0), ('untrained', 4), ('untrained', 5), ('trained', 1)];2;1;0;4;7
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 4), ('untrained', 5), ('trained', 1)];2;1;0;4;7
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 5), ('untrained', 4), ('trained', 1), ('trained', 0)];2;1;0;4;8
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 5), ('untrained', 4), ('trained', 1), ('trained', 0)];2;1;0;4;8
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 5), ('untrained', 4), ('trained', 1), ('trained', 0)];2;1;0;4;8
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 5), ('untrained', 4), ('trained', 1), ('trained', 0)];2;1;0;4;8
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 4), ('untrained', 5), ('trained', 0)];2;1;1;5;1
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 1), ('untrained', 4), ('untrained', 5), ('trained', 0)];2;1;0;5;1
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 1), ('untrained', 4), ('untrained', 5), ('trained', 0)];2;1;0;5;1
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 4), ('untrained', 5), ('trained', 0)];2;1;0;5;1
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 4), ('trained', 0), ('trained', 1), ('untrained', 5)];2;1;0;5;2
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 4), ('trained', 0), ('trained', 1), ('untrained', 5)];2;1;0;5;2
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 4), ('trained', 0), ('trained', 1), ('untrained', 5)];2;1;0;5;2
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 4), ('trained', 0), ('trained', 1), ('untrained', 5)];2;1;0;5;2
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('trained', 1), ('untrained', 4), ('untrained', 5)];2;1;0;5;3
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('trained', 1), ('untrained', 4), ('untrained', 5)];2;1;0;5;3
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 0), ('trained', 1), ('untrained', 4), ('untrained', 5)];2;1;0;5;3
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 0), ('trained', 1), ('untrained', 4), ('untrained', 5)];2;1;0;5;3
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 4), ('untrained', 5), ('trained', 1)];2;1;0;5;4
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 0), ('untrained', 4), ('untrained', 5), ('trained', 1)];2;1;0;5;4
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 0), ('untrained', 4), ('untrained', 5), ('trained', 1)];2;1;0;5;4
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 4), ('untrained', 5), ('trained', 1)];2;1;0;5;4
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 5), ('trained', 0), ('untrained', 4), ('trained', 1)];2;1;0;5;5
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 5), ('trained', 0), ('untrained', 4), ('trained', 1)];2;1;0;5;5
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 5), ('trained', 0), ('untrained', 4), ('trained', 1)];2;1;0;5;5
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 5), ('trained', 0), ('untrained', 4), ('trained', 1)];2;1;0;5;5
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 4), ('trained', 0), ('trained', 1), ('untrained', 5)];2;1;0;5;6
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 4), ('trained', 0), ('trained', 1), ('untrained', 5)];2;1;0;5;6
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 4), ('trained', 0), ('trained', 1), ('untrained', 5)];2;1;0;5;6
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 4), ('trained', 0), ('trained', 1), ('untrained', 5)];2;1;0;5;6
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 5), ('trained', 0), ('untrained', 4)];2;1;0;5;7
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 1), ('untrained', 5), ('trained', 0), ('untrained', 4)];2;1;0;5;7
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 5), ('trained', 0), ('untrained', 4)];2;1;0;5;7
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 1), ('untrained', 5), ('trained', 0), ('untrained', 4)];2;1;0;5;7
+12;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 5), ('untrained', 4), ('trained', 0), ('trained', 1)];2;1;0;5;8
+12;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 5), ('untrained', 4), ('trained', 0), ('trained', 1)];2;1;0;5;8
+12;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 5), ('untrained', 4), ('trained', 0), ('trained', 1)];2;1;0;5;8
+12;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 5), ('untrained', 4), ('trained', 0), ('trained', 1)];2;1;0;5;8
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('trained', 1), ('trained', 0), ('untrained', 1)];2;1;1;1;1
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('trained', 1), ('trained', 0), ('untrained', 1)];2;1;0;1;1
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('trained', 1), ('trained', 0), ('untrained', 1)];2;1;0;1;1
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('trained', 1), ('trained', 0), ('untrained', 1)];2;1;0;1;1
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;1;2
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;1;2
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;1;2
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;1;2
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('trained', 0), ('trained', 1), ('untrained', 1)];2;1;0;1;3
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('trained', 0), ('trained', 1), ('untrained', 1)];2;1;0;1;3
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('trained', 0), ('trained', 1), ('untrained', 1)];2;1;0;1;3
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('trained', 0), ('trained', 1), ('untrained', 1)];2;1;0;1;3
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('untrained', 1), ('trained', 0), ('trained', 1)];2;1;0;1;4
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('untrained', 1), ('trained', 0), ('trained', 1)];2;1;0;1;4
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('untrained', 1), ('trained', 0), ('trained', 1)];2;1;0;1;4
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('untrained', 1), ('trained', 0), ('trained', 1)];2;1;0;1;4
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('trained', 1), ('untrained', 0), ('trained', 0)];2;1;0;1;5
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('trained', 1), ('untrained', 0), ('trained', 0)];2;1;0;1;5
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('trained', 1), ('untrained', 0), ('trained', 0)];2;1;0;1;5
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('trained', 1), ('untrained', 0), ('trained', 0)];2;1;0;1;5
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('untrained', 0), ('trained', 0), ('trained', 1)];2;1;0;1;6
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('untrained', 0), ('trained', 0), ('trained', 1)];2;1;0;1;6
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('untrained', 0), ('trained', 0), ('trained', 1)];2;1;0;1;6
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('untrained', 0), ('trained', 0), ('trained', 1)];2;1;0;1;6
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;1;7
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;1;7
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;1;7
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;1;7
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 1), ('trained', 0), ('untrained', 0)];2;1;0;1;8
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('untrained', 1), ('trained', 0), ('untrained', 0)];2;1;0;1;8
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 1), ('trained', 0), ('untrained', 0)];2;1;0;1;8
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('untrained', 1), ('trained', 0), ('untrained', 0)];2;1;0;1;8
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('untrained', 0), ('trained', 0), ('trained', 1)];2;1;1;2;1
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('untrained', 0), ('trained', 0), ('trained', 1)];2;1;0;2;1
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('untrained', 0), ('trained', 0), ('trained', 1)];2;1;0;2;1
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('untrained', 0), ('trained', 0), ('trained', 1)];2;1;0;2;1
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('trained', 1), ('trained', 0), ('untrained', 1)];2;1;0;2;2
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('trained', 1), ('trained', 0), ('untrained', 1)];2;1;0;2;2
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('trained', 1), ('trained', 0), ('untrained', 1)];2;1;0;2;2
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('trained', 1), ('trained', 0), ('untrained', 1)];2;1;0;2;2
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('trained', 0), ('trained', 1), ('untrained', 1)];2;1;0;2;3
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('trained', 0), ('trained', 1), ('untrained', 1)];2;1;0;2;3
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('trained', 0), ('trained', 1), ('untrained', 1)];2;1;0;2;3
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('trained', 0), ('trained', 1), ('untrained', 1)];2;1;0;2;3
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('trained', 1), ('trained', 0), ('untrained', 1)];2;1;0;2;4
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('trained', 1), ('trained', 0), ('untrained', 1)];2;1;0;2;4
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('trained', 1), ('trained', 0), ('untrained', 1)];2;1;0;2;4
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('trained', 1), ('trained', 0), ('untrained', 1)];2;1;0;2;4
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 0), ('trained', 0), ('untrained', 1)];2;1;0;2;5
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('untrained', 0), ('trained', 0), ('untrained', 1)];2;1;0;2;5
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 0), ('trained', 0), ('untrained', 1)];2;1;0;2;5
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('untrained', 0), ('trained', 0), ('untrained', 1)];2;1;0;2;5
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 0), ('untrained', 1), ('trained', 1)];2;1;0;2;6
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('untrained', 0), ('untrained', 1), ('trained', 1)];2;1;0;2;6
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('untrained', 0), ('untrained', 1), ('trained', 1)];2;1;0;2;6
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 0), ('untrained', 1), ('trained', 1)];2;1;0;2;6
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('trained', 1), ('untrained', 0), ('trained', 0)];2;1;0;2;7
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('trained', 1), ('untrained', 0), ('trained', 0)];2;1;0;2;7
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('trained', 1), ('untrained', 0), ('trained', 0)];2;1;0;2;7
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('trained', 1), ('untrained', 0), ('trained', 0)];2;1;0;2;7
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;2;8
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;2;8
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;2;8
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;2;8
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 0), ('trained', 1), ('untrained', 1)];2;1;1;3;1
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('untrained', 0), ('trained', 1), ('untrained', 1)];2;1;0;3;1
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 0), ('trained', 1), ('untrained', 1)];2;1;0;3;1
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('untrained', 0), ('trained', 1), ('untrained', 1)];2;1;0;3;1
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;3;2
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;3;2
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;3;2
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;3;2
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;3;3
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;3;3
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;3;3
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;3;3
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('trained', 1), ('untrained', 1), ('untrained', 0)];2;1;0;3;4
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('trained', 1), ('untrained', 1), ('untrained', 0)];2;1;0;3;4
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('trained', 1), ('untrained', 1), ('untrained', 0)];2;1;0;3;4
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('trained', 1), ('untrained', 1), ('untrained', 0)];2;1;0;3;4
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;3;5
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;3;5
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;3;5
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;3;5
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('trained', 1), ('untrained', 1), ('untrained', 0)];2;1;0;3;6
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('trained', 1), ('untrained', 1), ('untrained', 0)];2;1;0;3;6
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('trained', 1), ('untrained', 1), ('untrained', 0)];2;1;0;3;6
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('trained', 1), ('untrained', 1), ('untrained', 0)];2;1;0;3;6
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('untrained', 0), ('trained', 1), ('trained', 0)];2;1;0;3;7
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('untrained', 0), ('trained', 1), ('trained', 0)];2;1;0;3;7
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('untrained', 0), ('trained', 1), ('trained', 0)];2;1;0;3;7
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('untrained', 0), ('trained', 1), ('trained', 0)];2;1;0;3;7
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('untrained', 0), ('trained', 0), ('trained', 1)];2;1;0;3;8
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('untrained', 0), ('trained', 0), ('trained', 1)];2;1;0;3;8
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('untrained', 0), ('trained', 0), ('trained', 1)];2;1;0;3;8
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('untrained', 0), ('trained', 0), ('trained', 1)];2;1;0;3;8
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 0), ('untrained', 1), ('trained', 1)];2;1;1;4;1
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('untrained', 0), ('untrained', 1), ('trained', 1)];2;1;0;4;1
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('untrained', 0), ('untrained', 1), ('trained', 1)];2;1;0;4;1
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 0), ('untrained', 1), ('trained', 1)];2;1;0;4;1
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;4;2
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;4;2
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;4;2
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;4;2
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('untrained', 0), ('trained', 1), ('trained', 0)];2;1;0;4;3
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('untrained', 0), ('trained', 1), ('trained', 0)];2;1;0;4;3
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('untrained', 0), ('trained', 1), ('trained', 0)];2;1;0;4;3
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('untrained', 0), ('trained', 1), ('trained', 0)];2;1;0;4;3
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;4;4
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;4;4
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;4;4
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;4;4
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('untrained', 0), ('trained', 0), ('trained', 1)];2;1;0;4;5
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('untrained', 0), ('trained', 0), ('trained', 1)];2;1;0;4;5
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('untrained', 0), ('trained', 0), ('trained', 1)];2;1;0;4;5
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('untrained', 0), ('trained', 0), ('trained', 1)];2;1;0;4;5
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('trained', 0), ('untrained', 0), ('trained', 1)];2;1;0;4;6
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('trained', 0), ('untrained', 0), ('trained', 1)];2;1;0;4;6
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('trained', 0), ('untrained', 0), ('trained', 1)];2;1;0;4;6
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('trained', 0), ('untrained', 0), ('trained', 1)];2;1;0;4;6
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;4;7
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;4;7
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;4;7
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;4;7
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;4;8
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;4;8
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;4;8
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;4;8
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;1;5;1
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;5;1
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;5;1
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;5;1
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('trained', 0), ('trained', 1), ('untrained', 1)];2;1;0;5;2
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('trained', 0), ('trained', 1), ('untrained', 1)];2;1;0;5;2
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('trained', 0), ('trained', 1), ('untrained', 1)];2;1;0;5;2
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('trained', 0), ('trained', 1), ('untrained', 1)];2;1;0;5;2
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;5;3
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;5;3
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;5;3
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;5;3
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('trained', 1), ('untrained', 1), ('trained', 0)];2;1;0;5;4
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('trained', 1), ('untrained', 1), ('trained', 0)];2;1;0;5;4
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('trained', 1), ('untrained', 1), ('trained', 0)];2;1;0;5;4
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('trained', 1), ('untrained', 1), ('trained', 0)];2;1;0;5;4
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('untrained', 0), ('trained', 0), ('trained', 1)];2;1;0;5;5
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('untrained', 0), ('trained', 0), ('trained', 1)];2;1;0;5;5
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('untrained', 0), ('trained', 0), ('trained', 1)];2;1;0;5;5
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('untrained', 0), ('trained', 0), ('trained', 1)];2;1;0;5;5
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('trained', 0), ('trained', 1), ('untrained', 0)];2;1;0;5;6
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('trained', 0), ('trained', 1), ('untrained', 0)];2;1;0;5;6
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('trained', 0), ('trained', 1), ('untrained', 0)];2;1;0;5;6
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('trained', 0), ('trained', 1), ('untrained', 0)];2;1;0;5;6
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;5;7
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;5;7
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;5;7
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;5;7
+18;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;5;8
+18;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;5;8
+18;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;5;8
+18;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;5;8
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 2), ('trained', 1), ('trained', 0), ('untrained', 3)];2;1;1;1;1
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 2), ('trained', 1), ('trained', 0), ('untrained', 3)];2;1;0;1;1
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 2), ('trained', 1), ('trained', 0), ('untrained', 3)];2;1;0;1;1
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 2), ('trained', 1), ('trained', 0), ('untrained', 3)];2;1;0;1;1
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 3), ('trained', 0), ('untrained', 2)];2;1;0;1;2
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 1), ('untrained', 3), ('trained', 0), ('untrained', 2)];2;1;0;1;2
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 3), ('trained', 0), ('untrained', 2)];2;1;0;1;2
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 1), ('untrained', 3), ('trained', 0), ('untrained', 2)];2;1;0;1;2
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 2), ('trained', 1), ('untrained', 3)];2;1;0;1;3
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 0), ('untrained', 2), ('trained', 1), ('untrained', 3)];2;1;0;1;3
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 2), ('trained', 1), ('untrained', 3)];2;1;0;1;3
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 0), ('untrained', 2), ('trained', 1), ('untrained', 3)];2;1;0;1;3
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('trained', 1), ('untrained', 2), ('untrained', 3)];2;1;0;1;4
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('trained', 1), ('untrained', 2), ('untrained', 3)];2;1;0;1;4
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 0), ('trained', 1), ('untrained', 2), ('untrained', 3)];2;1;0;1;4
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 0), ('trained', 1), ('untrained', 2), ('untrained', 3)];2;1;0;1;4
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 2), ('untrained', 3), ('trained', 1)];2;1;0;1;5
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 0), ('untrained', 2), ('untrained', 3), ('trained', 1)];2;1;0;1;5
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 0), ('untrained', 2), ('untrained', 3), ('trained', 1)];2;1;0;1;5
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 2), ('untrained', 3), ('trained', 1)];2;1;0;1;5
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 3), ('trained', 0), ('trained', 1), ('untrained', 2)];2;1;0;1;6
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 3), ('trained', 0), ('trained', 1), ('untrained', 2)];2;1;0;1;6
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 3), ('trained', 0), ('trained', 1), ('untrained', 2)];2;1;0;1;6
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 3), ('trained', 0), ('trained', 1), ('untrained', 2)];2;1;0;1;6
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 3), ('untrained', 2), ('trained', 0)];2;1;0;1;7
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 1), ('untrained', 3), ('untrained', 2), ('trained', 0)];2;1;0;1;7
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 1), ('untrained', 3), ('untrained', 2), ('trained', 0)];2;1;0;1;7
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 3), ('untrained', 2), ('trained', 0)];2;1;0;1;7
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 2), ('untrained', 3), ('trained', 1), ('trained', 0)];2;1;0;1;8
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 2), ('untrained', 3), ('trained', 1), ('trained', 0)];2;1;0;1;8
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 2), ('untrained', 3), ('trained', 1), ('trained', 0)];2;1;0;1;8
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 2), ('untrained', 3), ('trained', 1), ('trained', 0)];2;1;0;1;8
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 2), ('trained', 1), ('trained', 0), ('untrained', 3)];2;1;1;2;1
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 2), ('trained', 1), ('trained', 0), ('untrained', 3)];2;1;0;2;1
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 2), ('trained', 1), ('trained', 0), ('untrained', 3)];2;1;0;2;1
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 2), ('trained', 1), ('trained', 0), ('untrained', 3)];2;1;0;2;1
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 2), ('untrained', 3), ('trained', 1), ('trained', 0)];2;1;0;2;2
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 2), ('untrained', 3), ('trained', 1), ('trained', 0)];2;1;0;2;2
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 2), ('untrained', 3), ('trained', 1), ('trained', 0)];2;1;0;2;2
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 2), ('untrained', 3), ('trained', 1), ('trained', 0)];2;1;0;2;2
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 2), ('trained', 0), ('untrained', 3), ('trained', 1)];2;1;0;2;3
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 2), ('trained', 0), ('untrained', 3), ('trained', 1)];2;1;0;2;3
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 2), ('trained', 0), ('untrained', 3), ('trained', 1)];2;1;0;2;3
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 2), ('trained', 0), ('untrained', 3), ('trained', 1)];2;1;0;2;3
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 3), ('trained', 0), ('trained', 1), ('untrained', 2)];2;1;0;2;4
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 3), ('trained', 0), ('trained', 1), ('untrained', 2)];2;1;0;2;4
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 3), ('trained', 0), ('trained', 1), ('untrained', 2)];2;1;0;2;4
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 3), ('trained', 0), ('trained', 1), ('untrained', 2)];2;1;0;2;4
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 3), ('trained', 1), ('untrained', 2)];2;1;0;2;5
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 0), ('untrained', 3), ('trained', 1), ('untrained', 2)];2;1;0;2;5
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 3), ('trained', 1), ('untrained', 2)];2;1;0;2;5
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 0), ('untrained', 3), ('trained', 1), ('untrained', 2)];2;1;0;2;5
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 3), ('trained', 0), ('untrained', 2)];2;1;0;2;6
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 1), ('untrained', 3), ('trained', 0), ('untrained', 2)];2;1;0;2;6
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 3), ('trained', 0), ('untrained', 2)];2;1;0;2;6
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 1), ('untrained', 3), ('trained', 0), ('untrained', 2)];2;1;0;2;6
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 3), ('untrained', 2), ('trained', 0)];2;1;0;2;7
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 1), ('untrained', 3), ('untrained', 2), ('trained', 0)];2;1;0;2;7
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 1), ('untrained', 3), ('untrained', 2), ('trained', 0)];2;1;0;2;7
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 3), ('untrained', 2), ('trained', 0)];2;1;0;2;7
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 2), ('trained', 0), ('untrained', 3), ('trained', 1)];2;1;0;2;8
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 2), ('trained', 0), ('untrained', 3), ('trained', 1)];2;1;0;2;8
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 2), ('trained', 0), ('untrained', 3), ('trained', 1)];2;1;0;2;8
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 2), ('trained', 0), ('untrained', 3), ('trained', 1)];2;1;0;2;8
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 2), ('untrained', 3)];2;1;1;3;1
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 2), ('untrained', 3)];2;1;0;3;1
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 1), ('trained', 0), ('untrained', 2), ('untrained', 3)];2;1;0;3;1
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 1), ('trained', 0), ('untrained', 2), ('untrained', 3)];2;1;0;3;1
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 3), ('untrained', 2), ('trained', 0)];2;1;0;3;2
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 1), ('untrained', 3), ('untrained', 2), ('trained', 0)];2;1;0;3;2
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 1), ('untrained', 3), ('untrained', 2), ('trained', 0)];2;1;0;3;2
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 3), ('untrained', 2), ('trained', 0)];2;1;0;3;2
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 2), ('untrained', 3), ('trained', 0)];2;1;0;3;3
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 1), ('untrained', 2), ('untrained', 3), ('trained', 0)];2;1;0;3;3
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 1), ('untrained', 2), ('untrained', 3), ('trained', 0)];2;1;0;3;3
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 2), ('untrained', 3), ('trained', 0)];2;1;0;3;3
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 2), ('trained', 0), ('untrained', 3), ('trained', 1)];2;1;0;3;4
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 2), ('trained', 0), ('untrained', 3), ('trained', 1)];2;1;0;3;4
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 2), ('trained', 0), ('untrained', 3), ('trained', 1)];2;1;0;3;4
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 2), ('trained', 0), ('untrained', 3), ('trained', 1)];2;1;0;3;4
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('trained', 1), ('untrained', 3), ('untrained', 2)];2;1;0;3;5
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('trained', 1), ('untrained', 3), ('untrained', 2)];2;1;0;3;5
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 0), ('trained', 1), ('untrained', 3), ('untrained', 2)];2;1;0;3;5
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 0), ('trained', 1), ('untrained', 3), ('untrained', 2)];2;1;0;3;5
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 2), ('untrained', 3)];2;1;0;3;6
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 2), ('untrained', 3)];2;1;0;3;6
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 1), ('trained', 0), ('untrained', 2), ('untrained', 3)];2;1;0;3;6
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 1), ('trained', 0), ('untrained', 2), ('untrained', 3)];2;1;0;3;6
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 2), ('trained', 0), ('untrained', 3)];2;1;0;3;7
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 1), ('untrained', 2), ('trained', 0), ('untrained', 3)];2;1;0;3;7
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 2), ('trained', 0), ('untrained', 3)];2;1;0;3;7
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 1), ('untrained', 2), ('trained', 0), ('untrained', 3)];2;1;0;3;7
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 2), ('trained', 1), ('untrained', 3)];2;1;0;3;8
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 0), ('untrained', 2), ('trained', 1), ('untrained', 3)];2;1;0;3;8
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 2), ('trained', 1), ('untrained', 3)];2;1;0;3;8
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 0), ('untrained', 2), ('trained', 1), ('untrained', 3)];2;1;0;3;8
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 3), ('untrained', 2), ('trained', 0), ('trained', 1)];2;1;1;4;1
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 3), ('untrained', 2), ('trained', 0), ('trained', 1)];2;1;0;4;1
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 3), ('untrained', 2), ('trained', 0), ('trained', 1)];2;1;0;4;1
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 3), ('untrained', 2), ('trained', 0), ('trained', 1)];2;1;0;4;1
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('trained', 1), ('untrained', 3), ('untrained', 2)];2;1;0;4;2
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('trained', 1), ('untrained', 3), ('untrained', 2)];2;1;0;4;2
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 0), ('trained', 1), ('untrained', 3), ('untrained', 2)];2;1;0;4;2
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 0), ('trained', 1), ('untrained', 3), ('untrained', 2)];2;1;0;4;2
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 3), ('trained', 1), ('untrained', 2)];2;1;0;4;3
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 0), ('untrained', 3), ('trained', 1), ('untrained', 2)];2;1;0;4;3
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 3), ('trained', 1), ('untrained', 2)];2;1;0;4;3
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 0), ('untrained', 3), ('trained', 1), ('untrained', 2)];2;1;0;4;3
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 2), ('trained', 1), ('untrained', 3)];2;1;0;4;4
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 0), ('untrained', 2), ('trained', 1), ('untrained', 3)];2;1;0;4;4
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 2), ('trained', 1), ('untrained', 3)];2;1;0;4;4
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 0), ('untrained', 2), ('trained', 1), ('untrained', 3)];2;1;0;4;4
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 3), ('untrained', 2), ('trained', 0)];2;1;0;4;5
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 1), ('untrained', 3), ('untrained', 2), ('trained', 0)];2;1;0;4;5
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 1), ('untrained', 3), ('untrained', 2), ('trained', 0)];2;1;0;4;5
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 3), ('untrained', 2), ('trained', 0)];2;1;0;4;5
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 2), ('untrained', 3)];2;1;0;4;6
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 2), ('untrained', 3)];2;1;0;4;6
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 1), ('trained', 0), ('untrained', 2), ('untrained', 3)];2;1;0;4;6
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 1), ('trained', 0), ('untrained', 2), ('untrained', 3)];2;1;0;4;6
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 3), ('untrained', 2)];2;1;0;4;7
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 3), ('untrained', 2)];2;1;0;4;7
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 1), ('trained', 0), ('untrained', 3), ('untrained', 2)];2;1;0;4;7
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 1), ('trained', 0), ('untrained', 3), ('untrained', 2)];2;1;0;4;7
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 3), ('untrained', 2), ('trained', 1), ('trained', 0)];2;1;0;4;8
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 3), ('untrained', 2), ('trained', 1), ('trained', 0)];2;1;0;4;8
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 3), ('untrained', 2), ('trained', 1), ('trained', 0)];2;1;0;4;8
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 3), ('untrained', 2), ('trained', 1), ('trained', 0)];2;1;0;4;8
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('trained', 1), ('untrained', 2), ('untrained', 3)];2;1;1;5;1
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('trained', 1), ('untrained', 2), ('untrained', 3)];2;1;0;5;1
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 0), ('trained', 1), ('untrained', 2), ('untrained', 3)];2;1;0;5;1
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 0), ('trained', 1), ('untrained', 2), ('untrained', 3)];2;1;0;5;1
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 2), ('untrained', 3), ('trained', 0)];2;1;0;5;2
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 1), ('untrained', 2), ('untrained', 3), ('trained', 0)];2;1;0;5;2
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 1), ('untrained', 2), ('untrained', 3), ('trained', 0)];2;1;0;5;2
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 2), ('untrained', 3), ('trained', 0)];2;1;0;5;2
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 2), ('trained', 0), ('trained', 1), ('untrained', 3)];2;1;0;5;3
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 2), ('trained', 0), ('trained', 1), ('untrained', 3)];2;1;0;5;3
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 2), ('trained', 0), ('trained', 1), ('untrained', 3)];2;1;0;5;3
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 2), ('trained', 0), ('trained', 1), ('untrained', 3)];2;1;0;5;3
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 2), ('untrained', 3)];2;1;0;5;4
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 2), ('untrained', 3)];2;1;0;5;4
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 1), ('trained', 0), ('untrained', 2), ('untrained', 3)];2;1;0;5;4
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 1), ('trained', 0), ('untrained', 2), ('untrained', 3)];2;1;0;5;4
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 2), ('trained', 0), ('untrained', 3), ('trained', 1)];2;1;0;5;5
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 2), ('trained', 0), ('untrained', 3), ('trained', 1)];2;1;0;5;5
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 2), ('trained', 0), ('untrained', 3), ('trained', 1)];2;1;0;5;5
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 2), ('trained', 0), ('untrained', 3), ('trained', 1)];2;1;0;5;5
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('trained', 1), ('untrained', 2), ('untrained', 3)];2;1;0;5;6
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('trained', 1), ('untrained', 2), ('untrained', 3)];2;1;0;5;6
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 0), ('trained', 1), ('untrained', 2), ('untrained', 3)];2;1;0;5;6
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 0), ('trained', 1), ('untrained', 2), ('untrained', 3)];2;1;0;5;6
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 2), ('untrained', 3)];2;1;0;5;7
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 2), ('untrained', 3)];2;1;0;5;7
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('trained', 1), ('trained', 0), ('untrained', 2), ('untrained', 3)];2;1;0;5;7
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('trained', 1), ('trained', 0), ('untrained', 2), ('untrained', 3)];2;1;0;5;7
+24;fmri;1;1 2 3 4;type1;1 2 3 - 2 4 - 3 - 1 4 - 2 3 4;untrained;#3cb44b;[('untrained', 2), ('trained', 1), ('untrained', 3), ('trained', 0)];2;1;0;5;8
+24;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 2), ('trained', 1), ('untrained', 3), ('trained', 0)];2;1;0;5;8
+24;fmri;1;1 2 3 4;type1;2 3 4 - 1 2 - 4 - 1 3 - 2;untrained;#ffe119;[('untrained', 2), ('trained', 1), ('untrained', 3), ('trained', 0)];2;1;0;5;8
+24;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 2), ('trained', 1), ('untrained', 3), ('trained', 0)];2;1;0;5;8
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 4), ('trained', 0), ('trained', 1), ('untrained', 5)];2;1;1;1;1
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 4), ('trained', 0), ('trained', 1), ('untrained', 5)];2;1;0;1;1
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 4), ('trained', 0), ('trained', 1), ('untrained', 5)];2;1;0;1;1
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 4), ('trained', 0), ('trained', 1), ('untrained', 5)];2;1;0;1;1
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 5), ('trained', 0), ('untrained', 4)];2;1;0;1;2
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 1), ('untrained', 5), ('trained', 0), ('untrained', 4)];2;1;0;1;2
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 5), ('trained', 0), ('untrained', 4)];2;1;0;1;2
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 1), ('untrained', 5), ('trained', 0), ('untrained', 4)];2;1;0;1;2
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 4), ('trained', 0), ('untrained', 5)];2;1;0;1;3
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 1), ('untrained', 4), ('trained', 0), ('untrained', 5)];2;1;0;1;3
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 4), ('trained', 0), ('untrained', 5)];2;1;0;1;3
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 1), ('untrained', 4), ('trained', 0), ('untrained', 5)];2;1;0;1;3
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 5), ('trained', 1), ('untrained', 4)];2;1;0;1;4
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 0), ('untrained', 5), ('trained', 1), ('untrained', 4)];2;1;0;1;4
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 5), ('trained', 1), ('untrained', 4)];2;1;0;1;4
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 0), ('untrained', 5), ('trained', 1), ('untrained', 4)];2;1;0;1;4
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 4), ('untrained', 5)];2;1;0;1;5
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 4), ('untrained', 5)];2;1;0;1;5
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 1), ('trained', 0), ('untrained', 4), ('untrained', 5)];2;1;0;1;5
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 1), ('trained', 0), ('untrained', 4), ('untrained', 5)];2;1;0;1;5
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 4), ('trained', 1), ('untrained', 5)];2;1;0;1;6
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 0), ('untrained', 4), ('trained', 1), ('untrained', 5)];2;1;0;1;6
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 4), ('trained', 1), ('untrained', 5)];2;1;0;1;6
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 0), ('untrained', 4), ('trained', 1), ('untrained', 5)];2;1;0;1;6
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 4), ('trained', 1), ('untrained', 5), ('trained', 0)];2;1;0;1;7
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 4), ('trained', 1), ('untrained', 5), ('trained', 0)];2;1;0;1;7
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 4), ('trained', 1), ('untrained', 5), ('trained', 0)];2;1;0;1;7
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 4), ('trained', 1), ('untrained', 5), ('trained', 0)];2;1;0;1;7
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 5), ('untrained', 4), ('trained', 0), ('trained', 1)];2;1;0;1;8
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 5), ('untrained', 4), ('trained', 0), ('trained', 1)];2;1;0;1;8
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 5), ('untrained', 4), ('trained', 0), ('trained', 1)];2;1;0;1;8
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 5), ('untrained', 4), ('trained', 0), ('trained', 1)];2;1;0;1;8
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 5), ('untrained', 4)];2;1;1;2;1
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 5), ('untrained', 4)];2;1;0;2;1
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 1), ('trained', 0), ('untrained', 5), ('untrained', 4)];2;1;0;2;1
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 1), ('trained', 0), ('untrained', 5), ('untrained', 4)];2;1;0;2;1
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 4), ('untrained', 5), ('trained', 1)];2;1;0;2;2
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 0), ('untrained', 4), ('untrained', 5), ('trained', 1)];2;1;0;2;2
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 0), ('untrained', 4), ('untrained', 5), ('trained', 1)];2;1;0;2;2
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 4), ('untrained', 5), ('trained', 1)];2;1;0;2;2
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 4), ('untrained', 5), ('trained', 1), ('trained', 0)];2;1;0;2;3
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 4), ('untrained', 5), ('trained', 1), ('trained', 0)];2;1;0;2;3
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 4), ('untrained', 5), ('trained', 1), ('trained', 0)];2;1;0;2;3
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 4), ('untrained', 5), ('trained', 1), ('trained', 0)];2;1;0;2;3
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 5), ('untrained', 4)];2;1;0;2;4
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 5), ('untrained', 4)];2;1;0;2;4
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 1), ('trained', 0), ('untrained', 5), ('untrained', 4)];2;1;0;2;4
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 1), ('trained', 0), ('untrained', 5), ('untrained', 4)];2;1;0;2;4
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 4), ('untrained', 5)];2;1;0;2;5
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 4), ('untrained', 5)];2;1;0;2;5
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 1), ('trained', 0), ('untrained', 4), ('untrained', 5)];2;1;0;2;5
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 1), ('trained', 0), ('untrained', 4), ('untrained', 5)];2;1;0;2;5
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 5), ('untrained', 4), ('trained', 1)];2;1;0;2;6
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 0), ('untrained', 5), ('untrained', 4), ('trained', 1)];2;1;0;2;6
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 0), ('untrained', 5), ('untrained', 4), ('trained', 1)];2;1;0;2;6
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 5), ('untrained', 4), ('trained', 1)];2;1;0;2;6
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 4), ('trained', 0), ('trained', 1), ('untrained', 5)];2;1;0;2;7
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 4), ('trained', 0), ('trained', 1), ('untrained', 5)];2;1;0;2;7
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 4), ('trained', 0), ('trained', 1), ('untrained', 5)];2;1;0;2;7
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 4), ('trained', 0), ('trained', 1), ('untrained', 5)];2;1;0;2;7
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 4), ('untrained', 5), ('trained', 0), ('trained', 1)];2;1;0;2;8
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 4), ('untrained', 5), ('trained', 0), ('trained', 1)];2;1;0;2;8
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 4), ('untrained', 5), ('trained', 0), ('trained', 1)];2;1;0;2;8
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 4), ('untrained', 5), ('trained', 0), ('trained', 1)];2;1;0;2;8
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 4), ('trained', 0), ('untrained', 5)];2;1;1;3;1
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 1), ('untrained', 4), ('trained', 0), ('untrained', 5)];2;1;0;3;1
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 4), ('trained', 0), ('untrained', 5)];2;1;0;3;1
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 1), ('untrained', 4), ('trained', 0), ('untrained', 5)];2;1;0;3;1
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 4), ('trained', 1), ('untrained', 5)];2;1;0;3;2
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 0), ('untrained', 4), ('trained', 1), ('untrained', 5)];2;1;0;3;2
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 4), ('trained', 1), ('untrained', 5)];2;1;0;3;2
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 0), ('untrained', 4), ('trained', 1), ('untrained', 5)];2;1;0;3;2
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 4), ('untrained', 5), ('trained', 0), ('trained', 1)];2;1;0;3;3
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 4), ('untrained', 5), ('trained', 0), ('trained', 1)];2;1;0;3;3
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 4), ('untrained', 5), ('trained', 0), ('trained', 1)];2;1;0;3;3
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 4), ('untrained', 5), ('trained', 0), ('trained', 1)];2;1;0;3;3
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 5), ('untrained', 4), ('trained', 1), ('trained', 0)];2;1;0;3;4
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 5), ('untrained', 4), ('trained', 1), ('trained', 0)];2;1;0;3;4
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 5), ('untrained', 4), ('trained', 1), ('trained', 0)];2;1;0;3;4
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 5), ('untrained', 4), ('trained', 1), ('trained', 0)];2;1;0;3;4
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 5), ('untrained', 4), ('trained', 0)];2;1;0;3;5
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 1), ('untrained', 5), ('untrained', 4), ('trained', 0)];2;1;0;3;5
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 1), ('untrained', 5), ('untrained', 4), ('trained', 0)];2;1;0;3;5
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 5), ('untrained', 4), ('trained', 0)];2;1;0;3;5
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 4), ('trained', 0), ('untrained', 5), ('trained', 1)];2;1;0;3;6
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 4), ('trained', 0), ('untrained', 5), ('trained', 1)];2;1;0;3;6
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 4), ('trained', 0), ('untrained', 5), ('trained', 1)];2;1;0;3;6
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 4), ('trained', 0), ('untrained', 5), ('trained', 1)];2;1;0;3;6
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 4), ('trained', 1), ('untrained', 5), ('trained', 0)];2;1;0;3;7
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 4), ('trained', 1), ('untrained', 5), ('trained', 0)];2;1;0;3;7
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 4), ('trained', 1), ('untrained', 5), ('trained', 0)];2;1;0;3;7
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 4), ('trained', 1), ('untrained', 5), ('trained', 0)];2;1;0;3;7
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 4), ('trained', 0), ('trained', 1), ('untrained', 5)];2;1;0;3;8
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 4), ('trained', 0), ('trained', 1), ('untrained', 5)];2;1;0;3;8
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 4), ('trained', 0), ('trained', 1), ('untrained', 5)];2;1;0;3;8
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 4), ('trained', 0), ('trained', 1), ('untrained', 5)];2;1;0;3;8
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 4), ('trained', 1), ('trained', 0), ('untrained', 5)];2;1;1;4;1
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 4), ('trained', 1), ('trained', 0), ('untrained', 5)];2;1;0;4;1
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 4), ('trained', 1), ('trained', 0), ('untrained', 5)];2;1;0;4;1
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 4), ('trained', 1), ('trained', 0), ('untrained', 5)];2;1;0;4;1
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 4), ('trained', 1), ('trained', 0), ('untrained', 5)];2;1;0;4;2
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 4), ('trained', 1), ('trained', 0), ('untrained', 5)];2;1;0;4;2
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 4), ('trained', 1), ('trained', 0), ('untrained', 5)];2;1;0;4;2
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 4), ('trained', 1), ('trained', 0), ('untrained', 5)];2;1;0;4;2
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 5), ('trained', 1), ('untrained', 4)];2;1;0;4;3
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 0), ('untrained', 5), ('trained', 1), ('untrained', 4)];2;1;0;4;3
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 5), ('trained', 1), ('untrained', 4)];2;1;0;4;3
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 0), ('untrained', 5), ('trained', 1), ('untrained', 4)];2;1;0;4;3
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 4), ('untrained', 5)];2;1;0;4;4
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 4), ('untrained', 5)];2;1;0;4;4
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 1), ('trained', 0), ('untrained', 4), ('untrained', 5)];2;1;0;4;4
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 1), ('trained', 0), ('untrained', 4), ('untrained', 5)];2;1;0;4;4
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 4), ('trained', 0), ('untrained', 5)];2;1;0;4;5
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 1), ('untrained', 4), ('trained', 0), ('untrained', 5)];2;1;0;4;5
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 4), ('trained', 0), ('untrained', 5)];2;1;0;4;5
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 1), ('untrained', 4), ('trained', 0), ('untrained', 5)];2;1;0;4;5
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 4), ('trained', 1), ('untrained', 5)];2;1;0;4;6
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 0), ('untrained', 4), ('trained', 1), ('untrained', 5)];2;1;0;4;6
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 4), ('trained', 1), ('untrained', 5)];2;1;0;4;6
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 0), ('untrained', 4), ('trained', 1), ('untrained', 5)];2;1;0;4;6
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 4), ('untrained', 5)];2;1;0;4;7
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 4), ('untrained', 5)];2;1;0;4;7
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 1), ('trained', 0), ('untrained', 4), ('untrained', 5)];2;1;0;4;7
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 1), ('trained', 0), ('untrained', 4), ('untrained', 5)];2;1;0;4;7
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 4), ('trained', 1), ('untrained', 5), ('trained', 0)];2;1;0;4;8
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 4), ('trained', 1), ('untrained', 5), ('trained', 0)];2;1;0;4;8
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 4), ('trained', 1), ('untrained', 5), ('trained', 0)];2;1;0;4;8
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 4), ('trained', 1), ('untrained', 5), ('trained', 0)];2;1;0;4;8
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 5), ('trained', 0), ('trained', 1), ('untrained', 4)];2;1;1;5;1
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 5), ('trained', 0), ('trained', 1), ('untrained', 4)];2;1;0;5;1
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 5), ('trained', 0), ('trained', 1), ('untrained', 4)];2;1;0;5;1
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 5), ('trained', 0), ('trained', 1), ('untrained', 4)];2;1;0;5;1
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 4), ('untrained', 5), ('trained', 0)];2;1;0;5;2
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 1), ('untrained', 4), ('untrained', 5), ('trained', 0)];2;1;0;5;2
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 1), ('untrained', 4), ('untrained', 5), ('trained', 0)];2;1;0;5;2
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 4), ('untrained', 5), ('trained', 0)];2;1;0;5;2
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 5), ('trained', 0), ('untrained', 4), ('trained', 1)];2;1;0;5;3
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 5), ('trained', 0), ('untrained', 4), ('trained', 1)];2;1;0;5;3
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 5), ('trained', 0), ('untrained', 4), ('trained', 1)];2;1;0;5;3
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 5), ('trained', 0), ('untrained', 4), ('trained', 1)];2;1;0;5;3
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 4), ('trained', 1), ('untrained', 5)];2;1;0;5;4
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 0), ('untrained', 4), ('trained', 1), ('untrained', 5)];2;1;0;5;4
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 4), ('trained', 1), ('untrained', 5)];2;1;0;5;4
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 0), ('untrained', 4), ('trained', 1), ('untrained', 5)];2;1;0;5;4
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 4), ('untrained', 5), ('trained', 0)];2;1;0;5;5
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('trained', 1), ('untrained', 4), ('untrained', 5), ('trained', 0)];2;1;0;5;5
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('trained', 1), ('untrained', 4), ('untrained', 5), ('trained', 0)];2;1;0;5;5
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 4), ('untrained', 5), ('trained', 0)];2;1;0;5;5
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 4), ('trained', 1), ('untrained', 5), ('trained', 0)];2;1;0;5;6
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 4), ('trained', 1), ('untrained', 5), ('trained', 0)];2;1;0;5;6
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 4), ('trained', 1), ('untrained', 5), ('trained', 0)];2;1;0;5;6
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 4), ('trained', 1), ('untrained', 5), ('trained', 0)];2;1;0;5;6
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 5), ('trained', 1), ('trained', 0), ('untrained', 4)];2;1;0;5;7
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 5), ('trained', 1), ('trained', 0), ('untrained', 4)];2;1;0;5;7
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 5), ('trained', 1), ('trained', 0), ('untrained', 4)];2;1;0;5;7
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 5), ('trained', 1), ('trained', 0), ('untrained', 4)];2;1;0;5;7
+30;fmri;1;1 2 3 4;type1;1 2 - 3 - 2 4 - 1 - 3 4;untrained;#0082c8;[('untrained', 5), ('untrained', 4), ('trained', 0), ('trained', 1)];2;1;0;5;8
+30;fmri;1;1 2 3 4;type1;3 - 1 2 - 2 3 4 - 1 4 - 1 2 3;untrained;#46f0f0;[('untrained', 5), ('untrained', 4), ('trained', 0), ('trained', 1)];2;1;0;5;8
+30;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 5), ('untrained', 4), ('trained', 0), ('trained', 1)];2;1;0;5;8
+30;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 5), ('untrained', 4), ('trained', 0), ('trained', 1)];2;1;0;5;8
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 1), ('untrained', 0)];2;1;1;1;1
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 1), ('untrained', 0)];2;1;0;1;1
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('trained', 0), ('untrained', 1), ('untrained', 0)];2;1;0;1;1
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('trained', 0), ('untrained', 1), ('untrained', 0)];2;1;0;1;1
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('trained', 1), ('untrained', 1), ('untrained', 0)];2;1;0;1;2
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('trained', 1), ('untrained', 1), ('untrained', 0)];2;1;0;1;2
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('trained', 1), ('untrained', 1), ('untrained', 0)];2;1;0;1;2
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('trained', 1), ('untrained', 1), ('untrained', 0)];2;1;0;1;2
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 0), ('untrained', 1), ('trained', 0)];2;1;0;1;3
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('untrained', 0), ('untrained', 1), ('trained', 0)];2;1;0;1;3
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('untrained', 0), ('untrained', 1), ('trained', 0)];2;1;0;1;3
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 0), ('untrained', 1), ('trained', 0)];2;1;0;1;3
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('trained', 1), ('trained', 0), ('untrained', 1)];2;1;0;1;4
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('trained', 1), ('trained', 0), ('untrained', 1)];2;1;0;1;4
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('trained', 1), ('trained', 0), ('untrained', 1)];2;1;0;1;4
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('trained', 1), ('trained', 0), ('untrained', 1)];2;1;0;1;4
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 0), ('trained', 0), ('untrained', 1)];2;1;0;1;5
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('untrained', 0), ('trained', 0), ('untrained', 1)];2;1;0;1;5
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 0), ('trained', 0), ('untrained', 1)];2;1;0;1;5
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('untrained', 0), ('trained', 0), ('untrained', 1)];2;1;0;1;5
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;1;6
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;1;6
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;1;6
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;1;6
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;1;7
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;1;7
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;1;7
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;1;7
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 1), ('untrained', 0)];2;1;0;1;8
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 1), ('untrained', 0)];2;1;0;1;8
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('trained', 0), ('untrained', 1), ('untrained', 0)];2;1;0;1;8
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('trained', 0), ('untrained', 1), ('untrained', 0)];2;1;0;1;8
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('trained', 1), ('untrained', 1), ('untrained', 0)];2;1;1;2;1
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('trained', 1), ('untrained', 1), ('untrained', 0)];2;1;0;2;1
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('trained', 1), ('untrained', 1), ('untrained', 0)];2;1;0;2;1
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('trained', 1), ('untrained', 1), ('untrained', 0)];2;1;0;2;1
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('trained', 1), ('untrained', 1), ('untrained', 0)];2;1;0;2;2
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('trained', 1), ('untrained', 1), ('untrained', 0)];2;1;0;2;2
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('trained', 1), ('untrained', 1), ('untrained', 0)];2;1;0;2;2
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('trained', 1), ('untrained', 1), ('untrained', 0)];2;1;0;2;2
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;2;3
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;2;3
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;2;3
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;2;3
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 0), ('trained', 1), ('untrained', 1)];2;1;0;2;4
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('untrained', 0), ('trained', 1), ('untrained', 1)];2;1;0;2;4
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 0), ('trained', 1), ('untrained', 1)];2;1;0;2;4
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('untrained', 0), ('trained', 1), ('untrained', 1)];2;1;0;2;4
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 0), ('untrained', 1), ('trained', 1)];2;1;0;2;5
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('untrained', 0), ('untrained', 1), ('trained', 1)];2;1;0;2;5
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('untrained', 0), ('untrained', 1), ('trained', 1)];2;1;0;2;5
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 0), ('untrained', 1), ('trained', 1)];2;1;0;2;5
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;2;6
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;2;6
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;2;6
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;2;6
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 1), ('untrained', 0)];2;1;0;2;7
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 1), ('untrained', 0)];2;1;0;2;7
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('trained', 0), ('untrained', 1), ('untrained', 0)];2;1;0;2;7
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('trained', 0), ('untrained', 1), ('untrained', 0)];2;1;0;2;7
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('trained', 0), ('untrained', 0), ('trained', 1)];2;1;0;2;8
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('trained', 0), ('untrained', 0), ('trained', 1)];2;1;0;2;8
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('trained', 0), ('untrained', 0), ('trained', 1)];2;1;0;2;8
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('trained', 0), ('untrained', 0), ('trained', 1)];2;1;0;2;8
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;1;3;1
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;3;1
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;3;1
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;3;1
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 1), ('untrained', 0), ('trained', 1)];2;1;0;3;2
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('untrained', 1), ('untrained', 0), ('trained', 1)];2;1;0;3;2
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('untrained', 1), ('untrained', 0), ('trained', 1)];2;1;0;3;2
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 1), ('untrained', 0), ('trained', 1)];2;1;0;3;2
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('trained', 1), ('untrained', 0), ('untrained', 1)];2;1;0;3;3
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('trained', 1), ('untrained', 0), ('untrained', 1)];2;1;0;3;3
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('trained', 1), ('untrained', 0), ('untrained', 1)];2;1;0;3;3
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('trained', 1), ('untrained', 0), ('untrained', 1)];2;1;0;3;3
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('trained', 1), ('untrained', 1), ('trained', 0)];2;1;0;3;4
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('trained', 1), ('untrained', 1), ('trained', 0)];2;1;0;3;4
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('trained', 1), ('untrained', 1), ('trained', 0)];2;1;0;3;4
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('trained', 1), ('untrained', 1), ('trained', 0)];2;1;0;3;4
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;3;5
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;3;5
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;3;5
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;3;5
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;3;6
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;3;6
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;3;6
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;3;6
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 0), ('trained', 0), ('untrained', 1)];2;1;0;3;7
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('untrained', 0), ('trained', 0), ('untrained', 1)];2;1;0;3;7
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 0), ('trained', 0), ('untrained', 1)];2;1;0;3;7
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('untrained', 0), ('trained', 0), ('untrained', 1)];2;1;0;3;7
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;3;8
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;3;8
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;3;8
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;3;8
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('trained', 1), ('untrained', 0), ('trained', 0)];2;1;1;4;1
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('trained', 1), ('untrained', 0), ('trained', 0)];2;1;0;4;1
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('trained', 1), ('untrained', 0), ('trained', 0)];2;1;0;4;1
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('trained', 1), ('untrained', 0), ('trained', 0)];2;1;0;4;1
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 1), ('untrained', 0)];2;1;0;4;2
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 1), ('untrained', 0)];2;1;0;4;2
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('trained', 0), ('untrained', 1), ('untrained', 0)];2;1;0;4;2
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('trained', 0), ('untrained', 1), ('untrained', 0)];2;1;0;4;2
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;4;3
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;4;3
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;4;3
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;4;3
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('untrained', 1), ('trained', 0), ('trained', 1)];2;1;0;4;4
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('untrained', 1), ('trained', 0), ('trained', 1)];2;1;0;4;4
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('untrained', 1), ('trained', 0), ('trained', 1)];2;1;0;4;4
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('untrained', 1), ('trained', 0), ('trained', 1)];2;1;0;4;4
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;4;5
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;4;5
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;4;5
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 0), ('untrained', 1), ('trained', 1), ('trained', 0)];2;1;0;4;5
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 1), ('trained', 0), ('untrained', 0)];2;1;0;4;6
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('untrained', 1), ('trained', 0), ('untrained', 0)];2;1;0;4;6
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 1), ('trained', 0), ('untrained', 0)];2;1;0;4;6
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('untrained', 1), ('trained', 0), ('untrained', 0)];2;1;0;4;6
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;4;7
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;4;7
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;4;7
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;4;7
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 1), ('untrained', 0)];2;1;0;4;8
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 1), ('untrained', 0)];2;1;0;4;8
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('trained', 0), ('untrained', 1), ('untrained', 0)];2;1;0;4;8
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('trained', 0), ('untrained', 1), ('untrained', 0)];2;1;0;4;8
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;1;5;1
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;5;1
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;5;1
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('trained', 0), ('untrained', 0), ('untrained', 1)];2;1;0;5;1
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('untrained', 1), ('untrained', 0), ('trained', 1)];2;1;0;5;2
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('untrained', 1), ('untrained', 0), ('trained', 1)];2;1;0;5;2
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('untrained', 1), ('untrained', 0), ('trained', 1)];2;1;0;5;2
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('untrained', 1), ('untrained', 0), ('trained', 1)];2;1;0;5;2
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('trained', 0), ('untrained', 0), ('trained', 1)];2;1;0;5;3
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('trained', 0), ('untrained', 0), ('trained', 1)];2;1;0;5;3
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('trained', 0), ('untrained', 0), ('trained', 1)];2;1;0;5;3
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('trained', 0), ('untrained', 0), ('trained', 1)];2;1;0;5;3
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;5;4
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;5;4
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;5;4
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('trained', 1), ('trained', 0), ('untrained', 0)];2;1;0;5;4
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;5;5
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;5;5
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;5;5
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('untrained', 1), ('untrained', 0), ('trained', 0)];2;1;0;5;5
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('untrained', 1), ('trained', 1), ('untrained', 0), ('trained', 0)];2;1;0;5;6
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('untrained', 1), ('trained', 1), ('untrained', 0), ('trained', 0)];2;1;0;5;6
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('untrained', 1), ('trained', 1), ('untrained', 0), ('trained', 0)];2;1;0;5;6
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('untrained', 1), ('trained', 1), ('untrained', 0), ('trained', 0)];2;1;0;5;6
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 1), ('trained', 0), ('untrained', 1), ('untrained', 0)];2;1;0;5;7
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 1), ('trained', 0), ('untrained', 1), ('untrained', 0)];2;1;0;5;7
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 1), ('trained', 0), ('untrained', 1), ('untrained', 0)];2;1;0;5;7
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 1), ('trained', 0), ('untrained', 1), ('untrained', 0)];2;1;0;5;7
+36;fmri;1;1 2 3 4;type1;2 3 - 1 - 1 2 3 4 - 2 - 3 4;trained;#911eb4;[('trained', 0), ('trained', 1), ('untrained', 0), ('untrained', 1)];2;1;0;5;8
+36;fmri;1;1 2 3 4;type1;2 - 1 2 3 4 - 1 - 2 4 - 1 2 3;trained;#f032e6;[('trained', 0), ('trained', 1), ('untrained', 0), ('untrained', 1)];2;1;0;5;8
+36;fmri;1;1 2 3 4;type1;1 2 3 - 3 4 - 2 - 1 4 - 3;untrained;#f58231;[('trained', 0), ('trained', 1), ('untrained', 0), ('untrained', 1)];2;1;0;5;8
+36;fmri;1;1 2 3 4;type1;1 2 3 - 1 4 - 2 - 1 3 - 4;untrained;#111111;[('trained', 0), ('trained', 1), ('untrained', 0), ('untrained', 1)];2;1;0;5;8

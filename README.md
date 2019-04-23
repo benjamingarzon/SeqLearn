@@ -38,6 +38,8 @@ Python packages: psychopy, sqlachemy, sshtunnel, wxpython, pandas.
 
 Install Anaconda3 and make sure it is in the PATH.
 
+To avoid errors install also AVBIN: https://github.com/downloads/AVbin/AVbin/AVbin10-win64.exe
+
 Download and unzip (or clone) the files into a directory INSTALLPATH. To create an environment with the necessary python packages:
 
 ```

@@ -598,7 +598,7 @@ print(plot.acc)
 ```{r}
 #trialsfile = paste0('../../SeqLearnPilot/dataLundPilot/trialsfile-lup0s002_fmri.csv')
 #trialsfile = paste0('../../dataLeftHandPilots/dataLundPilot1/trialsfile-lup1s001_fmri.csv')
-trialsfile = paste0('../data/trialsfile-lup2s001_fmri.csv')
+trialsfile = paste0('../data/archive/trialsfile-lup2s001_fmri.csv')
 
 trials.table = read.table(trialsfile, sep =';', header = T, quote = "")
 #ok_trials = subset(trials.table, accuracy == 1 & run > 1)
@@ -615,7 +615,7 @@ Motivation factor
 nsess=24
 baseline = 7
 x = seq(nsess)
-factor = 0.8
+factor = 0.5
 maxscore = 2 + .1*x
 lm(ok_unpaced_trials$score ~ ok_unpaced_trials$sess_num)
 
@@ -623,7 +623,7 @@ y1 = baseline*exp(-(x-1)/nsess)
 y2 = maxscore*(1 + factor*exp(-2*(x-1)/nsess))
 y = apply(cbind(y1, y2), 1, max)
 
-#print(ggplot(ok_unpaced_trials, aes(x = sess_num, y = score, col = username)) + geom_point())
+print(ggplot(ok_unpaced_trials, aes(x = sess_num, y = score, col = username)) + geom_point())
 plot(ok_unpaced_trials$sess_num, ok_unpaced_trials$score)
 lines(x, y1, col ="black")
 lines(x, y2, col ="blue")
