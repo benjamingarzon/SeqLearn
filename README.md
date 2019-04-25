@@ -284,3 +284,7 @@ conda env export -n psychopyenv > psychopyenv.yml
 conda env export -n psychopyenv --no-builds > psychopyenv_nb.yml
 
 ```
+
+# Generating a new wave
+```
+python GenerateWave.py --nsubjects 20 --wave 1 --ssh_username xxx --sql_pass xxxx --sql_username xxx  --create_db```

@@ -17,6 +17,7 @@ from collections import defaultdict
 import glob, os
 from generator.generator import seq_to_stim, seq_to_string, string_to_seq
 from sklearn.metrics import silhouette_score
+from scipy.stats import sem
 
 def get_seq_types(type_file=None):
     """ 
@@ -119,27 +120,29 @@ def startSession(opts):
     texts = get_texts(config["LANGUAGE"])
         
     # get username and user group
-    if config["ASK_USER"] == 0:
-        try:
-            user_json = open("./config/user.json", "r")
-            json_obj = json.load(user_json)
+
+    try:
+        user_json = open("./config/user.json", "r")
+        json_obj = json.load(user_json)
+        if config["ASK_USER"] == 0:
             username = json_obj["USERNAME"]
             sched_table = json_obj["SCHEDULE_TABLE"]
-            user_json.close()
-        except IOError: 
-            print("Error: User file is missing!")
-        
-    else:
-        myDlg = gui.Dlg(title="Sequence training.")
-        myDlg.addField("Enter your username:")
-        myDlg.addField("Enter your schedule table:")
-        myDlg.show()
-        if myDlg.OK:  
-            username = myDlg.data[0]
-            sched_table = myDlg.data[1]
         else:
-            username = 'test0000'
-            sched_table = ''
+            myDlg = gui.Dlg(title="Sequence training.")
+            myDlg.addField("Enter your username:")
+            myDlg.addField("Enter your schedule table: ", json_obj["SCHEDULE_TABLE"])
+            myDlg.show()
+            if myDlg.OK:  
+                username = myDlg.data[0]
+                sched_table = myDlg.data[1]
+            else:
+                username = 'test0000'
+                sched_table = ''
+
+        user_json.close()
+    except IOError: 
+        print("Error: User file is missing!")
+
 
     # override certain options if we are in fMRI mode
     if opts.run_fmri :
@@ -533,10 +536,9 @@ def SetUsername():
     """ 
     Opens a dialogue to set the username and schedule table.
     """
-
     myDlg = gui.Dlg(title="Sequence training configuration.")
     myDlg.addField("Enter username:")
-    myDlg.addField("Enter schedule table:", "kip1_schedule_table")
+    myDlg.addField("Enter schedule table:", "lue1_schedule_table")
     
     myDlg.show()
     
@@ -614,10 +616,11 @@ def generate_ITIs(itimean, itirange, ititype):
         miniti = itimean/np.exp(itirange)
         ITIs[ITIs > maxiti] = maxiti
         ITIs[ITIs < miniti] = miniti
-        print("ITI: (min = %.1f, mean = %.1f, max = %.1f, diff = %.1f)"%(miniti, 
-                                                      np.mean(ITIs), 
+        print("ITI: (min = %.1f, mean = %.1f, max = %.1f, diff = %.1f, sem = %.2f)"%(miniti, 
+                                                      np.mean(ITIs),
                                                       maxiti, 
-                                                      maxiti-miniti))
+                                                      maxiti-miniti,
+                                                      sem(ITIs)))
     else:
         ITIs = list(np.random.uniform(itimean + itirange, 
                        itimean + itirange, 
@@ -626,17 +629,16 @@ def generate_ITIs(itimean, itirange, ititype):
     
 def end_session(username, sess_num):
     try:
-        last_json = open("./config/last_session.json", "a")
-        json_obj = json.load(last_json)
+        with open('./config/last_session.json') as f:
+            json_obj = json.load(f)
+
         json_obj[username] = sess_num
-        json.dump(json_obj, last_json)
-        last_json.close()
+    
+        with open('./config/last_session.json', 'w') as f:
+            json.dump(json_obj, f)    
                 
     except IOError: 
         print("Session file not found; a new one will be created.")
         json_obj = {username: sess_num}
-        last_json = open("./config/last_session.json", "w")
-        json.dump(json_obj, last_json)
-        last_json.close()
-
-    
+        with open('./config/last_session.json', 'w') as f:
+            json.dump(json_obj, f)    

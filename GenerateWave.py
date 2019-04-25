@@ -80,11 +80,14 @@ def GenerateWave(opts):
         
                         engine = create_engine(engine_string)
                         
-                        engine.execute("drop database %s" %(db_config["DATABASE"]))
-                        engine.execute("create database %s" %(db_config["DATABASE"]))
+                        engine.execute("DROP DATABASE IF EXISTS %s" %(db_config["DATABASE"]))
+                        engine.execute("CREATE DATABASE %s" %(db_config["DATABASE"]))
+                        engine.execute("DROP DATABASE IF EXISTS %s" %(db_config["DATABASE_FMRI"]))
+                        engine.execute("CREATE DATABASE %s" %(db_config["DATABASE_FMRI"]))
                         for subject in subjects:
                             command = "DROP USER IF EXISTS '%s'@'localhost'; CREATE USER '%s'@'localhost' IDENTIFIED BY '%s'; "%(subject, subject, db_config["SSH_PASS"]) + \
-                            "GRANT INSERT,SELECT,CREATE,INDEX ON %s.* TO '%s'@'localhost';"%(db_config["DATABASE"], subject)                    
+                            "GRANT INSERT,SELECT,CREATE,INDEX ON %s.* TO '%s'@'localhost';"%(db_config["DATABASE"], subject) + \
+                            "GRANT INSERT,SELECT,CREATE,INDEX ON %s.* TO '%s'@'localhost';"%(db_config["DATABASE_FMRI"], subject)
                             print(command)
                             engine.execute(command)
                         engine.dispose()

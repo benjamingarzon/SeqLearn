@@ -13,28 +13,23 @@ sshtunnel.TUNNEL_TIMEOUT = 20.0
 def connect(opts):
     """ Connect to MySQL database and delete tables."""
  
-    username = opts.username
-    password = opts.password
-    
     db_config_json = open("./db/db_config.json", "r")
     db_config = json.load(db_config_json)
     db_config_json.close()
     database = opts.database if opts.database else db_config['DATABASE'] 
     
-    if username == 'researcher':
-        sql_name = 'researcher'
-    else:
-        sql_name = 'root'
+    if not opts.sql_username:
+        opts.sql_username = opts.ssh_username
         
     if opts.upload:
         mypath, mysuffix = opts.upload.split(",")
-        sql_name = mysuffix
+        opts.sql_username = mysuffix
         
 #    print db_config
     with sshtunnel.SSHTunnelForwarder(
             (db_config['REMOTEHOST'], 
             int(db_config['REMOTEPORT'])),
-            ssh_username = username,
+            ssh_username = opts.ssh_username,
             ssh_password = db_config['SSH_PASS'],
             ssh_pkey = os.path.abspath(db_config['KEY']),
             remote_bind_address = (db_config['LOCALHOST'], 
@@ -42,8 +37,8 @@ def connect(opts):
         ) as server:
             port = server.local_bind_port
             try:
-                engine_string = 'mysql://%s:%s@%s:%d/%s'%(sql_name, 
-                                               password, 
+                engine_string = 'mysql://%s:%s@%s:%d/%s'%(opts.sql_username, 
+                                               opts.sql_password, 
                                                db_config['LOCALHOST'],
                                                port,
                                                database)
@@ -72,9 +67,12 @@ def connect(opts):
                             mypath, 
                             "trialsfile-" + mysuffix + ".csv"), sep = ";")
 
-                    update_table(engine, "memo_table", mymemo, sql_name) 
-                    update_table(engine, "trials_table", mytrials, sql_name)
-                    update_table(engine, "keys_table", mykeys, sql_name) 
+                    update_table(engine, "memo_table", mymemo, 
+                                 opts.sql_username) 
+                    update_table(engine, "trials_table", mytrials,
+                                 opts.sql_username)
+                    update_table(engine, "keys_table", mykeys, 
+                                 opts.sql_username) 
                  
                     print('Uploaded the data!')
                     
@@ -130,19 +128,25 @@ def build_parser():
                         type = str, 
                         dest = "upload", 
                         help = "Upload subject files to database. " + 
-                        "UPLOAD = <Path, participant>",
+                        "UPLOAD = <Path,participant>",
                         required = False)
 
-    parser.add_argument("--u", 
+    parser.add_argument("--sshu", 
                         type = str, 
-                        dest = "username", 
-                        help = "Username.",
+                        dest = "ssh_username", 
+                        help = "SSH username.",
+                        required = True)
+
+    parser.add_argument("--sqlu", 
+                        type = str, 
+                        dest = "sql_username", 
+                        help = "SQL username.",
                         required = True)
 
     parser.add_argument("--p", 
                         type = str, 
-                        dest = "password", 
-                        help = "Password.",
+                        dest = "sql_password", 
+                        help = "Database password.",
                         required = True)
 
     parser.add_argument("--database", 

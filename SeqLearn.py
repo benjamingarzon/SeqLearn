@@ -47,8 +47,7 @@ def SeqLearn(opts):
     schedule, schedule_unique, run = \
     startSession(opts)
 
-    # different random ITIs for different groups and sessions
-    np.random.seed(config["RND_SEED"] + 1000*sched_group + 100*sess_num + 10*run)
+    np.random.seed(config["RND_SEED"])
 
 ############################ 
 ## Define window and stimuli
@@ -76,11 +75,11 @@ def SeqLearn(opts):
     instructions4_message = stimuli["instructions4_message"]
     instructions4_space = stimuli["instructions4_space"]
     instructionspaced1_message = stimuli["instructionspaced1_message"]    
-    instructionsfmri1_message = stimuli["instructionsfmri1_message"]
+#    instructionsfmri1_message = stimuli["instructionsfmri1_message"]
     instructionsfmripaced1_message = stimuli["instructionsfmripaced1_message"]    
     instructionsbreak_message = stimuli["instructionsbreak_message"]    
     instructionsstretch_message = stimuli["instructionsstretch_message"]
-    instructionsbreakseq_message = stimuli["instructionsbreaksequence_message"]
+#    instructionsbreakseq_message = stimuli["instructionsbreaksequence_message"]
     beatslow_message = stimuli["beatslow_message"]
     beatfast_message = stimuli["beatfast_message"]
     last_label = stimuli["last_label"]
@@ -129,7 +128,7 @@ def SeqLearn(opts):
 ############################ 
 ## Memorization
 ############################ 
-    if sess_num > 0 :
+    if sess_num >= 0 :
         showStimulus(win, [intro_message])
         wait_clock(globalClock, config["INTRO_TIME"])
 
@@ -640,9 +639,9 @@ def SeqLearn(opts):
     keysfile.close()
     trialsfile.close()
     
-    mymemo = pd.read_table(memofile.name, sep = ";")
-    mykeys = pd.read_table(keysfile.name, sep = ";")
-    mytrials = pd.read_table(trialsfile.name, sep = ";")
+    mymemo = pd.read_csv(memofile.name, sep = ";")
+    mykeys = pd.read_csv(keysfile.name, sep = ";")
+    mytrials = pd.read_csv(trialsfile.name, sep = ";")
     
     # make a local backup
     now = datetime.now()
@@ -673,11 +672,16 @@ def SeqLearn(opts):
                 ) as server:
                     port = server.local_bind_port
                     try:
+                        if config["MODE"] != "fmri":
+                            database = db_config["DATABASE"]
+                        else:
+                            database = db_config["DATABASE_FMRI"]
+                            
                         engine_string = "mysql://%s:%s@%s:%d/%s"%(username, 
                                                        db_config["DB_PASS"], 
                                                        db_config["LOCALHOST"],
                                                        port,
-                                                       db_config["DATABASE"])
+                                                       database)
         
                         engine = create_engine(engine_string)
                         if config["TEST_MEM"] == 1 and config["PRESHOW"] == 1:

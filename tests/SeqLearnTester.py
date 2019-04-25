@@ -13,27 +13,26 @@ parser = ArgumentParser()
 opts = parser.parse_args()
 opts.automate = True
 opts.no_upload = False
-opts.restart = True
 opts.config_file = None
 opts.demo = False
 opts.schedule_file = None
-
+opts.restart = False
 opts.run = None
 opts.session = None
 
 # testing home sessions 
 opts.run_fmri = False
-
-for session in range(40):
+for session in range(20):
     print("Test session %d"%(session))
-    opts.restart = True if session == 0 else False
-    SeqLearn(opts)
-    
-# testing home sessions 
-opts.run_fmri = True
-for session in range(10):
-    opts.restart = True if session == 0 else False
+#    opts.restart = True if session == 0 else False
     SeqLearn(opts)
 
+# testing fmri sessions 
+opts.run_fmri = True
+for session in range(20):
+#    opts.restart = True if session == 0 else False
+    SeqLearn(opts)
+
+    
 core.quit()
 

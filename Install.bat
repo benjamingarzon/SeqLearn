@@ -65,9 +65,8 @@ echo set PATH=%ANACONDAPATH%\Scripts;%ANACONDAPATH%\;%PATH% >> SequencePracticeS
 echo call activate psychopyenv >> SequencePracticeSession.bat
 echo echo Starting program. This may take a few seconds... >> SequencePracticeSession.bat 
 echo cd %INSTALLPATH%\SeqLearn >> SequencePracticeSession.bat
-echo set /p SESSNUM="Enter session number:"
-
-echo python SeqLearn.py --session %SESSNUM% ^> NUL >> SequencePracticeSession.bat
+echo set /p SESSNUM="Enter session number: " >> SequencePracticeSession.bat
+echo python SeqLearn.py --session ^%SESSNUM^% ^> NUL >> SequencePracticeSession.bat
 echo call deactivate" >> SequencePracticeSession.bat
 
 mkdir "%HOMEPATH%\Desktop\SeqLearnUtils"
