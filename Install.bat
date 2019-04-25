@@ -39,7 +39,7 @@ echo call activate psychopyenv >> SequencePractice.bat
 echo echo Starting program. This may take a few seconds... >> SequencePractice.bat 
 echo cd %INSTALLPATH%\SeqLearn >> SequencePractice.bat
 echo python SeqLearn.py ^> NUL >> SequencePractice.bat
-echo call deactivate" >> SequencePractice.bat
+echo call deactivate >> SequencePractice.bat
 
 echo set INSTALLPATH=%INSTALLPATH% > SequencePracticeDemo.bat
 echo set SEQDIR=%INSTALLPATH%\SeqLearn >> SequencePracticeDemo.bat
@@ -48,7 +48,7 @@ echo call activate psychopyenv >> SequencePracticeDemo.bat
 echo cd %INSTALLPATH%\SeqLearn >> SequencePracticeDemo.bat
 echo echo Starting program. This may take a few seconds... >> SequencePracticeDemo.bat 
 echo python SeqLearn.py --demo ^> NUL >> SequencePracticeDemo.bat
-echo call deactivate" >> SequencePracticeDemo.bat
+echo call deactivate >> SequencePracticeDemo.bat
 
 echo set INSTALLPATH=%INSTALLPATH% > UploadData.bat
 echo set SEQDIR=%INSTALLPATH%\SeqLearn >> UploadData.bat
@@ -57,7 +57,7 @@ echo call activate psychopyenv >> UploadData.bat
 echo cd %INSTALLPATH%\SeqLearn >> UploadData.bat
 echo echo Uploading data. This may take a few seconds... >> UploadData.bat 
 echo python UploadData.py ^> NUL >> UploadData.bat
-echo call deactivate" >> UploadData.bat
+echo call deactivate >> UploadData.bat
 
 echo set INSTALLPATH=%INSTALLPATH% > SequencePracticeSession.bat
 echo set SEQDIR=%INSTALLPATH%\SeqLearn >> SequencePracticeSession.bat
@@ -67,7 +67,7 @@ echo echo Starting program. This may take a few seconds... >> SequencePracticeSe
 echo cd %INSTALLPATH%\SeqLearn >> SequencePracticeSession.bat
 echo set /p SESSNUM="Enter session number: " >> SequencePracticeSession.bat
 echo python SeqLearn.py --session ^%SESSNUM^% ^> NUL >> SequencePracticeSession.bat
-echo call deactivate" >> SequencePracticeSession.bat
+echo call deactivate >> SequencePracticeSession.bat
 
 mkdir "%HOMEPATH%\Desktop\SeqLearnUtils"
 move SequencePractice.bat "%HOMEPATH%\Desktop"
