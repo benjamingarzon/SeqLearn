@@ -71,7 +71,7 @@ echo call deactivate >> SequencePracticeSession.bat
 
 mkdir "%HOMEPATH%\Desktop\SeqLearnUtils"
 move SequencePractice.bat "%HOMEPATH%\Desktop"
-move SequencePracticeDemo.bat "%HOMEPATH%\Desktop"
+move SequencePracticeDemo.bat "%HOMEPATH%\Desktop\SeqLearnUtils"
 move UploadData.bat "%HOMEPATH%\Desktop\SeqLearnUtils"
 move SequencePracticeSession.bat "%HOMEPATH%\Desktop\SeqLearnUtils"
 

@@ -7,30 +7,91 @@ output:
   pdf_document: default
 ---
 
+# change to subject date time
+
 # open data
 ```{r}
 rm(list=ls())
 
 library(ggplot2)
 library(reshape2)
+library(plyr)
 library(dplyr)
 
-trialsfile = paste0('../data/archive/trials_table-20190316_1422-Lundpilot2db.csv')
-trials.table = unique(read.table(trialsfile, sep =';', header = T,quote = "")[-1])
+test_sessions = c(0, 6, 12, 18, 24)
+
+theme_lh <- function () { 
+    theme_bw(base_size=18, base_family="Avenir")
+}
+
+trialsfile = paste0('../data/trials_table-20190527_2219-Lund1db.csv')
+trialsfilefmri = paste0('../data/trials_table-20190527_2226-Lund1fmridb.csv')
+#trialsfile = paste0('../data/archive/trials_table-20190313_2239-Lundpilot2db.csv')
 
 maxy = 4500 
 miny = 500 
 
-# analyze only these
-group = c("lup2s001")#, "lup2s002", "lup2s003", "lup2s004", "lup2s005", "lup2s006", "lup2s007", "lup2s008", "lup2s009")
 
-trials.table = subset(trials.table, username %in% group)
+trials.table = unique(read.table(trialsfile, sep =';', header = T,quote = "")[-1]) %>% mutate(date_time = paste(username, sess_date, sess_time))
+trials.table$username = as.character(trials.table$username)
+
+trials.table.fmri = unique(read.table(trialsfilefmri, sep =';', header = T,quote = "")[-1]) %>% mutate(date_time = paste(username, sess_date, sess_time))
+trials.table.fmri$username = as.character(trials.table.fmri$username)
+
+
+# analyze only these
+include = c("lue1103")
+# analyze only these
+exclude = c("lue1101")
+
+# analyze only these
+#trials.table = subset(trials.table, username %in% include)
+#trials.table = subset(trials.table, !username %in% exclude)
 
 ```
 
+Correct and assign groups
+```{r}
+
+trials.table = subset(trials.table, !(sess_time == "15:55:23.768000" & sess_num == 0 & username == "lue1202"))
+#trials.table[trials.table$username == "lue1101" & trials.table$sess_num == 1 ]$sess_num = trials.table[trials.table$username == "lue1101", ]$sess_num - 1
+trials.table[trials.table$username == "lue1101" & trials.table$sess_num == 1, ]$sess_num = 0
+
+# check that the number of trials is correct
+ntrials = trials.table %>% group_by(username, date_time, sess_num, run, sess_type) %>% summarise(n = max(trial, na.rm = T), cum_trial = sum(cumulative_trial == 1))
+#interrupted_times = ntrials$date_time[ntrials$n < max(ntrials$n)]
+
+interrupted_times = ntrials$date_time[!(( ntrials$cum_trial == 6 & ntrials$sess_type == "training") | ( ntrials$cum_trial == 5 & ntrials$sess_type == "testing"))]
+
+print("Interrupted sessions")
+print(interrupted_times)
+trials.table = subset(trials.table, !date_time %in% interrupted_times)
+
+# fmri
+ntrials.fmri = trials.table.fmri %>% group_by(username, date_time, sess_num, run) %>% summarise(n = n(), cum_trial = sum(cumulative_trial == 1))
+
+interrupted_times.fmri = ntrials$date_time[ntrials.fmri$n < max(ntrials.fmri$n)]
+
+print("Interrupted fmri runs")
+print(interrupted_times.fmri)
+trials.table.fmri = subset(trials.table.fmri, !date_time %in% interrupted_times)
+
+trials.table.fmri = subset(trials.table.fmri, !(sess_time == "10:42:34.981000" & username == "lue1203" & sess_num == 6 ))
+trials.table.fmri = subset(trials.table.fmri, !(sess_time == "11:02:27" & username == "lue1205" & sess_num == 0))
+```
+
+Name groups
+
+```{r}
+trials.table$group = "Experimental"
+trials.table$group[grep("lue12", trials.table$username)] = "Control"
+trials.table.fmri$group = "Experimental"
+trials.table.fmri$group[grep("lue12", trials.table.fmri$username)] = "Control"
+```
 
 Performance
-```{r fig.width=14, fig.asp=0.4}
+```{r fig.width=25, fig.asp=0.7}
+
 
 ok_trials = subset(trials.table, accuracy == 1)
 unpaced_trials = subset(trials.table, paced == 0 & trial_type != "missed")
@@ -38,57 +99,126 @@ paced_trials = subset(trials.table, paced == 1 & trial_type != "missed")
 ok_unpaced_trials = subset(unpaced_trials, accuracy == 1)
 ok_paced_trials = subset(paced_trials, accuracy == 1)
                       
-plot.MT = ggplot(ok_unpaced_trials, aes(x = trial, y = MT, col = as.factor(seq_train), group = true_sequence)) + geom_line(lwd=1) + geom_point() + ylim(miny, maxy) + facet_grid( username ~ sess_num) + theme(legend.position="bottom") + theme_bw()
+plot.MT = ggplot(ok_unpaced_trials, aes(x = trial, y = MT, col = as.factor(seq_train), group = true_sequence)) + geom_line(lwd=0.5) + geom_point(size=0.7) + ylim(miny, maxy) +  facet_grid( username ~ sess_num) + theme_lh() + theme(legend.position="none")
 
-plot.MT.paced = ggplot(ok_paced_trials, aes(x = trial, y = MT, col = as.factor(seq_train), group = true_sequence)) + geom_line(lwd=1) + geom_point() + ylim(miny, maxy) + facet_grid( username ~ sess_num) + theme(legend.position="none") + theme_bw()
+plot.MT.paced = ggplot(ok_paced_trials, aes(x = trial, y = MT, col = as.factor(seq_train), group = true_sequence)) + geom_line(lwd=0.5) + geom_point(size=0.7) + ylim(miny, maxy) + facet_grid( username ~ sess_num) + theme_lh() + theme(legend.position="none")
 
-plot.MT.paced.hist = ggplot(ok_paced_trials, aes(x = MT, col = as.factor(seq_train), group = true_sequence)) + geom_histogram(bins = 50) + facet_grid(  username ~ . ) + theme(legend.position="none") + theme_bw()
+plot.MT.paced.hist = ggplot(ok_paced_trials, aes(x = MT, col = as.factor(seq_train), group = true_sequence)) + geom_histogram(bins = 50) + facet_grid(  username ~ . ) + theme_lh() + theme(legend.position="none")
  
 print(plot.MT)
 print(plot.MT.paced)
-print(plot.MT.paced.hist)
+#print(plot.MT.paced.hist)
 
 ```
 
 
 
 Mean performance
-```{r fig.width=25, fig.asp=0.6}
+```{r fig.width=25, fig.asp=0.4}
 
 # consider only last trials 
-last_trials = subset(ok_unpaced_trials, trial > 5) %>% 
-  group_by(username, sess_num, true_sequence, seq_train) %>% 
+last_trials = subset(ok_unpaced_trials, trial > 10) %>% 
+  group_by(username, sess_num, true_sequence, seq_train, group) %>% 
   summarise(meanMT = mean(MT), sdMT = sd(MT))
 
-plot.meanMT = ggplot(last_trials, aes(x = sess_num, y = meanMT, group = true_sequence, col = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( seq_train ~ username ) + theme(legend.position="bottom") + theme_bw()
+plot.meanMT = ggplot(last_trials, aes(x = sess_num, y = meanMT, group = true_sequence, col = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( . ~ username ) + theme(legend.position="bottom") + theme_lh()
+
+print(plot.meanMT)
+
+plot.meanMT = ggplot(subset(last_trials, group == "Experimental" & seq_train == "trained"), aes(x = sess_num, y = meanMT, group = true_sequence, col = as.factor(true_sequence))) + geom_line(lwd=1) + geom_point() + facet_grid( . ~ username ) + theme(legend.position="none") + theme_lh()
 
 print(plot.meanMT)
 
 # aggregate within participant and compare participants
 
 last_trials.user = last_trials %>% 
-  group_by(username, sess_num, seq_train) %>% 
+  group_by(username, sess_num, seq_train, group) %>% 
   summarise(meanMT = mean(meanMT), sdMT = mean(sdMT))
 
-plot.meanMT.user = ggplot(last_trials.user, aes(x = sess_num, y = meanMT, col = username, lty = as.factor(seq_train), shape = as.factor(seq_train))) + geom_line(lwd=1) + geom_point(size = 3) + facet_grid( .~ seq_train) + theme_bw()
+plot.meanMT.user = ggplot(last_trials.user, aes(x = sess_num, y = meanMT, col = username, lty = as.factor(seq_train), shape = as.factor(seq_train))) + geom_line(lwd=1) + geom_point(size = 3) + facet_grid( group ~ seq_train) + theme_lh()
 
 print(plot.meanMT.user)
 
+plot.sdMT.user = ggplot(last_trials.user, aes(x = sess_num, y = sdMT, col = username, lty = as.factor(seq_train), shape = as.factor(seq_train))) + geom_line(lwd=1) + geom_point(size = 3) + facet_grid( group ~ seq_train) + theme_lh()
+
+print(plot.sdMT.user)
+
+
 # aggregate within sequence 
 last_trials.sequence = last_trials %>% 
-  group_by(true_sequence, username, sess_num, seq_train) %>% 
+  group_by(true_sequence, username, sess_num, seq_train, group) %>% 
   summarise(meanMT = mean(meanMT), sdMT = mean(sdMT))
 
-plot.meanMT.sequence = ggplot(last_trials.sequence, aes(x = sess_num, y = meanMT, group = username, lty = as.factor(seq_train), col = username)) + geom_line(lwd=1) + geom_point(size = 3) + facet_grid( seq_train ~ true_sequence ) + theme_bw() + theme(legend.position="bottom") 
+plot.meanMT.sequence = ggplot(last_trials.sequence, aes(x = sess_num, y = meanMT, group = username, lty = as.factor(seq_train), col = username)) + geom_line(lwd=1) + geom_point(size = 3) + facet_grid( seq_train ~ true_sequence ) + theme_lh() + theme(legend.position="bottom") 
 
 print(plot.meanMT.sequence)
+
+# plot mean for each group
+plot.meanMT.group = ggplot(last_trials.user, aes(x = sess_num, y = meanMT, group = username, col = as.factor(seq_train)))  + geom_vline(xintercept = test_sessions, lty = 2) +  geom_smooth(aes(group=as.factor(seq_train)))  + theme_lh() + theme( legend.position="none") + xlab('Session') + ylab('Movement duration mean (ms)') + facet_grid(.~group) 
+
+print(plot.meanMT.group)
+
+plot.meanMT.group2 = ggplot(last_trials.user, aes(x = sess_num, y = meanMT, group = username, col = group))  + geom_vline(xintercept = test_sessions, lty = 2) +  geom_smooth(aes(group=as.factor(group)))  + theme_lh() + theme( legend.position="bottom") + xlab('Session') + ylab('Movement duration mean (ms)') + facet_grid(.~seq_train) 
+
+print(plot.meanMT.group2)
+
+
+plot.sdMT.group = ggplot(last_trials.user, aes(x = sess_num, y = sdMT, group = username, col = as.factor(seq_train))) + geom_vline(xintercept = test_sessions, lty = 2) +  geom_smooth(aes(group=as.factor(seq_train)))  + theme_lh() + theme( legend.position="none") + xlab('Session') + ylab('Movement duration SD (ms)') + facet_grid(.~group)
+
+print(plot.sdMT.group)
+
+```
+
+Savings
+
+```{r fig.width=15, fig.asp=0.7}
+last.5 = subset(ok_unpaced_trials, trial > 15 ) %>% 
+  group_by(username, sess_num, true_sequence, seq_train, group) %>% 
+  summarise(meanMT = mean(MT), sdMT = sd(MT))
+first.5 = subset(ok_unpaced_trials, trial <=5) %>% 
+  group_by(username, sess_num, true_sequence, seq_train, group) %>% 
+  summarise(meanMT = mean(MT), sdMT = sd(MT))
+
+savings = merge(first.5, last.5, by = c("username", "sess_num", "true_sequence", "seq_train", "group"), suffix = c(".first", ".last")) %>% mutate(meanMT = (meanMT.first - meanMT.last)) %>%  group_by(username, sess_num, seq_train, group) %>% summarise(meanMT = mean(meanMT))
+
+plot.savings = ggplot(savings, aes(x = sess_num, y = meanMT, group = username, col = as.factor(seq_train))) + geom_point() + geom_line() + theme_lh() + theme( legend.position="none") + xlab('Session') + ylab('Movement duration (ms)') + facet_grid(as.factor(seq_train) ~ group)
+
+print(plot.savings)
+
+plot.savings.group = ggplot(savings, aes(x = sess_num, y = meanMT, group = username, col = as.factor(seq_train))) + geom_vline(xintercept = test_sessions, lty = 2) +  geom_smooth(aes(group=as.factor(seq_train)))  + theme_lh() + theme( legend.position="none") + xlab('Session') + ylab('Movement duration (ms)') + facet_grid(.~group)
+
+print(plot.savings.group)
+
+plot.summary = ggplot(subset(savings, sess_num%% 6 == 0), aes(x = group, y = meanMT, fill = group)) + geom_boxplot() + theme_lh() + theme(legend.title=element_blank()) + xlab('Session') + ylab('Movement duration  (ms)') + facet_grid( seq_train~ as.factor(sess_num)) + theme_lh()
+print(plot.summary)
 
 
 ```
 
+
+As clusters
+```{r}
+trials_arr = acast(subset(last_trials.sequence, seq_train == "trained" & group == "Experimental"),  sess_num ~ true_sequence ~ username, value.var = "meanMT")
+trials_mat = do.call(cbind, alply(trials_arr, 3))
+
+colnames(trials_mat) = sapply(dimnames(trials_arr)[[3]], function(x) rep(x, dim(trials_arr)[2]))
+distances = cor(trials_mat, use = "pairwise.complete.obs") 
+#distances = dist(trials_mat)
+distances[lower.tri(distances)] = NA
+distances.melt = subset(melt(distances, na.rm = T), value != 1) 
+distances.melt$type = "within"
+distances.melt$type[distances.melt$Var1 != distances.melt$Var2 ] = "between"
+
+boxplot(value ~ type, data = distances.melt, ylab = "Correlation")
+
+wilcox.test(value ~ type, data = distances.melt, method = "")
+```
+
+
+
 Wrong trials 
 
-```{r fig.width=11, fig.asp=0.8}
+```{r fig.width=11, fig.asp=1.2}
 
 unpaced_trials.wrong = unpaced_trials %>% 
   group_by(username, sess_num, true_sequence, seq_train) %>% 
@@ -98,15 +228,30 @@ paced_trials.wrong = paced_trials %>%
   group_by(username, sess_num, true_sequence, seq_train) %>% 
   summarise(wrong_trials = sum(accuracy < 1))
 
-plot.unpaced.wrong = ggplot(unpaced_trials.wrong, aes(x = sess_num, y = wrong_trials, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ .) + theme(legend.position="none") + theme_bw()
+plot.unpaced.wrong = ggplot(unpaced_trials.wrong, aes(x = sess_num, y = wrong_trials, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ .) + theme(legend.position="none") + theme_lh()
 
-plot.paced.wrong = ggplot(paced_trials.wrong, aes(x = sess_num, y = wrong_trials, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ .) + theme(legend.position="none") + theme_bw()
+plot.paced.wrong = ggplot(paced_trials.wrong, aes(x = sess_num, y = wrong_trials, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ .) + theme(legend.position="none") + theme_lh()
 
 print(plot.unpaced.wrong)
 print(plot.paced.wrong)
 
 ```
 
+
+Trained vs untrained
+```{r fig.width=20, fig.asp=0.6}
+
+
+# remove average for each subject
+mean.user.sequence.demeaned = subset(last_trials.sequence, sess_num%% 6 == 0) %>% group_by(username) %>% mutate(meanMT = meanMT)
+#mutate(meanMT = meanMT - mean(meanMT))
+plot.summary = ggplot(mean.user.sequence.demeaned, aes(x = group, y = meanMT, fill = seq_train)) + geom_boxplot() + theme_lh() + theme(legend.title=element_blank()) + xlab('Session') + ylab('Movement duration mean (ms)') + facet_grid( .~ as.factor(sess_num)) + theme_lh()
+print(plot.summary)
+
+
+
+
+```
 
 Missed trials 
 
@@ -125,15 +270,15 @@ plot.unpaced.missed = ggplot(unpaced_trials.missed, aes(x = sess_num, y = missed
 plot.paced.missed = ggplot(paced_trials.missed, aes(x = sess_num, y = missed_trials, col = true_sequence, group = true_sequence, lty = as.factor(seq_train))) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ .) + theme(legend.position="none")
 
 print(plot.unpaced.missed)
-print(plot.paced.missed)
+#print(plot.paced.missed)
 
 ```
 
 
 Session duration
-```{r fig.width=11, fig.asp=0.8}
+```{r fig.width=11, fig.asp=0.6}
 plot.duration = ggplot(trials.table, aes(x = sess_num, y = global_clock/60, col = username, group = username)) + 
-  stat_summary(fun.y = max, geom = "line", lwd = 1) +  stat_summary(fun.y = max, geom = "point") + ylab("Session duration")
+  stat_summary(fun.y = max, geom = "line", lwd = 1) +  stat_summary(fun.y = max, geom = "point") + ylab("Session duration") + xlab("Session") +  facet_grid(.~group) + theme_lh()
 
 print(plot.duration)
 
@@ -152,9 +297,106 @@ print(plot.dates)
 
 table(trials.times$username)
 
-plot.times = ggplot(trials.times, aes(x = sess_num, y = sess_time)) + geom_line() + geom_point() + xlab("Session number") + ylab("Session time") + facet_grid( . ~ username)
+plot.times = ggplot(trials.times, aes(x = sess_num, y = sess_time)) + geom_line() + geom_point() + xlab("Session number") + ylab("Session time") + facet_grid( . ~ username) + theme_lh()
 print(plot.times)
 
 ```
 
+```{r fig.width=18, fig.asp=0.7}
 
+paced_trials = subset(trials.table.fmri, paced == 1 & trial_type != "missed" & sess_type == "fmri")
+
+plot.MT.paced = ggplot(paced_trials, aes(x = block, y = accuracy, col = as.factor(seq_train), group = true_sequence)) + geom_line(lwd=1) + geom_point() + facet_grid( username ~ sess_num + run) + theme(legend.position="none") + theme_lh()
+
+plot.MT.paced.hist = ggplot(paced_trials, aes(accuracy)) + geom_histogram(bins = 6) + facet_grid( username ~ sess_num + run) + theme(legend.position="none") + theme_lh()
+
+correct_sess_trials = paced_trials %>%
+  group_by(username, sess_num, seq_train, group) %>% 
+  summarise(correct = sum(accuracy==1))
+
+plot.correct.sess = ggplot(correct_sess_trials, aes(x = sess_num, y = correct, col = username)) + geom_line() +  geom_point()  + theme(legend.position="none") + theme_lh() + facet_grid(. ~ group + seq_train)
+
+correct_run_trials = paced_trials %>%
+  group_by(username, seq_train, sess_num, group, run) %>% 
+  summarise(correct = sum(accuracy==1))
+
+plot.correct.run = ggplot(correct_run_trials, aes(x = run, y = correct, col = username)) + geom_line() +  geom_point()  + theme(legend.position="none") + facet_grid(group + seq_train ~sess_num ) + theme_lh() 
+
+#plot.MT.paced.hist = ggplot(ok_paced_trials, aes(x = MT, col = as.factor(seq_train), group = true_sequence)) + geom_histogram(bins = 50) + facet_grid(  username ~ . ) + theme(legend.position="none") + theme_lh()
+
+print(plot.MT.paced)
+print(plot.MT.paced.hist)
+print(plot.correct.sess)
+print(plot.correct.run)
+
+```
+
+```{r fig.width=18, fig.asp=0.6}
+
+mean_paced_trials = subset(paced_trials, accuracy == 1) %>% 
+  group_by(username, sess_num, true_sequence, seq_train, group) %>% 
+  summarise(meanMT = mean(MT), sdMT = sd(MT)) %>% 
+  group_by(username, sess_num, seq_train, group) %>% 
+  summarise(meanMT = mean(meanMT), sdMT = mean(sdMT))
+
+# plot mean for each group
+
+plot.meanMT.user = ggplot(mean_paced_trials, aes(x = sess_num, y = meanMT, col = username, lty = as.factor(seq_train), shape = as.factor(seq_train))) + geom_line(lwd=1) + geom_point(size = 3) + facet_grid( group ~ seq_train) + theme_lh()
+
+print(plot.meanMT.user)
+
+plot.meanMT.group = ggplot(mean_paced_trials, aes(x = group, y = meanMT, fill = group)) + geom_boxplot() + theme_lh() + theme(legend.title=element_blank()) + xlab('Session') + ylab('Movement duration mean (ms)') + facet_grid( seq_train~ as.factor(sess_num)) + theme_lh()
+
+print(plot.meanMT.group)
+
+plot.sdMT.group = ggplot(mean_paced_trials, aes(x = group, y = meanMT, fill = group)) + geom_boxplot() + theme_lh() + theme(legend.title=element_blank()) + xlab('Session') + ylab('Movement duration SD (ms)') + facet_grid( seq_train~ as.factor(sess_num)) + theme_lh()
+
+print(plot.sdMT.group)
+
+
+
+```
+
+```{r}
+library(lme4)
+library(lmerTest)
+
+coefs = NULL
+pvalues = NULL
+last_trials$seq_train2 = relevel(last_trials$seq_train, ref = "trained" )
+
+for (i in test_sessions){
+  MT.model = lmer(meanMT ~ group*seq_train2 + (1|username), data = subset(last_trials, sess_num == i))
+#  MT.model = lmer(meanMT ~ group + (1|username), data = subset(last_trials, seq_train == "untrained" & sess_num == i))
+  coefs = cbind(coefs, fixef(MT.model))
+  pvalues = cbind(pvalues, summary(MT.model)$coefficients[, "Pr(>|t|)"])
+  print(summary(MT.model))
+  print("----------------------------------------------------------------------")
+}
+
+colnames(coefs) = test_sessions
+
+plot(test_sessions, coefs[2, ], type = "both", pch = ifelse(pvalues[2, ] < 0.05, 8, 20))
+plot(test_sessions, coefs[3, ], type = "both", pch = ifelse(pvalues[3, ] < 0.05, 8, 20))
+plot(test_sessions, coefs[4, ], type = "both", pch = ifelse(pvalues[4, ] < 0.05, 8, 20))
+
+```
+
+```{r}
+
+last_trials$sess_dem = last_trials$sess_num - 12
+last_trials$sess_dem2 = last_trials$sess_dem^2
+#MT.model = lmer(meanMT ~ group*seq_train2*sess_dem + group*seq_train2*sess_dem2 + (1 + sess_dem + sess_dem2|username), data = subset(last_trials, sess_num %in% test_sessions))
+#summary(MT.model)
+#coefs = fixef(MT.model)
+#plot(last_trials$sess_num, coefs["groupExperimental:seq_train2untrained"] + coefs["groupExperimental:seq_train2untrained:sess_dem"]*last_trials$sess_dem + coefs["groupExperimental:seq_train2untrained:sess_dem2"]*last_trials$sess_dem2, pch = 20, ylab = "Near transfer effect" )
+
+untrained_trials = subset(last_trials, seq_train == "untrained")
+MT.model = lmer(meanMT ~ group*sess_dem + group*sess_dem2 + (1|username), data = untrained_trials)
+summary(MT.model)
+coefs = fixef(MT.model)
+plot(untrained_trials$sess_num, coefs["groupExperimental"] + coefs["groupExperimental:sess_dem"]*untrained_trials$sess_dem + coefs["groupExperimental:sess_dem2"]*untrained_trials$sess_dem2, pch = 20, ylab = "Near transfer effect", xlab = "Session")
+
+
+
+```

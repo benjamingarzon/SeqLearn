@@ -57,13 +57,13 @@ def connect(opts):
 
                 if opts.upload:
                     
-                    mymemo = pd.read_table(os.path.join(
+                    mymemo = pd.read_csv(os.path.join(
                             mypath, 
                             "memofile-" + mysuffix + ".csv"), sep = ";")
-                    mykeys = pd.read_table(os.path.join(
+                    mykeys = pd.read_csv(os.path.join(
                             mypath, 
                             "keysfile-" + mysuffix + ".csv"), sep = ";")
-                    mytrials = pd.read_table(os.path.join(
+                    mytrials = pd.read_csv(os.path.join(
                             mypath, 
                             "trialsfile-" + mysuffix + ".csv"), sep = ";")
 
@@ -141,7 +141,7 @@ def build_parser():
                         type = str, 
                         dest = "sql_username", 
                         help = "SQL username.",
-                        required = True)
+                        required = False)
 
     parser.add_argument("--p", 
                         type = str, 

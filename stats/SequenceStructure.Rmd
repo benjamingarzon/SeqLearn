@@ -21,6 +21,7 @@ library(proxy)
 library(rjson)
 
 source("./SequenceStructureFuncs.R")
+output_prefix = '//aldrecentrum.local/rf/benjamin.garzon/My Documents/Projects/SeqLearn/scheduling/sequences/sequences_lue1_'
 
 ```
 
@@ -99,7 +100,6 @@ eldist.mat = as.matrix(eldist)
 Find clusters
 ```{r}
 
-
 schedule_size = 3 # number of trained
 
 #  find clusters of sequences with uncommon transitions
@@ -110,15 +110,14 @@ clusters.table = table(clusters)
 sel.clus = which(clusters.table > 8 )# at least 8 different sequences needed
 #sel.clus = which(clusters.table > max(clusters.table) - 4)
 
-sel.chunks =  list()
+sel.chunks =  list() 
 degree = min.eldist = NULL
 myfinger_distance = mychord_distance = myschedules = mytransitions = NULL
 for (i in seq(length(sel.clus))){
   sel.chunks[[i]] = chunks[which(clusters == sel.clus[i])]
   chunks.vecdist = get_vecdist(sel.chunks[[i]], nchords)
   chunks.eldist = proxy::dist(sel.chunks[[i]], chunkdist)
-#  schedules = get_schedules(sel.chunks[[i]], schedule_size)
-  schedules = get_schedules_complete(sel.chunks[[i]], schedule_size)
+  schedules = get_schedules_complete(sel.chunks[[i]], schedule_size) # contains possible configurations of trained and untrained sequences
   myfinger_distance = c(myfinger_distance,
                         sapply(schedules, finger_distribution_distance, chords)
   )
@@ -129,7 +128,6 @@ for (i in seq(length(sel.clus))){
                  schedules)
   mytransitions = rbind(mytransitions, 
                  t(sapply(schedules, get_transition_distribution, nchords)))
-                 
   print(i)
 }
 
@@ -137,19 +135,17 @@ for (i in seq(length(sel.clus))){
 
 plot(jitter(mychord_distance), jitter(myfinger_distance), pch = 20, cex = 0.3) 
 
-chosen_indices = which(mychord_distance==max(mychord_distance))
+chosen_indices = which(mychord_distance == max(mychord_distance))
 chosen_schedules.1 = myschedules[chosen_indices]
 myfinger_distance = myfinger_distance[chosen_indices]
 
 chosen_schedules.2 = chosen_schedules.1[order(myfinger_distance)]
-
 
 # check distribution of fingers and transitions
 ```
 
 # write out
 ```{r}
-
 chosen_schedules = chosen_schedules.2[c(2 , 3)] # arbitrary
 
 vecs.trained = vecs.untrained = NULL
@@ -175,9 +171,11 @@ for (i in seq(length(chosen_schedules))){
   print(sapply(list(schedule), finger_distribution_distance, chords))
   print("Chord distance")
   print(sapply(list(schedule), chord_distance, size = schedule_size))  
-} 
+}
+```
 
 
+```{r}
 # if I select k schedules, how many different transitions do I cover?
 k = 2
 n_chosen = length(chosen_schedules)
@@ -192,11 +190,18 @@ for (j in seq(ncol(mycomb))){
   }
 
 #chosen_schedules = chosen_schedules[c(1, 3)]
+```
+
+
+```{r}
+set.seed(4) # to permutate the sequences
+permutations = NULL
+permutations[[1]] = c(4, 1, 5, 2, 3, 6)
+permutations[[2]] = c(1, 4, 2, 5, 3, 6)
 
 for (i in seq(length(chosen_schedules))){
   
   schedule = chosen_schedules[[i]]
-    
   print(i)
   finger_distribution.trained = sapply(schedule$trained, get_finger_distribution, chords)
   finger_distribution.untrained = sapply(schedule$untrained, get_finger_distribution, chords)  
@@ -208,149 +213,17 @@ for (i in seq(length(chosen_schedules))){
   print(t(finger_distribution.trained))
   print(t(finger_distribution.untrained))
   
-  json_file = paste0('../scheduling/sequences/sequences_lup2_', formatC(i, width = 3, flag = 0), '_0.json')
+  json_file = paste0(output_prefix, formatC(i, width = 3, flag = 0), '.json')
   trained.chunks = schedule$trained
   untrained.chunks = schedule$untrained
-  trained = translate_seqs(trained.chunks, chords)
-  untrained = translate_seqs(untrained.chunks, chords)
-#  myjson = toJSON(list(type1 = c(trained, untrained)))
+  #trained = sample(translate_seqs(trained.chunks, chords))
+  #untrained = sample(translate_seqs(untrained.chunks, chords))
+  trained = sample(translate_seqs(trained.chunks, chords))
+  untrained = translate_seqs(untrained.chunks, chords)[permutations[[i]]]
   myjson = toJSON(list(type1 = list(trained = trained, untrained = untrained)))
-  
+  print(untrained)
   write(myjson, json_file)
   
 } 
 
-
-
-# sel.chunk = sel.chunks[[ 58 ]]
-# 
-# # observe clustering
-# sel.dist = proxy::dist(sel.chunk, chunkdist)
-# hc.sel = hclust(sel.dist, method = "single")
-# plot(hc.sel)
-# 
-# trained.chunks = sel.cluster[c(1, 8, 5)]
-# untrained.chunks = sel.cluster[c(9, 4, 6)]
-# 
-# vecdist.results = get_vecdist(c(trained.chunks, untrained.chunks), nchords)
-# eldist.results = proxy::dist(c(trained.chunks, untrained.chunks), chunkdist)
-# 
-# print(as.matrix(vecdist.results))
-# print(as.matrix(eldist.results))
-
-# run SeqGen.py to generate schedule
-# python SeqGen.py --sequence_file=scheduling\sequences_001.json --schedule_file=scheduling\schedule001
-```
-
-```{r}
-
-```
-
-
-
-Configuration 1:
-Untrained and trained have different chords (and different transitions). Distance between consecutive chords is always 3.
-
-Confirm
-
-```{r}
-
-# trained.dist = get_vecdist(trained.cluster, nchords)
-# untrained.dist = get_vecdist(untrained.cluster, nchords)
-# hc = hclust(untrained.dist, method = "single")
-# plot(hc)
-# 
-# hc.complete = hclust(as.dist(eldist.mat[sel.chunks, sel.chunks]), method = "single")
-# hc.inverse = hclust(as.dist(seq_size - eldist.mat[sel.chunks, sel.chunks]), method = "single")
-# plot(hc.single)
-# plot(hc.complete)
-# clusters.2 = cutree(hc.complete, h = 4)
-# mychunks = chunks[as.numeric(names(which(clusters.2==1)))]
-# 
-# 
-# eldist.deg0 = colSums(eldist.mat == 0)
-# eldist.deg1 = colSums(eldist.mat == seq_size)
-# 
-# vecdist.deg = colSums(vecdist.mat == maxdist.vec)
-# maxdist = eldist.deg == max(eldist.deg)
-# 
-# eldist.max = eldist.mat[maxdist, maxdist]
-# vecdist.max = vecdist.mat[maxdist, maxdist]
-# 
-# 
-# # disjoint are sequences with distance seq_size -1
-# 
-# eldist.adj = 1*(eldist.mat == 0)
-# eldist.adj = 1*(as.matrix(sel.dist) == 5)
-# 
-# mygraph.el = graph_from_adjacency_matrix(eldist.adj, mode = "undirected")
-# modules.el = edge.betweenness.community(mygraph.el)
-# modules.el = fastgreedy.community(mygraph.el)
-# modules.el = walktrap.community(mygraph.el)
-# modules.el = leading.eigenvector.community(mygraph.el)
-# mod.table = table(modules.el$membership)
-# sel.mod = which(mod.table == max(mod.table))[1]
-# sel.chunks = chunks[modules.el$membership == sel.mod]
-# 
-# eldist.mod = eldist.mat[modules.el$membership == sel.mod, modules.el$membership == sel.mod]
-# vecdist.mod = vecdist.mat[modules.el$membership == sel.mod, modules.el$membership == sel.mod]
-# 
-# plot(mygraph.el)
-# vecdist.adj = 1*(vecdist.mat == maxdist.vec)
-# mygraph.vec = graph_from_adjacency_matrix(vecdist.adj, mode = "undirected")
-# modules.vec = fastgreedy.community(mygraph.vec)
-# modules.vec = walktrap.community(mygraph.vec)
-# print(modules.vec[[3]])
-# vecs.mod = vecs[ as.numeric(modules.vec[[3]]), ] 
-# vecdist.mod = dist(vecs.mod, method = "manhattan") 
-# hc = hclust(as.dist(eldist.mod), method = "single")
-#plot(hc)
-
-
-# save
-
-
-# modules.vec = getmodules(findModules(1*(vecdist.mat == 2*(seq_size - 1)), iter = 10, sparse = F))
-# modules.el = getmodules(findModules(1*(as.matrix(eldist) == 0), iter = 10, sparse = F))
-
-# hc = hclust(vecdist, method = "single")
-# plot(hc)
-# clusters = cutree(hc, h = 7)
-# 
-# chunks1 = chunks[clusters == 1]
-# chunks2 = chunks[clusters == 2]
-# 
-# # check 
-# 
-# vecs1 = vecs[clusters == 1, ]
-# vecs2 = vecs[clusters == 2, ]
-# 
-# vecdist.clus = dist(rbind(vecs1, vecs2), method = "manhattan") 
-```
-
-
-
-
-```{r}
-# # is reorganizing 3 digits more costly than reorganizing 2?
-# maxtransitions = sum(bindistance)
-# 
-# transitions = melt(bindistance)
-# colnames(transitions) = c("from", "to", "value")
-# transitions = subset(transitions, value != 0)[-3]
-# index = 1
-# seq_list = seqs[index, ]
-# 
-# for (i in 1:maxtransitions){
-#   s = subset(transitions, from == index)
-#   next_index = s["to"][1, ]
-#   if (is.na(next_index)) break
-#   print(c(index, next_index))
-#   transitions = subset(transitions, !(from == index & to == next_index))
-#   transitions = subset(transitions, !(from == next_index & to == index))
-#   index = next_index
-#   seq_list = rbind(seq_list, seqs[index, ]) 
-# }
-# print(seq_list)
-# print(transitions)
 ```
