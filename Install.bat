@@ -6,7 +6,6 @@ echo Installation path: %INSTALLPATH%
 set /p DOWNLOADPATH="Enter PATH where you unzipped the files. (Default C:%HOMEPATH%\Downloads\SeqLearn-master\SeqLearn-master): " || set DOWNLOADPATH="C:%HOMEPATH%\Downloads\SeqLearn-master\SeqLearn-master"
 echo Download path: %DOWNLOADPATH%
 
-
 echo "Select second copy option (directory)"
 xcopy ""%DOWNLOADPATH%"" ""%INSTALLPATH%\SeqLearn"" /E
 

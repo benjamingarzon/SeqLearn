@@ -90,7 +90,6 @@ def scorePerformance(keys, RTs, sequence, keytimes):
     accuracy = np.sum(correct) / len(sequence)
 
     # MT
-    #MT = np.sum(RTs[1:])
     MT = keytimes[-1] - keytimes[0]
     
     score = len(sequence)/MT
@@ -101,10 +100,6 @@ def calcmaxgroupscore(session, n_sessions, factor, baseline, maxscore):
     """ 
     Calculates the maxscore. 
     """    
-#    maxgroupscore = np.max(
-#            (baseline*np.exp(-(session-1)/n_sessions),
-#            maxscore*(1 + factor*np.exp(-2*(session-1)/n_sessions)))
-#            )
     maxgroupscore = np.max(
             (baseline*np.exp(-session/n_sessions),
             maxscore*(1 + factor*np.exp(-2*session/n_sessions)))
@@ -211,7 +206,6 @@ def startSession(opts):
 
     maxscore = defaultdict(float)
     maxgroupscore = defaultdict(lambda:config["MAXSCORE_BASELINE"], {})
-
    
     try:
         # proceed from where it was left before
@@ -230,9 +224,8 @@ def startSession(opts):
             last_json.close()
         except IOError: 
             print("Session file not found.")
-            last_sess_num = np.max(trialstable["sess_num"])
+            last_sess_num = np.max(trialstable["sess_num"]) 
 
-        #last_sess_num = np.max(trialstable["sess_num"])
         next_sess_num = last_sess_num + 1
         q = np.where(schedule["sess_num"] >= next_sess_num)
         # sess_num is zero if there are no more sessions left
@@ -268,6 +261,23 @@ def startSession(opts):
                     maxscore[seq]
                     )
 
+        if np.isnan(sess_num):
+            sess_num = 0
+
+        if np.isnan(run):
+            run = 1
+
+        # check everything alright before moving on
+        if config["ASK_USER"] == 1:
+            myDlg = gui.Dlg(title="Confirm information.")
+            myDlg.addText("Username: %s"%(username))
+            myDlg.addText("Session: %d"%(sess_num))
+            if config["MODE"] == "fmri":
+                myDlg.addText("Run: %d"%(run)) 
+            myDlg.show()
+            if not myDlg.OK:
+                exit()   
+
         # connect files with a csv writer
         memowriter = csv.writer(memofile, delimiter=";")
         keyswriter = csv.writer(keysfile, delimiter=";")
@@ -285,7 +295,17 @@ def startSession(opts):
         keysfile = open(keysfilename, "wb")
         trialsfile = open(trialsfilename, "wb")
         sess_num = np.min(schedule["sess_num"])
-        
+
+        if config["ASK_USER"] == 1:
+            myDlg = gui.Dlg(title="Confirm information.")
+            myDlg.addText("Username: %s"%(username))
+            myDlg.addText("Session: %d"%(sess_num))
+            if config["MODE"] == "fmri":
+                myDlg.addText("Run: %d"%(run)) 
+            myDlg.show()
+            if not myDlg.OK:
+                exit()   
+            
         # connect files with a csv writer
         memowriter = csv.writer(memofile, delimiter=";")
         keyswriter = csv.writer(keysfile, delimiter=";")

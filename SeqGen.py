@@ -392,22 +392,22 @@ def main():
     opts.split = True
     N_SCHEDULES = 10
     TR = 1.2
-    
+    schedule_type = 1
     for sched_group in range(N_SCHEDULES):
         opts.seq_file =  "./scheduling/sequences/sequences_lue1_001"
-        opts.schedule_file =  "./scheduling/schedules/lue1schedule_g1_c1"
+        opts.schedule_file =  "./scheduling/schedules/lue%dschedule_g1_c1"%(schedule_type)
         generate_with_predefined_sequences(opts, TR, sched_group = sched_group, group = 'experimental')
 
         opts.seq_file =  "./scheduling/sequences/sequences_lue1_002"
-        opts.schedule_file =  "./scheduling/schedules/lue1schedule_g1_c2"
+        opts.schedule_file =  "./scheduling/schedules/lue%dschedule_g1_c2"%(schedule_type)
         generate_with_predefined_sequences(opts, TR, sched_group = sched_group, group = 'experimental')
 
         opts.seq_file =  "./scheduling/sequences/sequences_lue1_001"
-        opts.schedule_file =  "./scheduling/schedules/lue1schedule_g2_c1"
+        opts.schedule_file =  "./scheduling/schedules/lue%dschedule_g2_c1"%(schedule_type)
         generate_with_predefined_sequences(opts, TR, sched_group = sched_group, group = 'control')
 
         opts.seq_file =  "./scheduling/sequences/sequences_lue1_002"
-        opts.schedule_file =  "./scheduling/schedules/lue1schedule_g2_c2"
+        opts.schedule_file =  "./scheduling/schedules/lue%dschedule_g2_c2"%(schedule_type)
         generate_with_predefined_sequences(opts, TR, sched_group = sched_group, group = 'control')
 
 #    generate_with_predefined_sequences(opts, sched_group = 1)

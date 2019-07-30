@@ -10,6 +10,7 @@ The main script is SeqLearn.py. To get help:
 usage: SeqLearn.py [-h] [--schedule_file SCHEDULE_FILE]
                    [--config_file CONFIG_FILE] [--restart] [--demo]
                    [--session SESSION] [--run RUN] [--fmri] [--no_upload]
+                   [--automate]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -23,7 +24,7 @@ optional arguments:
   --run RUN             Run only this run. Incompatible with --restart
   --fmri                Run in fMRI mode.
   --no_upload           Do not upload the data to the database.
-  --ignore_misses       Ignore misses, don't repeat trial.  
+  --automate            Run automatically for testing.
 ```
 
 
@@ -32,7 +33,8 @@ optional arguments:
 ## Dependencies 
 
 Anaconda3 (https://www.anaconda.com/download/).
-Python packages: psychopy, sqlachemy, sshtunnel, wxpython, pandas.
+Python packages: psychopy, cogsci, pygame, pandas, mysql-python, sqlalchemy, scikit-learn, sshtunnel, wxpython 3.0.
+
 
 ## Linux manual installation
 
@@ -46,11 +48,12 @@ Download and unzip (or clone) the files into a directory INSTALLPATH. To create 
 mv $INSTALLPATH\SeqLearn-master $INSTALLPATH\SeqLearn
 cd $INSTALLPATH\SeqLearn
 conda create -y -n psychopyenv
-source activate psychopyenv
+call activate psychopyenv
 conda install -y python=2.7.13
 conda install -y -c anaconda pandas mysql-python sqlalchemy scikit-learn
 conda install -y -c conda-forge sshtunnel wxpython=3.0
 conda install -y -c cogsci psychopy pygame
+
 ```
 
 Now run:
@@ -63,44 +66,12 @@ This will configure the file 'config/user.json' with the user name and the sched
 ```
 {
 "USERNAME": "subjectxxx", 
-"SCHEDULE_GROUP": 0
+"SCHEDULE_TABLE": "xxx_schedule_table"
 }
 ```
 
 
-To create a wrapper 'SequencePractice.sh' to run the program assign the correct variables to these variables: 
-
-``` 
-SEQDIR=/full/path/to/SeqLearn/folder
-ANACONDAPATH=/full/path/to/anaconda3
-``` 
-
-and then copy-paste to the terminal:
-
-``` 
-echo "SEQDIR=$SEQDIR" > SequencePractice.sh
-echo "PATH=$ANACONDAPATH/Scripts:$ANACONDAPATH:$PATH" >> SequencePractice.sh
-echo "source activate psychopyenv" >> SequencePractice.sh
-echo "cd $SEQDIR" >> SequencePractice.sh
-echo "python SeqLearn.py" > /dev/null >> SequencePractice.sh
-echo "echo Starting program. This may take a few seconds..." >> SequencePractice.sh 
-echo "source deactivate" >> SequencePractice.sh
-chmod a+x SequencePractice.sh
-```
-
-Similarly, to create a wrapper for the demo:
-``` 
-echo "SEQDIR=$SEQDIR" > SequencePracticeDemo.sh
-echo "PATH=$ANACONDAPATH/Scripts:$ANACONDAPATH:$PATH" >> SequencePracticeDemo.sh
-echo "source activate psychopyenv" >> SequencePracticeDemo.sh
-echo "cd $SEQDIR" >> SequencePracticeDemo.sh
-echo "echo Starting program. This may take a few seconds..." >> SequencePracticeDemo.sh 
-echo "python SeqLearn.py --demo" > /dev/null >> SequencePracticeDemo.sh
-echo "source deactivate" >> SequencePracticeDemo.sh
-chmod a+x SequencePracticeDemo.sh
-```
-
-Now you can move the wrappers wherever you want. 
+To create wrappers to run the program and demo, see Install.bat. 
 
 To clean unnecessary files:
 ``` 
@@ -108,10 +79,16 @@ rm -r $SEQDIR/stats
 ``` 
 
 ## Windows
-Run the script Installation.bat and follow the instructions. 
-It will create shortcuts called SequencePractice.bat and SequencePracticeDemo.bat in your desktop directory that will run the program and a demo, respectively.  
+Run the script Install.bat and follow the instructions. 
+It will create shortcuts in your desktop directory:
 
-# Database connections
+SequencePractice.bat: runs the program
+SeqLearnUtils\SequencePracticeDemo.bat: runs the demo
+SeqLearnUtils\UploadData.bat: synchronizes with the database, in case the practice was done off line.
+SeqLearnUtils\SequencePracticeSession.bat: runs the program, asking for the session first
+
+# Database
+## Database connections
 To allow connections to the remote database, after installation save the private key inside the db directory in a file called 'db/id_rsa'.
 Make sure that the subject has been created in the database. 
 Configure database parameters in a file 'db/db_config.json':
@@ -130,7 +107,7 @@ Configure database parameters in a file 'db/db_config.json':
 }
 ```
 
-# Configuring the database
+## Configuring the database
 
 To create a database and users, from mysql: 
 
@@ -183,15 +160,13 @@ sudo passwd
 
 # Preparing a study
 
-- Create a database and users.
+- Create a database and users (see GenerateWave.py).
 
-- Create sequences that will be used (use SequenceStructure.Rmd).
+- Create sequences that will be used (you can use SequenceStructure.Rmd).
 
-- Create a schedule (use SeqGen.py).
+- Create schedules and schedule_tables (use SeqGen.py and GenerateWave.py).
 
 - Adjust options in config/config.json.
-
-- Configure database.
 
 - Install software on training devices.
 
@@ -201,11 +176,21 @@ sudo passwd
     - Copy db_config.json file to db/
 
 # Schedule tables and groups
-It is possible to use several schedules, so that different subjects are required to perform different sequences. 
-Use flag  --schedule_file with the prefix of the file (e. g. scheduling/schedules/schedule000)
-The schedule table is a file that assigns very subject to a schedule file, allowing training different 
-sequences or schedules across subjects. The schedule group can be 0 or 1 and allows to counterbalance sequences across subjects 
-(trained sequences for schedule group are untrained for group 1 and viceversa). 
+
+The schedule table is a file that assigns each subject to a schedule file, allowing training different groups of sequences and randomization. 
+
+Configuration: a set of sequences.
+Schedule group: indicates a particular randomization. 
+
+# Generating a new wave
+Use the script GenerateWave.py.
+It will generate a number of subject IDs:
+subject ID: prefix + wave (1 digit) + group (1 digit) + subjectID (2 digits), e.g. lue1101
+
+```
+python GenerateWave.py --nsubjects 20 --wave x --ssh_username xxx --sql_pass xxxx --sql_username xxx  --prefix lue --create_db 
+```
+This will generate new databases (for behaviour and fMRI) and a local schedule table, and create the subjects in the database. You need to specify first the database names in db_config.json.
 
 # Generating sequences
 Use the script called SeqGen.py. 
@@ -234,48 +219,25 @@ optional arguments:
 Example: 
 
 ```
-Ver 1.3
 # schedule group added automatically, needs files sequences_grouped_001_lund1_0.json and sequences_grouped_001_lund1_1.json
 python SeqGen.py --sequence_file=./scheduling/sequences/sequences_grouped_001_lund1 --schedule_file=./scheduling/schedules/lup0schedule1 --type_file=./scheduling/seq_types_lu0.csv
 
-Older versions
-
-python SeqGen.py --sequence_file=./scheduling/sequences/sequences_001.json --schedule_file=./scheduling/schedules/kip0schedule1 --type_file=./scheduling/seq_types.csv
-python SeqGen.py --sequence_file=./scheduling/sequences/sequences_demo.json --schedule_file=./scheduling/schedules/schedule_simple --type_file=./scheduling/seq_types_simple.csv --split
-
-python SeqGen.py --sequence_file=./scheduling/sequences/sequences_001.json --schedule_file=./scheduling/schedules/kip1schedule1 --type_file=./scheduling/seq_types_ki1.csv
-python SeqGen.py --sequence_file=./scheduling/sequences/sequences_002.json --schedule_file=./scheduling/schedules/kip1schedule2 --type_file=./scheduling/seq_types_ki1.csv
-
-python SeqGen.py --sequence_file=./scheduling/sequences/sequences_001.json --sequence_file2=./scheduling/sequences/sequences_002.json --schedule_file=./scheduling/schedules/kip1schedule1 --type_file=./scheduling/seq_types_ki1.csv
-python SeqGen.py --sequence_file=./scheduling/sequences/sequences_002.json --sequence_file2=./scheduling/sequences/sequences_001.json --schedule_file=./scheduling/schedules/kip1schedule2 --type_file=./scheduling/seq_types_ki1.csv
-
-
-python SeqGen.py --sequence_file=./scheduling/sequences/sequences_lup2_001 --schedule_file=./scheduling/schedules/lup2schedule1 --type_file=./scheduling/seq_types_lup2.csv
-python SeqGen.py --sequence_file=./scheduling/sequences/sequences_lup2_002 --schedule_file=./scheduling/schedules/lup2schedule2 --type_file=./scheduling/seq_types_lup2.csv
-
 ```
-
-Add a second type of sequences (unseen - DEPRECATED)
-```
-python SeqGen.py --sequence_file=./scheduling/sequences/sequences_001.json --sequence_file2=./scheduling/sequences/sequences_002.json --schedule_file=./scheduling/schedules/kip0schedule1 --type_file=./scheduling/seq_types.csv
-python SeqGen.py --sequence_file=./scheduling/sequences/sequences_001.json --sequence_file2=./scheduling/sequences/sequences_002.json --schedule_file=./scheduling/schedules/kip1schedule1 --type_file=./scheduling/seq_types.csv
-python SeqGen.py --sequence_file=./scheduling/sequences/sequences_002.json --sequence_file2=./scheduling/sequences/sequences_001.json --schedule_file=./scheduling/schedules/kip1schedule2 --type_file=./scheduling/seq_types.csv
-```
-
 
 # Function modes
 ## Home training
 In the config.json file, set:
 "MODE":"home"
-"PRESHOW":1
-"TEST_MEM":1
+"ASK_USER":0
+
+## Laptop with multiple users (e.g. different controls using the same laptop)
+"MODE":"home"
+"ASK_USER":1
 
 ## fMRI experiment
 In the config.json file, set:
 "MODE":"fmri"
-This will also set automatically:
-"PRESHOW":0
-"TEST_MEM":0
+"ASK_USER":1
 In the schedule file, set only paced trials (optional).
 
 # Exporting the environment
@@ -285,6 +247,4 @@ conda env export -n psychopyenv --no-builds > psychopyenv_nb.yml
 
 ```
 
-# Generating a new wave
-```
-python GenerateWave.py --nsubjects 20 --wave 1 --ssh_username xxx --sql_pass xxxx --sql_username xxx  --create_db```
+

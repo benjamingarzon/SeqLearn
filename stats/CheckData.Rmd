@@ -17,15 +17,20 @@ library(ggplot2)
 library(reshape2)
 library(plyr)
 library(dplyr)
+library(extrafont)
+#font_import()
+loadfonts(device = "win")
 
-test_sessions = c(0, 6, 12, 18, 24)
+setwd("~/Projects/SeqLearn/stats")
+
+test_sessions = c(0, 6, 12, 18, 24, 30, 36)
 
 theme_lh <- function () { 
     theme_bw(base_size=18, base_family="Avenir")
 }
 
-trialsfile = paste0('../data/trials_table-20190527_2219-Lund1db.csv')
-trialsfilefmri = paste0('../data/trials_table-20190527_2226-Lund1fmridb.csv')
+trialsfile = paste0('../data/trials_table-20190624_1706-Lund1db.csv')
+trialsfilefmri = paste0('../data/trials_table-20190614_1549-Lund1fmridb.csv')
 #trialsfile = paste0('../data/archive/trials_table-20190313_2239-Lundpilot2db.csv')
 
 maxy = 4500 
@@ -54,8 +59,11 @@ Correct and assign groups
 ```{r}
 
 trials.table = subset(trials.table, !(sess_time == "15:55:23.768000" & sess_num == 0 & username == "lue1202"))
-#trials.table[trials.table$username == "lue1101" & trials.table$sess_num == 1 ]$sess_num = trials.table[trials.table$username == "lue1101", ]$sess_num - 1
+
 trials.table[trials.table$username == "lue1101" & trials.table$sess_num == 1, ]$sess_num = 0
+trials.table[trials.table$username == "lue1104" & trials.table$sess_date == "2019-06-06", ]$sess_num = 33
+trials.table[trials.table$username == "lue1104" & trials.table$sess_date == "2019-06-07", ]$sess_num = 34
+trials.table[trials.table$username == "lue1104" & trials.table$sess_date == "2019-06-08", ]$sess_num = 35
 
 # check that the number of trials is correct
 ntrials = trials.table %>% group_by(username, date_time, sess_num, run, sess_type) %>% summarise(n = max(trial, na.rm = T), cum_trial = sum(cumulative_trial == 1))
@@ -70,14 +78,48 @@ trials.table = subset(trials.table, !date_time %in% interrupted_times)
 # fmri
 ntrials.fmri = trials.table.fmri %>% group_by(username, date_time, sess_num, run) %>% summarise(n = n(), cum_trial = sum(cumulative_trial == 1))
 
-interrupted_times.fmri = ntrials$date_time[ntrials.fmri$n < max(ntrials.fmri$n)]
+interrupted_times.fmri = ntrials.fmri$date_time[ntrials.fmri$n < max(ntrials.fmri$n)]
 
 print("Interrupted fmri runs")
 print(interrupted_times.fmri)
-trials.table.fmri = subset(trials.table.fmri, !date_time %in% interrupted_times)
+trials.table.fmri = subset(trials.table.fmri, !date_time %in% interrupted_times.fmri)
+#"lue1101 2019-05-04 13:29:27.665000", "lue1103 2019-04-27 14:43:56.336000", 
+#               "lue1103 2019-05-18 14:48:11.918000",  
+#               "lue1106 2019-05-18 16:06:27.653000", "lue1201 2019-04-28 17:18:59.337000", 
+               
+dt_exclude = c("lue1203 2019-05-05 10:42:34.981000", "lue1205 2019-04-28 11:02:27")
+trials.table.fmri = subset(trials.table.fmri, !date_time %in% dt_exclude)
 
-trials.table.fmri = subset(trials.table.fmri, !(sess_time == "10:42:34.981000" & username == "lue1203" & sess_num == 6 ))
-trials.table.fmri = subset(trials.table.fmri, !(sess_time == "11:02:27" & username == "lue1205" & sess_num == 0))
+
+#task not synced, use??
+#trials.table.fmri = subset(trials.table.fmri, !(username == "lue1101" & sess_num == 6 ))
+#trials.table.fmri = subset(trials.table.fmri, !(username == "lue1103" & sess_num == 6 & run == 1))
+
+
+```
+# Save clean data
+```{r}
+write.table(trials.table, file = '../data/archive/trials_table_Lund1_clean.csv')
+write.table(trials.table.fmri, file = '../data/archive/trials_table_Lund1fmri_clean.csv')
+
+```
+
+# Number of sessions of each subject
+```{r fig.width=25, fig.asp=0.7}
+trials.sess = trials.table %>% group_by(username, sess_num, sess_date, sess_time) %>% summarise( n_sess = n() > 0) %>% 
+  group_by(username, sess_num, sess_date) %>% summarise( n_sess = sum(n_sess))
+
+plot.sess = ggplot(trials.sess, aes(x = sess_num, y = n_sess, group = username)) + geom_line(lwd=0.5) + geom_point(size=1.5) + facet_grid( username ~ .) + theme_lh() + theme(legend.position="none", axis.text.x = element_text(angle=90))
+
+print(plot.sess)
+
+trials.sess.fmri = trials.table.fmri %>% group_by(username, sess_num, sess_date, sess_time) %>% summarise( n_sess = n() > 0) %>% 
+  group_by(username, sess_num, sess_date) %>% summarise( n_sess = sum(n_sess))
+
+plot.sess.fmri = ggplot(trials.sess.fmri, aes(x = sess_num, y = n_sess, group = username)) + geom_line(lwd=0.5) + geom_point(size=1.5) + geom_hline(yintercept = 5, lty = 2) + facet_grid( username ~ .) + theme_lh() + theme(legend.position="none", axis.text.x = element_text(angle=90)) + ylab("Number of runs")
+
+print(plot.sess.fmri)
+
 ```
 
 Name groups
@@ -353,8 +395,6 @@ plot.sdMT.group = ggplot(mean_paced_trials, aes(x = group, y = meanMT, fill = gr
 
 print(plot.sdMT.group)
 
-
-
 ```
 
 ```{r}
@@ -396,7 +436,5 @@ MT.model = lmer(meanMT ~ group*sess_dem + group*sess_dem2 + (1|username), data =
 summary(MT.model)
 coefs = fixef(MT.model)
 plot(untrained_trials$sess_num, coefs["groupExperimental"] + coefs["groupExperimental:sess_dem"]*untrained_trials$sess_dem + coefs["groupExperimental:sess_dem2"]*untrained_trials$sess_dem2, pch = 20, ylab = "Near transfer effect", xlab = "Session")
-
-
 
 ```

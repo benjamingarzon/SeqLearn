@@ -22,9 +22,11 @@ def GenerateWave(opts):
     NEXP = int(opts.nsubjects)#experimental
     NCONT = int(opts.nsubjects)#control 
     WAVE = int(opts.wave)
-    prefix = "lue"
-    schedule_file = prefix + "%dschedule"%(WAVE)
-    schedule_table_file = "./scheduling/tables/%s1_schedule_table.csv"%(prefix)
+    OFFSET = int(opts.offset) if opts.offset else 0
+    
+    prefix = opts.prefix
+    schedule_file = prefix + "1schedule"
+    schedule_table_file = "./scheduling/tables/%s%d_schedule_table.csv"%(prefix, WAVE)
     # code : 1102 wave (1 digit), group (1 digit), subjectID (2 digits)
     subjects = [prefix + "%d1%0.2d"%(WAVE, i + 1) for i in range(NEXP)] + \
                [prefix + "%d2%0.2d"%(WAVE, i + 1) for i in range(NCONT)]
@@ -38,7 +40,7 @@ def GenerateWave(opts):
     subjects = subjects + [ "%stest%d"%(prefix, i) for i in [1, 2, 3, 4]] 
     group = group + [1, 1, 2, 2]
     
-    configuration = 0
+    configuration = OFFSET
     for isub, subject in enumerate(subjects):
         row_list.append({'SUBJECT': subject, 
                                'SCHEDULE_FILE': schedule_file + "_g%d_c%d_s%d"%(group[isub], configuration + 1, schedule_group), 
@@ -51,7 +53,7 @@ def GenerateWave(opts):
         
     schedule_table = pd.DataFrame(row_list, columns = ['SUBJECT', 'SCHEDULE_FILE', 'FMRI_SCHEDULE_FILE',  'CONFIGURATION', 'SCHEDULE_GROUP'])
     schedule_table.to_csv(schedule_table_file, sep = ";", index = False)
-    print(subjects)
+    print("Subjects: ", subjects)
     print(schedule_table)
     
     # create db and subjects
@@ -89,7 +91,7 @@ def GenerateWave(opts):
                             "GRANT INSERT,SELECT,CREATE,INDEX ON %s.* TO '%s'@'localhost';"%(db_config["DATABASE"], subject) + \
                             "GRANT INSERT,SELECT,CREATE,INDEX ON %s.* TO '%s'@'localhost';"%(db_config["DATABASE_FMRI"], subject)
                             print(command)
-                            engine.execute(command)
+#                            engine.execute(command)
                         engine.dispose()
                         print("Synced with database.")
                     except exc.SQLAlchemyError as e:
@@ -126,12 +128,21 @@ def build_parser():
                         help = "Wave number.",
                         required = False)
 
+    parser.add_argument("--offset", 
+                        dest = "offset", 
+                        help = "Add an offset to the configuration, to balance configurations across waves.",
+                        required = False)
 
     parser.add_argument("--create_db", 
                         dest = "create_db", 
                         help = "Create database.",
                         action="store_true",
                         required = False)
+
+    parser.add_argument("--prefix", 
+                        dest = "prefix", 
+                        help = "Indicate prefix for files and subjects.",
+                        required = True)
 
     return(parser)
 
