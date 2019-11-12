@@ -61,6 +61,10 @@ def generate_with_predefined_sequences(opts, TR, sched_group, group = 'experimen
         trained_seqs, untrained_seqs \
         = mygenerator.read_grouped(seq_file, seq_type)
         
+        if opts.cycle_offset:
+            trained_seqs = trained_seqs[opts.cycle_offset:] + trained_seqs[:opts.cycle_offset]
+            untrained_seqs = untrained_seqs[opts.cycle_offset:] + untrained_seqs[:opts.cycle_offset]
+
         n_trained = len(trained_seqs)
         n_untrained = len(untrained_seqs)
         reorder_trained = list(permutations(range(n_trained)))    
@@ -354,6 +358,11 @@ def build_parser():
                         help = "Add non-memorized sequences to test.",
                         required = False)
 
+    parser.add_argument("--cycle_offset", 
+                        type = int,
+                        dest = "cycle_offset", 
+                        help = "Cycles the sequences by cycle_offset units.",
+                        required = False)
 
     parser.add_argument("--schedule_file", 
                         type = str,
@@ -393,22 +402,25 @@ def main():
     N_SCHEDULES = 10
     TR = 1.2
     schedule_type = 1
-    for sched_group in range(N_SCHEDULES):
-        opts.seq_file =  "./scheduling/sequences/sequences_lue1_001"
-        opts.schedule_file =  "./scheduling/schedules/lue%dschedule_g1_c1"%(schedule_type)
-        generate_with_predefined_sequences(opts, TR, sched_group = sched_group, group = 'experimental')
-
-        opts.seq_file =  "./scheduling/sequences/sequences_lue1_002"
-        opts.schedule_file =  "./scheduling/schedules/lue%dschedule_g1_c2"%(schedule_type)
-        generate_with_predefined_sequences(opts, TR, sched_group = sched_group, group = 'experimental')
-
-        opts.seq_file =  "./scheduling/sequences/sequences_lue1_001"
-        opts.schedule_file =  "./scheduling/schedules/lue%dschedule_g2_c1"%(schedule_type)
-        generate_with_predefined_sequences(opts, TR, sched_group = sched_group, group = 'control')
-
-        opts.seq_file =  "./scheduling/sequences/sequences_lue1_002"
-        opts.schedule_file =  "./scheduling/schedules/lue%dschedule_g2_c2"%(schedule_type)
-        generate_with_predefined_sequences(opts, TR, sched_group = sched_group, group = 'control')
+    for cycle_offset in range(3):
+        opts.cycle_offset = cycle_offset
+        configuration = 2*cycle_offset + 1
+        for sched_group in range(N_SCHEDULES):
+            opts.seq_file =  "./scheduling/sequences/sequences_lue1_001"
+            opts.schedule_file =  "./scheduling/schedules/lue%dschedule_g1_c%d"%(schedule_type, configuration)
+            generate_with_predefined_sequences(opts, TR, sched_group = sched_group, group = 'experimental')
+    
+            opts.seq_file =  "./scheduling/sequences/sequences_lue1_002"
+            opts.schedule_file =  "./scheduling/schedules/lue%dschedule_g1_c%d"%(schedule_type, configuration + 1)
+            generate_with_predefined_sequences(opts, TR, sched_group = sched_group, group = 'experimental')
+    
+            opts.seq_file =  "./scheduling/sequences/sequences_lue1_001"
+            opts.schedule_file =  "./scheduling/schedules/lue%dschedule_g2_c%d"%(schedule_type, configuration)
+            generate_with_predefined_sequences(opts, TR, sched_group = sched_group, group = 'control')
+    
+            opts.seq_file =  "./scheduling/sequences/sequences_lue1_002"
+            opts.schedule_file =  "./scheduling/schedules/lue%dschedule_g2_c%d"%(schedule_type, configuration + 1)
+            generate_with_predefined_sequences(opts, TR, sched_group = sched_group, group = 'control')
 
 #    generate_with_predefined_sequences(opts, sched_group = 1)
     print("Done!")

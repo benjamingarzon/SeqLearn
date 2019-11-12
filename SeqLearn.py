@@ -482,8 +482,7 @@ def SeqLearn(opts):
                             
                             
                     else:    
-                        # feedback
-                        
+                        # feedback                        
                         pastmaxscore = maxscore[sequence_string] \
                         if sequence_string in maxscore.keys() else score                    
                                 
@@ -497,14 +496,21 @@ def SeqLearn(opts):
                         last_height = score*config["BAR_HEIGHT"]/\
                         maxgroupscore[sequence_string]
                         
-                        last_bar = visual.Rect(win, height=last_height, 
-                                                  width=config["BAR_WIDTH"], 
-                                                  lineWidth=0, 
-                                                  fillColor="blue", 
-                                                  pos=(-3*config["BAR_WIDTH"], 
-                                                       0.5*last_height - 3))
+                        # make sure the bars never exceed the max value
+                        ratio = 0.95
+                        last_height = np.min((last_height, ratio*config["BAR_HEIGHT"]))
+                        max_height = np.min((max_height, ratio*config["BAR_HEIGHT"]))
                         
-                        best_bar = visual.Rect(win, height=max_height, 
+                        last_bar = visual.Rect(win, 
+                                               height=last_height, 
+                                               width=config["BAR_WIDTH"], 
+                                               lineWidth=0, 
+                                               fillColor="blue", 
+                                               pos=(-3*config["BAR_WIDTH"], 
+                                                    0.5*last_height - 3))
+                        
+                        best_bar = visual.Rect(win, 
+                                               height=max_height, 
                                                width=config["BAR_WIDTH"], 
                                                lineWidth=0, 
                                                fillColor="green",

@@ -26,7 +26,7 @@ def GenerateWave(opts):
     
     prefix = opts.prefix
     schedule_file = prefix + "1schedule"
-    schedule_table_file = "./scheduling/tables/%s%d_schedule_table.csv"%(prefix, WAVE)
+    schedule_table_file = "./scheduling/tables/%s%d_schedule_table_v3.csv"%(prefix, WAVE)
     # code : 1102 wave (1 digit), group (1 digit), subjectID (2 digits)
     subjects = [prefix + "%d1%0.2d"%(WAVE, i + 1) for i in range(NEXP)] + \
                [prefix + "%d2%0.2d"%(WAVE, i + 1) for i in range(NCONT)]
@@ -40,16 +40,16 @@ def GenerateWave(opts):
     subjects = subjects + [ "%stest%d"%(prefix, i) for i in [1, 2, 3, 4]] 
     group = group + [1, 1, 2, 2]
     
-    configuration = OFFSET
+    configuration = 0 # change to start with a different config
     for isub, subject in enumerate(subjects):
         row_list.append({'SUBJECT': subject, 
-                               'SCHEDULE_FILE': schedule_file + "_g%d_c%d_s%d"%(group[isub], configuration + 1, schedule_group), 
+                               'SCHEDULE_FILE': schedule_file + "_g%d_c%d_s%d"%(group[isub], configuration + 1 + OFFSET, schedule_group), 
                                'SCHEDULE_GROUP': schedule_group, 
-                               'FMRI_SCHEDULE_FILE': schedule_file + "_g%d_c%d_s%d_fmri"%(group[isub],  configuration + 1, schedule_group),
-                               'CONFIGURATION': configuration + 1
+                               'FMRI_SCHEDULE_FILE': schedule_file + "_g%d_c%d_s%d_fmri"%(group[isub],  configuration + 1 + OFFSET, schedule_group),
+                               'CONFIGURATION': configuration + 1 + OFFSET
                                })
         schedule_group = (schedule_group + 1) % N_SCHEDULE_GROUPS
-        configuration = (configuration + 1) % N_CONFIGURATIONS
+        configuration = (configuration + 1) % N_CONFIGURATIONS 
         
     schedule_table = pd.DataFrame(row_list, columns = ['SUBJECT', 'SCHEDULE_FILE', 'FMRI_SCHEDULE_FILE',  'CONFIGURATION', 'SCHEDULE_GROUP'])
     schedule_table.to_csv(schedule_table_file, sep = ";", index = False)
@@ -132,7 +132,7 @@ def build_parser():
                         dest = "offset", 
                         help = "Add an offset to the configuration, to balance configurations across waves.",
                         required = False)
-
+    
     parser.add_argument("--create_db", 
                         dest = "create_db", 
                         help = "Create database.",
